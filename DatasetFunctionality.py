@@ -21,3 +21,11 @@ class ShapeNetFunctionality:
 
         return nb_nodes
 
+    @staticmethod
+    def filter_data(dataset, min_nb):
+        filtered = []
+        for data in dataset:
+            if data.num_nodes >= min_nb:
+                filtered.extend([data])
+        return filtered
+

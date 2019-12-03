@@ -2,3 +2,6 @@
 *.seg
 *.pts
 *.pt
+result/pointcloudae_random_loss.png
+result/pointcloudvae_losses.png
+result/shapenet_airplane.html

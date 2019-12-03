@@ -1,7 +1,9 @@
 import torch
-from torch_geometric.data import Data
 import numpy as np
 import matplotlib.pyplot as plt
+from random import sample
+from PoolLayer import RandomPoolLayer
+from torch_geometric.data import Data
 
 
 class ShapeNetFunctionality:
@@ -12,6 +14,11 @@ class ShapeNetFunctionality:
         plt.hist(nb_nodes)
         plt.title("Nb Points: " + name)
         plt.show()
+
+    @staticmethod
+    def get_total_nb_nodes(dataset):
+        nb_nodes = ShapeNetFunctionality.get_number_of_nodes(dataset)
+        return sum(nb_nodes)
 
     @staticmethod
     def get_number_of_nodes(dataset):
@@ -28,4 +35,26 @@ class ShapeNetFunctionality:
             if data.num_nodes >= min_nb:
                 filtered.extend([data])
         return filtered
+
+    @staticmethod
+    def simple_resample_to_minimum(dataset):
+        minimum = min(ShapeNetFunctionality.
+                      get_number_of_nodes(dataset))
+        pool = RandomPoolLayer(minimum)
+        result = []
+        i = 0
+        for data in dataset:
+            vertices, _ = pool(data.pos)
+            result.append(
+                Data(pos=vertices)
+            )
+        return result
+
+    @staticmethod
+    def random_split_ratio(dataset, ratio):
+        nb_set1 = round(len(dataset) * ratio)
+        set1 = sample(dataset, nb_set1)
+        set2 = [data for data in dataset if data not in set1]
+        return set1, set2
+
 

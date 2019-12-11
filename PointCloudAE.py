@@ -2,6 +2,7 @@ import torch
 from torch.nn import Module, Linear
 from DynamicEdgeConv import DynamicEdgeConv
 from PoolLayer import FPSPoolLayer, RandomPoolLayer, KnnUnpoolLayer, RandomUnpoolLayer
+# from torch_geometric.nn import DynamicEdgeConv
 
 
 class PointCloudAE(Module):
@@ -19,7 +20,7 @@ class PointCloudAE(Module):
         self.unpool1 = KnnUnpoolLayer(500)
         self.conv5 = DynamicEdgeConv(12, 9, 3)
         self.unpool2 = KnnUnpoolLayer(2300)
-        self.conv6 = DynamicEdgeConv(9, 3, 3)
+        self.conv6 = DynamicEdgeConv(9, 3, 3, 'sigmoid')
 
     def forward(self, x, batch=None):
         x, batch = self.encode(x, batch)
@@ -102,6 +103,34 @@ class PointCoudAERandom(Module):
         x = self.conv5(x, batch)
         x, batch = self.unpool2(x, batch)
         x = self.conv6(x, batch)
+        return x
+
+
+class SimplePointCloudAE(Module):
+    def __init__(self):
+        super(SimplePointCloudAE, self).__init__()
+        self.conv1 = DynamicEdgeConv(3, 9, 3)
+        self.pool1 = RandomPoolLayer(500)
+        self.conv2 = DynamicEdgeConv(9, 9, 3)
+
+        self.unpool = RandomUnpoolLayer(2300)
+        self.conv4 = DynamicEdgeConv(9, 3, 3)
+
+    def forward(self, x, batch=None):
+        # return self.conv1(x, batch)
+
+        x, batch = self.encode(x, batch)
+        return self.decode(x, batch)
+
+    def encode(self, x, batch=None):
+        x = self.conv1(x, batch)
+        x, batch = self.pool1(x, batch)
+        x = self.conv2(x, batch)
+        return x, batch
+
+    def decode(self, x, batch=None):
+        x, batch = self.unpool(x, batch)
+        x = self.conv4(x, batch)
         return x
 
 

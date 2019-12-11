@@ -5,7 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DatasetFunctionality.py" beforeDir="false" afterPath="$PROJECT_DIR$/DatasetFunctionality.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DynamicEdgeConv.py" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicEdgeConv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LossFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/LossFunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PointCloudAE.py" beforeDir="false" afterPath="$PROJECT_DIR$/PointCloudAE.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PointCloudAE_Eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/PointCloudAE_Eval.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PointCloudAE_Train.py" beforeDir="false" afterPath="$PROJECT_DIR$/PointCloudAE_Train.py" afterDir="false" />

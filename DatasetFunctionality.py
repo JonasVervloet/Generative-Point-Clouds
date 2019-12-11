@@ -9,9 +9,12 @@ from torch_geometric.data import Data
 class ShapeNetFunctionality:
 
     @staticmethod
-    def histogram(dataset, name):
+    def histogram(dataset, name, nb_bins=None):
         nb_nodes = ShapeNetFunctionality.get_number_of_nodes(dataset)
-        plt.hist(nb_nodes)
+        if nb_bins is not None:
+            plt.hist(nb_nodes, bins=nb_bins)
+        else:
+            plt.hist(nb_nodes)
         plt.title("Nb Points: " + name)
         plt.show()
 
@@ -56,5 +59,14 @@ class ShapeNetFunctionality:
         set1 = sample(dataset, nb_set1)
         set2 = [data for data in dataset if data not in set1]
         return set1, set2
+
+    @staticmethod
+    def reshape_batch(batch, nb_vertices):
+        return batch.view(-1, nb_vertices, batch.size(1))
+
+    @staticmethod
+    def dist_between_points(point1, point2):
+        return sum((point1-point2)**2)
+
 
 

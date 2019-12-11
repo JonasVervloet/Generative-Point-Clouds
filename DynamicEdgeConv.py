@@ -1,7 +1,6 @@
 import torch
 from torch.nn import Linear
-from torch.nn.functional import relu
-from torch_geometric.nn import  MessagePassing
+from torch_geometric.nn import MessagePassing
 from torch_geometric.nn import knn_graph
 
 
@@ -18,7 +17,8 @@ class EdgeConv(MessagePassing):
     def message(self, x_i, x_j):
         val1 = self.mlp1(x_i)
         val2 = self.mlp2(x_j - x_i)
-        return relu(val1 + val2)
+
+        return val1 + val2
 
     def update(self, aggr_out):
         return aggr_out

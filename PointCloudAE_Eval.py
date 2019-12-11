@@ -1,74 +1,89 @@
 import torch
-from PointCloudAE import PointCloudAE
+from PointCloudAE import PointCloudAE, PointCoudAERandom, SimplePointCloudAE
 from torch_geometric.datasets import ShapeNet
 from DatasetFunctionality import ShapeNetFunctionality as snf
 import meshplot as mp
-import random
+from random import sample
+from torch.nn import Linear
+from torch_geometric.nn import DynamicEdgeConv
 import numpy as np
 
 RESULT_PATH = "C:/Users/vervl/OneDrive/Documenten/GitHub/Generative-Mesh-Models/result/"
-NB_TESTS = 5
 
-test = torch.tensor([[1, 2], [3, 4],
-                     [5, 6], [7, 8],
-                     [9, 10], [11, 12],
-                     [13, 14], [14, 16]])
-print(test)
-print(test.reshape(-1))
-print(test.reshape(4, -1))
 
-# model = PointCloudAE()
-# model.load_state_dict(torch.load(RESULT_PATH + "pointcloudvae_model.pt"))
-# print(model)
+def eval_model(model, name, nb_epochs, test):
+    mp.offline()
+    pos = test.pos
+    np_pos = pos.numpy()
+    plot = mp.subplot(
+        np_pos, c=np_pos[:, 0], s=[nb_epochs + 1, 1, 0], shading={"point_size": 0.05}
+    )
+    for epoch in range(nb_epochs):
+        model.load_state_dict(
+            torch.load(RESULT_PATH + name + "/" + "model_batchsize16_epoch{}.pt".format(epoch))
+        )
+        model.eval()
+        result = model(pos).detach().numpy()
+        print(result)
+        mp.subplot(
+            result, c=result[:, 0], s=[nb_epochs + 1, 1, epoch + 1],
+            data=plot, shading={"point_size": 0.05}
+        )
+    plot.save(RESULT_PATH + name + "/" + "eval")
 
-# dataset = ShapeNet(root="./data/ShapeNet", categories=["Airplane"])
-# print("length dataset: " + str(len(dataset)))
-# print("Total number of nodes: {}".format(snf.get_total_nb_nodes(dataset)))
+
+dataset = ShapeNet(root="./data/ShapeNet", categories=["Airplane"])
+filtered = snf.filter_data(dataset, 2300)
+resampled = snf.simple_resample_to_minimum(filtered)
+print("len resampled dataset: {}".format(len(resampled)))
+print("size of data in resampled dataset: {}".format(resampled[5].pos.size()))
+
+rnd_test = sample(resampled, 1)[0]
+# max_x = max(rnd_test.pos[:, 0])
+# max_y = max(rnd_test.pos[:, 1])
+# max_z = max(rnd_test.pos[:, 2])
+# min_x = min(rnd_test.pos[:, 0])
+# min_y = min(rnd_test.pos[:, 1])
+# min_z = min(rnd_test.pos[:, 2])
+# print("min_x = {}, max_x = {}".format(min_x, max_x))
+# print("min_y = {}, max_y = {}".format(min_y, max_y))
+# print("min_z = {}, max_z = {}".format(min_z, max_z))
 #
-# filtered = snf.filter_data(dataset, 2300)
-# resampled = snf.simple_resample_to_minimum(filtered)
-# resampled = resampled[:100]
 #
-# test_samples = random.sample(range(len(resampled)), NB_TESTS)
+# net = PointCoudAERandom()
+# result = net(rnd_test.pos)
+# pos = result.detach().numpy()
+# mp.plot(pos, c=pos[:, 0], filename=RESULT_PATH + "test")
+# print("result: {}".format(result))
+# max_x = max(result[:, 0])
+# max_y = max(result[:, 1])
+# max_z = max(result[:, 2])
+# min_x = min(result[:, 0])
+# min_y = min(result[:, 1])
+# min_z = min(result[:, 2])
+# print("min_x = {}, max_x = {}".format(min_x, max_x))
+# print("min_y = {}, max_y = {}".format(min_y, max_y))
+# print("min_z = {}, max_z = {}".format(min_z, max_z))
+#
+# name = "pointcloudae_random"
+# nb_epochs = 10
+# eval_model(net, name, nb_epochs, rnd_test)
+#
+# net = PointCloudAE()
+# name = "pointcloudeae_fps"
+# nb_epochs = 5
+# eval_model(net, name, nb_epochs, rnd_test)
 
-# mp.offline()
-# plot = 0
-# for i in range(NB_TESTS):
-#     print("TEST {}".format(i))
-#     test = dataset[test_samples[i]].pos
-#     result = model(test)
-#     if not plot == 0:
-#         mp.subplot(test, c=test[:, 0], data=plot)
-#     else:
-#         plot = mp.subplot(test, c=test[:, 0])
-#     mp.subplot(result, c=result[:, 0], data=plot)
-# plot.save(RESULT_PATH + "pointcloudvae_eval")
+net = SimplePointCloudAE()
+name = "simpelAE"
+nb_epochs = 23
+eval_model(net, name, nb_epochs, rnd_test)
 
-# test_samples = random.sample(range(len(dataset)), NB_TESTS)
-#
-# mp.offline()
-# plot = 0
-# for i in range(len(test_samples)):
-#     print(i)
-#     data = dataset[test_samples[i]]
-#     v = data.pos.numpy()
-#     if not i == 0:
-#         mp.subplot(v, c=v[:, 0], s=[NB_TESTS, 1, i],
-#                    data=plot, shading={"point_size": 0.1})
-#     else:
-#         plot = mp.subplot(v, c=v[:, 0], s=[NB_TESTS, 1, 0],
-#                           shading={"point_size": 0.1})
-#
-#     print(data)
-#     print(data.pos.size())
-#     print(data.pos.numpy().shape)
-#     print("")
-#
-# print(plot)
-#
-# plot.save(RESULT_PATH + "shapenet_airplane")
-
-
+# name = "test"
+# hulp_net = Linear(6, 3)
+# net = DynamicEdgeConv(hulp_net, 3)
+# nb_epochs = 50
+# eval_model(net, name, nb_epochs, rnd_test)
 
 
 

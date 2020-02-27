@@ -2,18 +2,42 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/EncodeLayer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ModelNet.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RandomPermutation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Upsample.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/Download_datasets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/primitive_shapes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pointnet/auto_encoder_pn.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pointnet/decoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pointnet/pointnet.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pointnet/pointnet_pp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pointnet/utils/PointCloudAE_Train.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pointnet/utils/PointCloudVAE_Eval.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pointnet/utils/PointCloudVAE_Train.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/decoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/encoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/simple_layer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/training.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/visualisation/fps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/visualisation/knn.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DatasetFunctionality.py" beforeDir="false" afterPath="$PROJECT_DIR$/DatasetFunctionality.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DynamicEdgeConv.py" beforeDir="false" afterPath="$PROJECT_DIR$/DynamicEdgeConv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DatasetFunctionality.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/functionality.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LossFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/LossFunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PointCloudAE.py" beforeDir="false" afterPath="$PROJECT_DIR$/PointCloudAE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PointCloudAE_Eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/PointCloudAE_Eval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PointCloudAE_Train.py" beforeDir="false" afterPath="$PROJECT_DIR$/PointCloudAE_Train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PointCloudAE_Eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/pointnet/utils/PointCloudAE_Eval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PointCloudAE_Train.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PoolLayer.py" beforeDir="false" afterPath="$PROJECT_DIR$/PoolLayer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="Generative-Mesh-Models" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -27,7 +51,18 @@
   </component>
   <component name="ProjectId" id="1UFVFdOgv1Gg4gQtSvfGiZg9Mm5" />
   <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\dataset" />
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\Datasets" />
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloudNetwork" />
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train" />
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\Visualisation" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -41,7 +76,70 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Test">
+  <component name="RunManager" selected="Python.PointCloudVAE_Eval">
+    <configuration name="FPS_visualisation" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Generative-Mesh-Models" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\Visualisation\FPS Visualisation.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="MnistVAE" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Generative-Mesh-Models" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\vervl\Anaconda3\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MnistVAE.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="PointCloudAE_Train" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Generative-Mesh-Models" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train\PointCloudAE_Train.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="PointCloudVAE_Eval" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -54,7 +152,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloudAE_Eval.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train\PointCloudVAE_Eval.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -75,7 +173,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloudAE_Train.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train\PointCloudVAE_Train.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -84,7 +182,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="RelativeLayerTraining" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -92,11 +190,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RelativeLayer" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RelativeLayer/RelativeLayerTraining.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -105,11 +203,21 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.MnistVAE" />
+      <item itemvalue="Python.PointCloudAE_Train" />
+      <item itemvalue="Python.FPS_visualisation" />
+      <item itemvalue="Python.RelativeLayerTraining" />
+      <item itemvalue="Python.PointCloudVAE_Train" />
+      <item itemvalue="Python.PointCloudVAE_Eval" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Test" />
-        <item itemvalue="Python.PointCloudVAE_Train" />
         <item itemvalue="Python.PointCloudVAE_Eval" />
+        <item itemvalue="Python.PointCloudVAE_Train" />
+        <item itemvalue="Python.RelativeLayerTraining" />
+        <item itemvalue="Python.FPS_visualisation" />
+        <item itemvalue="Python.PointCloudAE_Train" />
       </list>
     </recent_temporary>
   </component>

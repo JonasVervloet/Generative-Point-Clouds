@@ -1,12 +1,9 @@
 import torch
-from PointCloudAE import PointCloudAE, PointCoudAERandom, SimplePointCloudAE
+from PointCloudAE import SimplePointCloudAE
 from torch_geometric.datasets import ShapeNet
-from DatasetFunctionality import ShapeNetFunctionality as snf
+from dataset.functionality import ShapeNetFunctionality as snf
 import meshplot as mp
 from random import sample
-from torch.nn import Linear
-from torch_geometric.nn import DynamicEdgeConv
-import numpy as np
 
 RESULT_PATH = "C:/Users/vervl/OneDrive/Documenten/GitHub/Generative-Mesh-Models/result/"
 
@@ -20,7 +17,7 @@ def eval_model(model, name, nb_epochs, test):
     )
     for epoch in range(nb_epochs):
         model.load_state_dict(
-            torch.load(RESULT_PATH + name + "/" + "model_batchsize16_epoch{}.pt".format(epoch))
+            torch.load(RESULT_PATH + name + "/" + "model_batchsize1_epoch{}.pt".format(epoch))
         )
         model.eval()
         result = model(pos).detach().numpy()
@@ -32,7 +29,8 @@ def eval_model(model, name, nb_epochs, test):
     plot.save(RESULT_PATH + name + "/" + "eval")
 
 
-dataset = ShapeNet(root="./data/ShapeNet", categories=["Airplane"])
+dataset = ShapeNet(root="C:/Users/vervl/Data/ShapeNet/utils", train=True,
+                   categories=["Airplane"])
 filtered = snf.filter_data(dataset, 2300)
 resampled = snf.simple_resample_to_minimum(filtered)
 print("len resampled dataset: {}".format(len(resampled)))
@@ -76,7 +74,7 @@ rnd_test = sample(resampled, 1)[0]
 
 net = SimplePointCloudAE()
 name = "simpelAE"
-nb_epochs = 23
+nb_epochs = 20
 eval_model(net, name, nb_epochs, rnd_test)
 
 # name = "test"

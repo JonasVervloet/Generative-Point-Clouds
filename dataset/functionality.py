@@ -68,5 +68,34 @@ class ShapeNetFunctionality:
     def dist_between_points(point1, point2):
         return sum((point1-point2)**2)
 
+    @staticmethod
+    def get_minima(obj):
+        pos = obj.pos
+        minima, inds = torch.min(pos, dim=0)
+        return minima
+
+    @staticmethod
+    def get_maxima(obj):
+        pos = obj.pos
+        maxima, inds = torch.max(pos, dim=0)
+        return maxima
+
+    @staticmethod
+    def minima_and_maxima_dataset(data):
+        minima = []
+        maxima = []
+        for data in data:
+            minima.append(ShapeNetFunctionality.get_minima(data))
+            maxima.append(ShapeNetFunctionality.get_maxima(data))
+        minima = torch.stack(minima)
+        minima, inds = torch.min(minima, dim=0)
+        maxima = torch.stack(maxima)
+        maxima, inds = torch.max(maxima, dim=0)
+        return torch.cat([minima, maxima])
+
+
+
+
+
 
 

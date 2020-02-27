@@ -1,5 +1,5 @@
 import torch
-from torch.nn import Module, Linear
+from torch.nn import Module, Linear, ReLU, Sigmoid, Tanh
 from DynamicEdgeConv import DynamicEdgeConv
 from PoolLayer import FPSPoolLayer, RandomPoolLayer, KnnUnpoolLayer, RandomUnpoolLayer
 # from torch_geometric.nn import DynamicEdgeConv
@@ -55,6 +55,7 @@ class PointCloudAE(Module):
         x = self.conv6(x, batch)
         return x
 
+
 class PointCoudAERandom(Module):
     def __init__(self):
         super(PointCoudAERandom, self).__init__()
@@ -107,14 +108,14 @@ class PointCoudAERandom(Module):
 
 
 class SimplePointCloudAE(Module):
-    def __init__(self):
+    def __init__(self, pool, unpool):
         super(SimplePointCloudAE, self).__init__()
-        self.conv1 = DynamicEdgeConv(3, 9, 3)
-        self.pool1 = RandomPoolLayer(500)
-        self.conv2 = DynamicEdgeConv(9, 9, 3)
+        self.conv1 = DynamicEdgeConv(3, 3, 3)
+        self.pool1 = pool(2000)
+        self.conv2 = DynamicEdgeConv(3, 3, 3)
 
-        self.unpool = RandomUnpoolLayer(2300)
-        self.conv4 = DynamicEdgeConv(9, 3, 3)
+        self.unpool = unpool(2300)
+        self.conv4 = DynamicEdgeConv(3, 3, 3)
 
     def forward(self, x, batch=None):
         # return self.conv1(x, batch)
@@ -132,6 +133,40 @@ class SimplePointCloudAE(Module):
         x, batch = self.unpool(x, batch)
         x = self.conv4(x, batch)
         return x
+
+
+class PointCloudFC(Module):
+    def __init__(self):
+        super(PointCloudFC, self).__init__()
+        self.fc1 = Linear(6900, 1000)
+        self.relu = ReLU()
+        self.fc2 = Linear(1000, 6900)
+        self.tanh = Tanh()
+
+    def forward(self, x, batch=None):
+        if batch is not None:
+            nb_samples = max(batch) + 1
+            feats = torch.reshape(x, [nb_samples, 2300 * 3])
+            out = self.tanh(self.fc2(
+                self.relu(self.fc1(feats))
+            ))
+            return torch.reshape(out, [nb_samples * 2300, 3])
+        else:
+            feats = torch.unsqueeze(
+                torch.reshape(x, [2300 * 3]), 0
+            )
+            out = self.tanh(self.fc2(
+                self.relu(self.fc1(feats))))[0]
+            return torch.reshape(out, [2300, 3])
+
+
+class TestDynamicConv(Module):
+    def __init__(self):
+        super(TestDynamicConv, self).__init__()
+        self.conv1 = DynamicEdgeConv(3, 3, 3)
+
+    def forward(self, x, batch=None):
+        return self.conv1(x, batch)
 
 
 

@@ -9,9 +9,12 @@ class ChamferDistLoss(Module):
 
     def forward(self, input, output):
         if len(input.size()) == 3:
-            return sum([self.chamfer_dist(input[i], output[i]) for i in range(input.size(0))])
+            loss = 0
+            for i in range(input.size(0)):
+                loss += self.chamfer_dist_tensor(input[i], output[i])
+            return loss
         else:
-            return self.chamfer_dist(input, output)
+            return self.chamfer_dist_tensor(input, output)
 
     def chamfer_dist(self, cloud1, cloud2):
         with torch.no_grad():
@@ -51,4 +54,41 @@ class ChamferDistLoss(Module):
                     [sum((p - m)**2) for p in cloud2]
                 ) for m in cloud1]
             )
+
+    def get_distances_tensor(self, cloud1, cloud2):
+        distances = []
+        for i in range(len(cloud2)):
+            dists = (cloud1 - cloud2[i]) ** 2
+            distances.append(torch.sum(dists, dim=1))
+        return torch.stack(distances)
+
+    def get_closest_points_tensor(self, cloud2, distances):
+        indices = torch.argmin(distances, dim=0)
+        return indices
+
+    def chamfer_dist_tensor(self, cloud1, cloud2):
+        with torch.no_grad():
+            distances = self.get_distances_tensor(cloud1, cloud2)
+            indices = self.get_closest_points_tensor(cloud2, distances)
+        points = cloud2[indices]
+        loss = torch.sum((cloud1 - points) ** 2)
+        with torch.no_grad():
+            distances = torch.transpose(distances, 0, 1)
+            indices = self.get_closest_points_tensor(cloud1, distances)
+        points = cloud1[indices]
+        loss += torch.sum((cloud2 - points) ** 2)
+        return loss
+
+
+class ChamferVAELoss(Module):
+    def __init__(self, alfa=0.5):
+        super(ChamferVAELoss, self).__init__()
+        self.alfa = alfa
+        self.chamfer = ChamferDistLoss()
+
+    def forward(self, inp, outp, z_mu, z_var):
+        chamf_loss = self.chamfer(inp, outp)
+        kl_loss = 0.5 * torch.sum(torch.exp(z_var) + z_mu**2 - 1.0 - z_var)
+
+        return chamf_loss + self.alfa * kl_loss
 

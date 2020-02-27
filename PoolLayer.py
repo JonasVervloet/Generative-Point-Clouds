@@ -5,35 +5,71 @@ from torch_geometric.nn import fps
 from torch_geometric.nn import knn
 import random
 import numpy as np
+from torch_geometric.utils import scatter_
 
 
-class RandomPoolLayer(Module):
-    def __init__(self, nb_vertices):
-        super(RandomPoolLayer, self).__init__()
-        self.nb_vertices = nb_vertices
+class PoolLayer(Module):
+    def __init__(self, nb_outputs, pool_fn):
+        super(PoolLayer, self).__init__()
+        self.outputs = nb_outputs
+        self.function = pool_fn
 
     def forward(self, x, batch=None):
-        if batch is None:
-            return self.select_random_features(x), batch
-        else:
-            curr_f = []
+        if batch is not None:
+            curr_x = []
             curr_batch = []
             for i in range(max(batch) + 1):
                 features = x[batch == i]
-                pooled = self.select_random_features(features)
-                curr_f.append(pooled)
-                curr_batch.append(
-                    torch.ones(pooled.size(0), dtype=torch.int64) * i
-                )
-            x = cat(curr_f)
+                new_features = self.function(features)
+                new_batch = torch.ones(new_features.size(0), dtype=torch.int64) * i
+                curr_x.append(new_features)
+                curr_batch.append(new_batch)
+            x = cat(curr_x)
             batch = cat(curr_batch)
             return x, batch
 
-    def select_random_features(self, x):
-        rand_inds = random.sample(
-            range(x.size(0)), self.nb_vertices
+        else:
+            return self.function(x), batch
+
+
+class RandomPoolLayer(PoolLayer):
+    def __init__(self, nb_vertices):
+        super(RandomPoolLayer, self).__init__(
+            nb_vertices, self.select_random_features
         )
-        return x[rand_inds]
+
+    def select_random_features(self, x):
+        # rand_inds = random.sample(
+        #     range(x.size(0)), self.outputs
+        # )
+        perm = torch.randperm(x.size(0))
+        idx = perm[:self.outputs]
+        return x[idx]
+
+
+class TopKPool(PoolLayer):
+    def __init__(self, nb_outputs):
+        super(TopKPool, self).__init__(nb_outputs, self.max_pooling)
+
+    def max_pooling(self, x):
+        dists = torch.sum(x**2, dim=1)
+        values, inds = torch.topk(dists, self.outputs, largest=True)
+        return x[inds]
+
+
+class RandomKNNPool(PoolLayer):
+    def __init__(self, nb_outputs):
+        super(RandomKNNPool, self).__init__(nb_outputs, self.random_knn_pooling)
+
+    def random_knn_pooling(self, x):
+        rand_inds = random.sample(
+            range(x.size(0)), self.outputs
+        )
+        neighbors = knn(x, x[rand_inds], 3)
+        cluster, indices = neighbors
+        cluster_feats = x[indices]
+        new_features = scatter_("mean", cluster_feats, cluster)
+        return new_features
 
 
 class FPSPoolLayer(Module):
@@ -57,87 +93,67 @@ class FPSPoolLayer(Module):
             return x, batch
 
 
-class KnnUnpoolLayer(Module):
+class KnnUnpoolLayer(PoolLayer):
     def __init__(self, nb_outputs):
-        super(KnnUnpoolLayer, self).__init__()
-        self.outputs = nb_outputs
+        super(KnnUnpoolLayer, self).__init__(
+            nb_outputs, self.knn_unpool
+        )
 
-    def forward(self, x, batch=None):
-        if batch is not None:
-            curr_x = []
-            curr_batch = []
-            for i in range(max(batch) + 1):
-                temp_batch = batch[batch == i]
-                features = x[batch == i]
-                rand_inds = np.random.randint(
-                    features.size(0),
-                    size=(self.outputs - features.size(0))
-                )
-                knn_neighbors = knn(features,
-                                    features[rand_inds], 3)
-                clusters = knn_neighbors[0]
-                indices = knn_neighbors[1]
-                result = []
-                for j in range(max(clusters) + 1):
-                    curr_inds = indices[clusters == j]
-                    temp_feat = features[curr_inds]
-                    result.append(temp_feat.mean(0))
-
-                result = stack(result)
-                new_batch = torch.ones(result.size(0), dtype=torch.int64) * i
-                features = cat([features, result])
-                temp_batch = cat([temp_batch, new_batch])
-                curr_x.append(features)
-                curr_batch.append(temp_batch)
-
-            x = cat(curr_x)
-            batch = cat(curr_batch)
-            return x, batch
-
+    def knn_unpool(self, x):
+        feats = x
+        while self.outputs >= 2 * feats.size(0):
+            feats = self.knn_aggreate(feats, feats)
+        if feats.size(0) == self.outputs:
+            return feats
         else:
-            rand_inds = np.random.randint(x.size(0), size=(self.outputs - x.size(0)))
-            knn_neighbors = knn(x, x[rand_inds], 3)
-            clusters = knn_neighbors[0]
-            indices = knn_neighbors[1]
-            result = []
-            for i in range(max(clusters) + 1):
-                curr_inds = indices[clusters == i]
-                features = x[curr_inds]
-                result.append(features.mean(0))
+            nb = self.outputs - feats.size(0)
+            rand_inds = random.sample(
+                range(feats.size(0)), nb
+            )
+            return self.knn_aggreate(feats, feats[rand_inds])
 
-            result = stack(result)
-            x = cat([x, result])
-
-            return x, batch
+    def knn_aggreate(self, features, goals):
+        cluster, indices = knn(features, goals, 3)
+        cluster_feats = features[indices]
+        new_features = scatter_("mean", cluster_feats, cluster)
+        return torch.cat([features, new_features])
 
 
-class RandomUnpoolLayer(Module):
+class KnnUnpoolLayer2(PoolLayer):
     def __init__(self, nb_outputs):
-        super(RandomUnpoolLayer, self).__init__()
-        self.outputs = nb_outputs
+        super(KnnUnpoolLayer2, self).__init__(
+            nb_outputs, self.knn_unpool
+        )
 
-    def forward(self, x, batch=None):
-        if batch is not None:
-            curr_x = []
-            curr_batch = []
-            for i in range(max(batch) + 1):
-                features = x[batch == i]
-                new_features = self.rand_addition(features)
-                new_batch = torch.ones(new_features.size(0), dtype=torch.int64) * i
-                curr_x.append(new_features)
-                curr_batch.append(new_batch)
-            x = cat(curr_x)
-            batch = cat(curr_batch)
-            return x, batch
+    def knn_unpool(self, x):
+        feats = x
+        while not feats.size(0) == self.outputs:
+            ind = random.sample(
+                range(feats.size(0)), 1
+            )
+            cluster, indices = knn(feats, feats[ind], 3)
+            cluster_feats = feats[indices]
+            new_features = scatter_("mean", cluster_feats, cluster)
+            feats = torch.cat([feats, new_features])
+        return feats
 
-        else:
-            return self.rand_addition(x), batch
+
+class RandomUnpoolLayer(PoolLayer):
+    def __init__(self, nb_outputs):
+        super(RandomUnpoolLayer, self).__init__(
+            nb_outputs, self.rand_addition
+        )
 
     def rand_addition(self, x):
-        rand_inds = np.random.randint(
-            x.size(0),
-            size=(self.outputs - x.size(0))
+        # rand_inds = np.random.randint(
+        #     x.size(0),
+        #     size=(self.outputs - x.size(0))
+        # )
+        rand_inds = torch.randint(
+            0, x.size(0), (self.outputs - x.size(0),)
         )
         new_x = x[rand_inds]
         x = cat((x, new_x))
         return x
+
+

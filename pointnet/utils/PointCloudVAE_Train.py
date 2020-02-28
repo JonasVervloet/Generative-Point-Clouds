@@ -2,7 +2,7 @@ import torch
 from torch.optim import Adam
 from torch_geometric.data import DataLoader
 
-from dataset.primitive_shapes import PrimitiveShapes
+from dataset.primitives import PrimitiveShapes
 from PointNetAE import PointNetVAE
 from LossFunctions import ChamferVAELoss
 

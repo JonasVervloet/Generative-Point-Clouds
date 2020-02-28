@@ -3,7 +3,7 @@ from torch_geometric.data import DataLoader
 from torch_geometric.datasets import ShapeNet
 import torch_geometric.transforms as T
 from dataset.functionality import ShapeNetFunctionality as snf
-from dataset.primitive_shapes import PrimitiveShapes as ps
+from dataset.primitives import PrimitiveShapes as ps
 from PointNetAE import PointNetAE
 from LossFunctions import ChamferDistLoss
 from RandomPermutation import RandomPermutation

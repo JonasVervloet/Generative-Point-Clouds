@@ -1,8 +1,8 @@
 import torch
 import meshplot as mp
 
-from dataset.primitive_shapes import PrimitiveShapes
-from PointNetAE import PointNetVAE
+from dataset.primitives import PrimitiveShapes
+from pointnet.auto_encoder import PointNetVAE
 
 NB_EPOCHS = 50
 NB_INTERPOLS = 10

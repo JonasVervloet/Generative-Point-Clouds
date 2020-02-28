@@ -1,7 +1,7 @@
 import torch_geometric.nn as gnn
 import numpy as np
 import meshplot as mp
-from dataset.primitive_shapes import PrimitiveShapes as ps
+from dataset.primitives import PrimitiveShapes as ps
 from relative_layer.encoder import SimpleRelativeEncoder as sre
 from relative_layer.decoder import SimpleRelativeDecoder as srd
 from relative_layer.simple_layer import SimpleRelativeLayer

@@ -2,16 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/relative_layer/visualisation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/relative_ae.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/Download_datasets.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/download.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/primitive_shapes.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/primitives.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/auto_encoder_pn.py" beforeDir="false" afterPath="$PROJECT_DIR$/pointnet/auto_encoder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/utils/PointCloudAE_Train.py" beforeDir="false" afterPath="$PROJECT_DIR$/pointnet/utils/PointCloudAE_Train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/utils/PointCloudVAE_Eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/pointnet/utils/PointCloudVAE_Eval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/utils/PointCloudVAE_Train.py" beforeDir="false" afterPath="$PROJECT_DIR$/pointnet/utils/PointCloudVAE_Train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LossFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/LossFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/decoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/encoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/simple_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/simple_layer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/relative_layer/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/visualisation/fps.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualisation/fps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/visualisation.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/visualisation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -123,7 +122,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="RelativeLayerTraining" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -131,11 +130,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RelativeLayer" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RelativeLayer/RelativeLayerTraining.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -188,19 +187,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.MnistVAE" />
-      <item itemvalue="Python.RelativeLayerTraining" />
       <item itemvalue="Python.PointCloudVAE_Train" />
       <item itemvalue="Python.PointCloudVAE_Eval" />
       <item itemvalue="Python.training" />
       <item itemvalue="Python.visualisation" />
+      <item itemvalue="Python.Test" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.visualisation" />
         <item itemvalue="Python.training" />
+        <item itemvalue="Python.Test" />
         <item itemvalue="Python.PointCloudVAE_Eval" />
         <item itemvalue="Python.PointCloudVAE_Train" />
-        <item itemvalue="Python.RelativeLayerTraining" />
       </list>
     </recent_temporary>
   </component>

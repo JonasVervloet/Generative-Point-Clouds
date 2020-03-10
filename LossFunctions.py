@@ -7,14 +7,22 @@ class ChamferDistLoss(Module):
     def __init__(self):
         super(ChamferDistLoss, self).__init__()
 
-    def forward(self, input, output):
+    def forward(self, input, output, batch_in=None):
         if len(input.size()) == 3:
             loss = 0
             for i in range(input.size(0)):
                 loss += self.chamfer_dist_tensor(input[i], output[i])
             return loss
-        else:
+        elif batch_in is None:
             return self.chamfer_dist_tensor(input, output)
+        else:
+            loss = 0
+            assert(torch.max(batch_in) + 1 == output.size(0))
+            for i in range(output.size(0)):
+                loss += self.chamfer_dist_tensor(
+                    input[batch_in == i], output[i]
+                )
+            return loss
 
     def chamfer_dist(self, cloud1, cloud2):
         with torch.no_grad():

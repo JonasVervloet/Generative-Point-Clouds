@@ -5,11 +5,14 @@ import torch.nn.functional as F
 
 
 class SimpleRelativeEncoder(nn.Module):
-    def __init__(self, nb_feats1, nb_feats2, nb_feats_out):
+    def __init__(self, nb_feats1, nb_feats2, nb_feats_out, mean=False):
         super(SimpleRelativeEncoder, self).__init__()
         self.conv = nn.Conv1d(3, nb_feats1, 1)
+
         self.fc1 = nn.Linear(nb_feats1, nb_feats2)
         self.fc2 = nn.Linear(nb_feats2, nb_feats_out)
+
+        self.mean = mean
 
     def forward(self, points, batch):
 
@@ -28,7 +31,10 @@ class SimpleRelativeEncoder(nn.Module):
         transpose2 = conv.transpose(1, 2)
         # transpose2 = 1 x (nb_batch * nb_points) x nb_feats1
 
-        feats1 = gnn.global_max_pool(transpose2[0], batch)
+        if self.mean:
+            feats1 = gnn.global_mean_pool(transpose2[0], batch)
+        else:
+            feats1 = gnn.global_max_pool(transpose2[0], batch)
         # feats1 = nb_batch x nb_feats1
 
         fc1 = F.relu(self.fc1(feats1))

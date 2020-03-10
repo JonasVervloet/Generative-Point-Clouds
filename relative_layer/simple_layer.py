@@ -1,18 +1,21 @@
+import torch
 import torch.nn as nn
 import torch_geometric.nn as gnn
 
 from relative_layer.encoder import SimpleRelativeEncoder
 from relative_layer.decoder import SimpleRelativeDecoder
 
+from relative_layer.relative_ae import RelativeAutoEncoder
+
 
 class SimpleRelativeLayer(nn.Module):
-    def __init__(self, nb_neighbours, feats1, feats2, feats3):
+    def __init__(self, nb_neighbours, feats1, feats2, feats3, radius=0.22, mean=False):
         super(SimpleRelativeLayer, self).__init__()
-        self.enc = SimpleRelativeEncoder(feats1, feats2, feats3)
-        self.dec = SimpleRelativeDecoder(feats3, feats2, feats1, nb_neighbours)
+        self.ae = RelativeAutoEncoder(feats1, feats2, feats3, nb_neighbours, mean)
 
         self.nb_neighbours = nb_neighbours
         self.ratio = 1 / nb_neighbours
+        self.radius = radius
 
     def forward(self, points):
 
@@ -27,27 +30,40 @@ class SimpleRelativeLayer(nn.Module):
         # knn_cluster = nb_point x 1
         # knn_points = nb_points x 3
 
-        midpoints = samples[knn_cluster]
-        relative = knn_points - midpoints
+        rad_cluster, rad_inds = gnn.radius(points, samples, r=self.radius)
+        rad_points = points[rad_inds]
+
+        # midpoints = samples[knn_cluster]
+        midpoints = samples[rad_cluster]
+        # relative = knn_points - midpoints
+        relative = (rad_points - midpoints) / self.radius
         # midpoints = nb_points x 3
         # relative = nb_points x 3
 
-        encoded = self.enc(relative, knn_cluster)
-        # encoded = (ratio * nb_points) x 5
+        # relative_out = self.ae(relative, knn_cluster)
+        relative_out = self.ae(relative, rad_cluster)
+        # relative_out = nb_points x 3
 
-        decoded = self.dec(encoded)
-        # decoded = nb_points x 3
+        range = torch.arange(0, samples.size(0))
+        range_inds = range.repeat_interleave(self.nb_neighbours)
+        midpoints_out = samples[range_inds]
 
-        dec_abs = decoded + midpoints
+        dec_abs = (relative_out * self.radius) + midpoints_out
         # dec_abs = nb_points x 3
 
-        resized_orig = knn_points.view(-1, self.nb_neighbours, 3)
+        # resized_orig = knn_points.view(-1, self.nb_neighbours, 3)
         # resized_orig = (ratio * nb_points) x nb_neighbours x 3
+
+        # resized_rel = relative.view(-1, self.nb_neighbours, 3)
+        # resized_rel = (ratio * nb_points) x nb_neighbours x 3
 
         resized_deco = dec_abs.view(-1, self.nb_neighbours, 3)
         # resized_deco = (ratio * nb_points) x nb_neighbours x 3
 
-        return resized_orig, resized_deco
+        resized_rel_out = relative_out.view(-1, self.nb_neighbours, 3)
+        # resized_rel_out = (ratio * nb_points) x nb_neighbours x 3
+
+        return rad_points, rad_cluster, resized_deco
 
 
 

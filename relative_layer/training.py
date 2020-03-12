@@ -8,57 +8,64 @@ from LossFunctions import ChamferDistLoss
 
 import matplotlib.pyplot as plt
 
-NB_EPOCHS = 50
+NB_EPOCHS = 200
 RESULT_PATH = "D:/Documenten/Results/"
+NAME = "LearningRate/"
+START_LR = 0.001
+LR_NB = 5
 
 
 print("STARTING TRAINTNG")
 print("DATASET PREP")
 
-dataset = PrimitiveShapes.generate_dataset(10, 2000)
+dataset = PrimitiveShapes.generate_dataset(20, 2000)
 loader = DataLoader(dataset=dataset, batch_size=1)
 print(len(loader))
 
-net = SimpleRelativeLayer(20, 20, 10, 5)
-optimizer = Adam(net.parameters(), lr=0.01, weight_decay=5e-4)
 loss_fn = ChamferDistLoss()
 
-net.train()
-losses = []
-for epoch in range(NB_EPOCHS):
-    print("epoch: {}".format(epoch))
-    temp_loss = []
+for i in range(LR_NB):
+    learning_rate = START_LR / max(1, (i * 10))
+    path = RESULT_PATH + NAME + "LearningRate{}/".format(round(learning_rate * 100000))
+    print(learning_rate)
 
-    i = 0
-    for batch in loader:
-        i += 1
-        print("batch {}".format(i))
-        optimizer.zero_grad()
+    net = SimpleRelativeLayer(20, 20, 10, 5, mean=False)
+    optimizer = Adam(net.parameters(), lr=learning_rate, weight_decay=5e-4)
 
-        origin, output = net(batch.pos)
-        loss = loss_fn(origin, output)
-        loss.backward()
-        optimizer.step()
-        temp_loss.append(loss)
+    net.train()
+    losses = []
 
-    losses.append(
-        sum(temp_loss) / (len(loader) * 20)
-    )
+    for epoch in range(NB_EPOCHS):
+        print(epoch)
+        temp_loss = []
 
-    if epoch % 5 == 0:
-        torch.save(
-            net.state_dict(),
-            RESULT_PATH + "SimpleRelativeLayer/" + "model_epoch{}.pt".format(epoch)
+        for batch in loader:
+            optimizer.zero_grad()
+
+            origin, cluster, output = net(batch.pos)
+            loss = loss_fn(origin, output, batch_in=cluster)
+            loss.backward()
+            optimizer.step()
+            temp_loss.append(loss)
+
+        losses.append(
+            sum(temp_loss) / (len(loader) * 20)
         )
-        plt.clf()
-        x = range(len(losses))
-        plt.plot(x, losses)
-        plt.legend(['train loss'])
-        plt.title('Simple Relative Layer train loss')
-        plt.yscale('log')
-        plt.savefig(
-            RESULT_PATH + "SimpleRelativeLayer/" + "loss_epoch{}.png".format(epoch)
-        )
+
+        if epoch % 5 == 0:
+            torch.save(
+                net.state_dict(),
+                path + "model_epoch{}.pt".format(epoch)
+            )
+            plt.clf()
+            x = range(len(losses))
+            plt.plot(x, losses)
+            plt.legend(['train loss'])
+            plt.title('Simple Relative Layer train loss')
+            plt.yscale('log')
+            plt.savefig(
+                path + "loss_epoch{}.png".format(epoch)
+            )
 
 
 

@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/relative_layer/relative_ae.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LossFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/LossFunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/relative_layer/decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/decoder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/encoder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/relative_layer/simple_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/simple_layer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/relative_layer/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/relative_layer/visualisation.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/visualisation.py" afterDir="false" />

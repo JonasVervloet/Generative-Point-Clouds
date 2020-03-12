@@ -8,11 +8,11 @@ from dataset.primitives import PrimitiveShapes
 from relative_layer.simple_layer import SimpleRelativeLayer
 
 
-NB_EPOCHS = 100
+NB_EPOCHS = 200
 NB_TESTS = 10
 RADIUS = 0.22
 RESULT_PATH = "D:/Documenten/Results/"
-NAME = "SimpleRelativeLayerRadius/"
+NAME = "LearningRate/LearningRate1000/"
 
 print("STARTING EVALUATING")
 print("DATASET PREP")
@@ -25,11 +25,6 @@ np_pos = pos.numpy()
 sample_inds = gnn.fps(pos, ratio=0.05)
 samples = pos[sample_inds]
 
-# knn_cluster, knn_inds = gnn.knn(pos, samples, k=20)
-# knn_points = pos[knn_inds]
-# midpoints = samples[knn_cluster]
-# relatives = knn_points - midpoints
-
 rad_cluster, rad_inds = gnn.radius(pos, samples, r=RADIUS)
 rad_points = pos[rad_inds]
 rad_midpoints = samples[rad_cluster]
@@ -38,12 +33,6 @@ relatives = (rad_points - rad_midpoints) / RADIUS
 """
     VISUALISE LEARNING PROCESS
 """
-
-# neighbourhood = knn_points[knn_cluster == 0]
-# neighbourhood_np = neighbourhood.numpy()
-# neighbourhood_rel = relatives[knn_cluster == 0]
-# neigh_rel_np = neighbourhood_rel.numpy()
-# cluster = knn_cluster[knn_cluster == 0]
 
 neighbourhood = rad_points[rad_cluster == 0]
 neighbourhood_np = neighbourhood.numpy()
@@ -110,21 +99,18 @@ plot = mp.subplot(
 )
 net = SimpleRelativeLayer(20, 20, 10, 5)
 net.load_state_dict(
-    torch.load(RESULT_PATH + NAME + "model_epoch95.pt")
+    torch.load(RESULT_PATH + NAME + "model_epoch195.pt")
 )
 auto_encoder = net.ae
 
 for i in range(NB_TESTS):
     print(i)
-    # neigh = knn_points[knn_cluster == i]
     neigh = rad_points[rad_cluster == i]
     neigh_np = neigh.numpy()
 
-    # neigh_rel = relatives[knn_cluster == i]
     neigh_rel = relatives[rad_cluster == i]
     neigh_rel_np = neigh_rel.numpy()
 
-    # cluster = knn_cluster[knn_cluster == i]
     cluster = rad_cluster[rad_cluster == i]
     output = auto_encoder(neigh_rel, cluster)
     output_np = output.detach().numpy()

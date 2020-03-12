@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -36,7 +37,7 @@ class SimpleRelativeDecoder(nn.Module):
         transpose = squeezed.transpose(2, 1)
         # transpose = 1 x nb_feats2 x (nb_batch * nb_outputs)
 
-        conv = F.tanh(self.conv(transpose))
+        conv = torch.tan(self.conv(transpose))
         # conv = 1 x 3 x (nb_batch * nb_outputs)
 
         out = conv.transpose(1, 2)

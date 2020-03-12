@@ -1,12 +1,7 @@
 import torch
 
-range = torch.arange(0, 5)
-print(range)
-
-repeat = range.repeat_interleave(3)
-print(repeat)
-
-
+name = "LearningRate{}".format(round(0.1 * 100000))
+print(name)
 
 
 

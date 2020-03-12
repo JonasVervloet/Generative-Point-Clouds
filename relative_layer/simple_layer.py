@@ -40,9 +40,7 @@ class SimpleRelativeLayer(nn.Module):
         # midpoints = nb_points x 3
         # relative = nb_points x 3
 
-        # relative_out = self.ae(relative, knn_cluster)
         relative_out = self.ae(relative, rad_cluster)
-        # relative_out = nb_points x 3
 
         range = torch.arange(0, samples.size(0))
         range_inds = range.repeat_interleave(self.nb_neighbours)
@@ -51,17 +49,8 @@ class SimpleRelativeLayer(nn.Module):
         dec_abs = (relative_out * self.radius) + midpoints_out
         # dec_abs = nb_points x 3
 
-        # resized_orig = knn_points.view(-1, self.nb_neighbours, 3)
-        # resized_orig = (ratio * nb_points) x nb_neighbours x 3
-
-        # resized_rel = relative.view(-1, self.nb_neighbours, 3)
-        # resized_rel = (ratio * nb_points) x nb_neighbours x 3
-
         resized_deco = dec_abs.view(-1, self.nb_neighbours, 3)
         # resized_deco = (ratio * nb_points) x nb_neighbours x 3
-
-        resized_rel_out = relative_out.view(-1, self.nb_neighbours, 3)
-        # resized_rel_out = (ratio * nb_points) x nb_neighbours x 3
 
         return rad_points, rad_cluster, resized_deco
 

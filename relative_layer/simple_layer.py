@@ -25,8 +25,8 @@ class SimpleRelativeLayer(nn.Module):
         samples = points[sample_inds]
         # samples = (ratio * nb_points) x 3
 
-        knn_cluster, knn_inds = gnn.knn(points, samples, k=self.nb_neighbours)
-        knn_points = points[knn_inds]
+        # knn_cluster, knn_inds = gnn.knn(points, samples, k=self.nb_neighbours)
+        # knn_points = points[knn_inds]
         # knn_cluster = nb_point x 1
         # knn_points = nb_points x 3
 

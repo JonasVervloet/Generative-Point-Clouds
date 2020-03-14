@@ -8,17 +8,18 @@ from LossFunctions import ChamferDistLoss
 
 import matplotlib.pyplot as plt
 
+FROM_EPOCH = 0
 NB_EPOCHS = 200
 RESULT_PATH = "D:/Documenten/Results/"
-NAME = "LearningRate/"
+NAME = "LearningRateMean/"
 START_LR = 0.001
-LR_NB = 5
+LR_NB = 1
 
 
 print("STARTING TRAINTNG")
 print("DATASET PREP")
 
-dataset = PrimitiveShapes.generate_dataset(20, 2000)
+dataset = PrimitiveShapes.generate_dataset(30, 2000)
 loader = DataLoader(dataset=dataset, batch_size=1)
 print(len(loader))
 
@@ -28,14 +29,21 @@ for i in range(LR_NB):
     learning_rate = START_LR / max(1, (i * 10))
     path = RESULT_PATH + NAME + "LearningRate{}/".format(round(learning_rate * 100000))
     print(learning_rate)
+    print(round(learning_rate*100000))
 
-    net = SimpleRelativeLayer(20, 20, 10, 5, mean=False)
+    net = SimpleRelativeLayer(20, 20, 10, 5, mean=True)
+    if not FROM_EPOCH == 0:
+        print('loaded net')
+        net.load_state_dict(
+            torch.load(path + "model_epoch{}.pt".format(FROM_EPOCH))
+        )
     optimizer = Adam(net.parameters(), lr=learning_rate, weight_decay=5e-4)
 
     net.train()
     losses = []
 
-    for epoch in range(NB_EPOCHS):
+    for i in range(NB_EPOCHS - FROM_EPOCH):
+        epoch = i + FROM_EPOCH
         print(epoch)
         temp_loss = []
 
@@ -58,7 +66,7 @@ for i in range(LR_NB):
                 path + "model_epoch{}.pt".format(epoch)
             )
             plt.clf()
-            x = range(len(losses))
+            x = range(FROM_EPOCH, epoch + 1)
             plt.plot(x, losses)
             plt.legend(['train loss'])
             plt.title('Simple Relative Layer train loss')

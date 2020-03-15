@@ -5,9 +5,9 @@ import torch_geometric.nn as gnn
 from relative_layer.encoder import SimpleRelativeEncoder
 
 
-class ComposeLayerEncoder(nn.Module):
+class MiddleLayerEncoder(nn.Module):
     def __init__(self, nb_feats,  mean=False):
-        super(ComposeLayerEncoder, self).__init__()
+        super(MiddleLayerEncoder, self).__init__()
 
         self.encoder = SimpleRelativeEncoder(20, 10, 5)
         self.conv = nn.Conv1d(13, nb_feats, 1)
@@ -16,7 +16,6 @@ class ComposeLayerEncoder(nn.Module):
         self.mean = mean
 
     def forward(self, relative_points, features, cluster):
-        print("encoder!")
 
         # relative_points = (nb_cluster x nb_points) x 3
         # features = (nb_cluster x nb_points) x 5
@@ -24,42 +23,33 @@ class ComposeLayerEncoder(nn.Module):
 
         encoded = self.encoder(relative_points, cluster)
         # encoded = nb_cluster x 5
-        print(encoded.size())
 
         encoded_mapped = encoded[cluster]
         # encoded = (nb_cluster x nb_points) x 5
-        print(encoded_mapped.size())
 
         concat = torch.cat([relative_points, features, encoded_mapped], 1)
         # encoded = (nb_cluster x nb_points) x 13
-        print(concat.size())
 
         unsqueezed = concat.unsqueeze(0)
         # unsqueezed = 1 x (nb_cluster x nb_points) x 13
-        print(unsqueezed.size())
 
         transpose = unsqueezed.transpose(2, 1)
         # unsqueezed = 1 x 13 x (nb_cluster x nb_points)
-        print(transpose.size())
 
         conv = F.relu(self.conv(transpose))
         # conv = 1 x nb_feats x (nb_cluster x nb_points)
-        print(conv.size())
 
         transpose2 = conv.transpose(1, 2)
         # transpose2 = 1 x (nb_cluster x nb_points) x nb_feats
-        print(transpose2.size())
 
         if self.mean:
             feats = gnn.global_mean_pool(transpose2[0], cluster)
         else:
             feats = gnn.global_max_pool(transpose2[0], cluster)
         # feats = nb_cluster x nb_feats
-        print(feats.size())
 
         feats_out = F.relu(self.fc(feats))
         # feats2 = nb_cluster x nb_feats
-        print(feats_out.size())
 
         return encoded, feats_out
 

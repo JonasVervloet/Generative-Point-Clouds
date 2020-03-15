@@ -2,9 +2,6 @@ import torch
 import torch.nn as nn
 import torch_geometric.nn as gnn
 
-from relative_layer.encoder import SimpleRelativeEncoder
-from relative_layer.decoder import SimpleRelativeDecoder
-
 from relative_layer.relative_ae import RelativeAutoEncoder
 
 

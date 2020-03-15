@@ -12,7 +12,7 @@ FROM_EPOCH = 0
 NB_EPOCHS = 200
 RESULT_PATH = "D:/Documenten/Results/"
 NAME = "LearningRateMean/"
-START_LR = 0.001
+START_LR = 0.0001
 LR_NB = 1
 
 
@@ -25,8 +25,8 @@ print(len(loader))
 
 loss_fn = ChamferDistLoss()
 
-for i in range(LR_NB):
-    learning_rate = START_LR / max(1, (i * 10))
+for lr in range(LR_NB):
+    learning_rate = START_LR / max(1, (lr * 10))
     path = RESULT_PATH + NAME + "LearningRate{}/".format(round(learning_rate * 100000))
     print(learning_rate)
     print(round(learning_rate*100000))

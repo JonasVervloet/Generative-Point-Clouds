@@ -1,12 +1,14 @@
+import torch
 import torch_geometric.nn as gnn
 
 from composed_layer.encoder import ComposeLayerEncoder
+from composed_layer.decoder import ComposedLayerDecoder
 from relative_layer.encoder import SimpleRelativeEncoder
 from dataset.primitives import PrimitiveShapes
 
-
 encoder = SimpleRelativeEncoder(20, 10, 5)
 encoder2 = ComposeLayerEncoder(25)
+decoder = ComposedLayerDecoder()
 
 dataset = PrimitiveShapes.generate_dataset(1, 2000)
 points = dataset[0].pos
@@ -42,7 +44,9 @@ print(relative2.size())
 
 print()
 
-encoder2(relative2, rad2_feats, rad2_cluster)
+encoded, feats = encoder2(relative2, rad2_feats, rad2_cluster)
+print()
+decoder(encoded, feats)
 
 
 

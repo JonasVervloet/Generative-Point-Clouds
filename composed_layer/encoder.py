@@ -8,6 +8,7 @@ from relative_layer.encoder import SimpleRelativeEncoder
 class ComposeLayerEncoder(nn.Module):
     def __init__(self, nb_feats,  mean=False):
         super(ComposeLayerEncoder, self).__init__()
+
         self.encoder = SimpleRelativeEncoder(20, 10, 5)
         self.conv = nn.Conv1d(13, nb_feats, 1)
         self.fc = nn.Linear(nb_feats, nb_feats)
@@ -56,11 +57,11 @@ class ComposeLayerEncoder(nn.Module):
         # feats = nb_cluster x nb_feats
         print(feats.size())
 
-        out = F.relu(self.fc(feats))
-        # out = nb_cluster x nb_feats
-        print(out.size())
+        feats_out = F.relu(self.fc(feats))
+        # feats2 = nb_cluster x nb_feats
+        print(feats_out.size())
 
-        return out
+        return encoded, feats_out
 
 
 

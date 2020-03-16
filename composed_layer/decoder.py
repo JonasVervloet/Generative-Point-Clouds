@@ -5,12 +5,14 @@ from relative_layer.decoder import SimpleRelativeDecoder
 
 
 class MiddleLayerDecoder(nn.Module):
-    def __init__(self):
+    def __init__(self, nb_feats_in=25, nb_feats_out=5, nb_outputs=20):
         super(MiddleLayerDecoder, self).__init__()
 
-        self.decoder = SimpleRelativeDecoder(5, 10, 20, 20)
-        self.fc1 = nn.Linear(28, 10)
-        self.fc2 = nn.Linear(10, 5)
+        self.decoder = SimpleRelativeDecoder(5, 10, 20, nb_outputs)
+        self.fc1 = nn.Linear(nb_feats_in + 3, 10)
+        self.fc2 = nn.Linear(10, nb_feats_out)
+
+        self.nb_outputs = nb_outputs
 
     def forward(self, encoded, feats):
 
@@ -20,7 +22,7 @@ class MiddleLayerDecoder(nn.Module):
         decoded = self.decoder(encoded)
         # decoded = (nb_batch * 20) x 3
 
-        repeat = feats.repeat_interleave(20, dim=0)
+        repeat = feats.repeat_interleave(self.nb_outputs, dim=0)
         # repeat = (nb_batch * 20) x 25
 
         concat = torch.cat([decoded, repeat], 1)

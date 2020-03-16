@@ -1,19 +1,26 @@
-from composed_layer.auto_encoder import ComposedAutoEncoder
-from dataset.primitives import PrimitiveShapes
+from torch_geometric.data import DataLoader
 
-RADIUS1 = 0.3
-RADIUS2 = 1.0
+from dataset.primitives import PrimitiveShapes
+from full_network.full_nework import FullNetwork
 
 dataset = PrimitiveShapes.generate_dataset(1, 2000)
-points = dataset[0].pos
-print(points.size())
-print()
+loader = DataLoader(dataset=dataset, batch_size=2)
 
-encoder = ComposedAutoEncoder()
-out = encoder(points)
+done = False
 
-print()
-print(out.size())
+for batch_data in loader:
+    if done:
+        break
+    else:
+        done = True
+    print(batch_data)
+
+    net = FullNetwork()
+    out = net(batch_data.pos, batch_data.batch)
+
+    print()
+    print(out.size())
+
 
 
 

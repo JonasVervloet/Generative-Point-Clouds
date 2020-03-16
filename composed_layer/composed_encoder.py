@@ -8,7 +8,7 @@ class ComposedEncoder(nn.Module):
         super(ComposedEncoder, self).__init__()
 
         self.enc1 = SimpleRelativeEncoder(20, 10, 5)
-        self.enc2 = MiddleLayerEncoder(25)
+        self.enc2 = MiddleLayerEncoder(nb_feats_out=25)
 
     def forward(self, relative_neighs, cluster, relative_neighs2, indices2, cluster2):
 

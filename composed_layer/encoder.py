@@ -6,12 +6,23 @@ from relative_layer.encoder import SimpleRelativeEncoder
 
 
 class MiddleLayerEncoder(nn.Module):
-    def __init__(self, nb_feats,  mean=False):
+    def __init__(self, nb_feats_neighb=5, nb_feats_in=5, nb_feats_out=25,  mean=False):
         super(MiddleLayerEncoder, self).__init__()
 
-        self.encoder = SimpleRelativeEncoder(20, 10, 5)
-        self.conv = nn.Conv1d(13, nb_feats, 1)
-        self.fc = nn.Linear(nb_feats, nb_feats)
+        self.encoder = SimpleRelativeEncoder(
+            20,
+            10,
+            nb_feats_out=nb_feats_neighb
+        )
+        self.conv = nn.Conv1d(
+            in_channels=nb_feats_in + nb_feats_neighb + 3,
+            out_channels=nb_feats_out,
+            kernel_size=1
+        )
+        self.fc = nn.Linear(
+            in_features=nb_feats_out,
+            out_features=nb_feats_out
+        )
 
         self.mean = mean
 

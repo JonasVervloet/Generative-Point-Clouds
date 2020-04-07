@@ -24,3 +24,9 @@ class RelativeAutoEncoder(nn.Module):
         # decoded = nb_points x 3
 
         return decoded
+
+    def set_encoder(self, encoder):
+        self.enc = encoder
+
+    def set_decoder(self, decoder):
+        self.dec = decoder

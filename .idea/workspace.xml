@@ -2,15 +2,36 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/full_network/full_decoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/full_network/full_encoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/full_network/full_nework.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/full_network/training.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/full_network/training2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/full_network/visualisation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/decoder2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/decoder3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/encoder2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/encoder3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/grid_deformation_vis.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/rotation_invariant_layer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/simple_layer2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/simple_layer3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/visualisation/normals.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/visualisation/one_layer_features.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/visualisation/radius.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LossFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/LossFunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composed_layer/composed_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/composed_layer/composed_encoder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composed_layer/decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/composed_layer/decoder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composed_layer/encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/composed_layer/encoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/primitives.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/primitives.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/full_network/full_decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/full_decoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/full_network/full_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/full_encoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/full_network/full_nework.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/full_nework.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/full_network/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/decoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/relative_ae.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/relative_ae.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/simple_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/simple_layer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/visualisation.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/visualisation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/visualisation/fps.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualisation/fps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/visualisation/knn.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/full_network2.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +45,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Python Stub" />
         <option value="Python Script" />
       </list>
     </option>
@@ -58,7 +80,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Test">
+  <component name="RunManager" selected="Python.visualisation (1)">
     <configuration name="MnistVAE" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -80,7 +102,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="PointCloudVAE_Eval" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="fps" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -88,11 +110,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/visualisation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train\PointCloudVAE_Eval.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/visualisation/fps.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -101,7 +123,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="PointCloudVAE_Train" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="one_layer_features" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -109,11 +131,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/visualisation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train\PointCloudVAE_Train.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/visualisation/one_layer_features.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -122,7 +144,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="training (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -130,11 +152,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/full_network" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/full_network/training.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -164,7 +186,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="visualisation" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="visualisation (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -172,11 +194,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/relative_layer" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/full_network" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/relative_layer/visualisation.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/full_network/visualisation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -187,19 +209,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.MnistVAE" />
-      <item itemvalue="Python.PointCloudVAE_Train" />
-      <item itemvalue="Python.PointCloudVAE_Eval" />
+      <item itemvalue="Python.training (1)" />
+      <item itemvalue="Python.visualisation (1)" />
+      <item itemvalue="Python.one_layer_features" />
       <item itemvalue="Python.training" />
-      <item itemvalue="Python.visualisation" />
-      <item itemvalue="Python.Test" />
+      <item itemvalue="Python.fps" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Test" />
+        <item itemvalue="Python.visualisation (1)" />
+        <item itemvalue="Python.training (1)" />
+        <item itemvalue="Python.fps" />
         <item itemvalue="Python.training" />
-        <item itemvalue="Python.visualisation" />
-        <item itemvalue="Python.PointCloudVAE_Eval" />
-        <item itemvalue="Python.PointCloudVAE_Train" />
+        <item itemvalue="Python.one_layer_features" />
       </list>
     </recent_temporary>
   </component>

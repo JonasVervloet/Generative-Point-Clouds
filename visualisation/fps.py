@@ -6,10 +6,10 @@ from relative_layer.encoder import SimpleRelativeEncoder as sre
 from relative_layer.decoder import SimpleRelativeDecoder as srd
 from relative_layer.simple_layer import SimpleRelativeLayer
 
-RESULT_PATH = "C:/Users/vervl/OneDrive/Documenten/GitHub/Generative-Mesh-Models/result/"
+RESULT_PATH = "D:/Documenten/Results/Visualisations/"
 mp.offline()
 
-dataset = ps.generate_dataset(5, 2000)
+dataset = ps.generate_dataset(5, 3600, [True, False, False, False, False])
 data = dataset[0]
 print(data)
 print(data.pos.size())
@@ -17,11 +17,11 @@ print(data.pos.size())
 pos = data.pos
 np_pos = pos.numpy()
 
-samples_inds = gnn.fps(pos, ratio=0.05)
+samples_inds = gnn.fps(pos, ratio=1/25)
 samples = pos[samples_inds]
 np_samples = samples.numpy()
 
-samples_inds2 = gnn.fps(samples, ratio=0.05)
+samples_inds2 = gnn.fps(samples, ratio=1/16)
 samples2 = samples[samples_inds2]
 np_samples2 = samples2.numpy()
 
@@ -63,7 +63,6 @@ fps_plot.save(RESULT_PATH + "fps_visualisation")
 
 print(samples.size())
 nb_samples = 10
-print(nb_samples)
 knn_plot = mp.subplot(
     np_samples, c=np_samples[:, 0], s=[nb_samples, 3, 0],
     shading={"point_size": 0.4}
@@ -101,13 +100,13 @@ for i in range(nb_samples):
 
 knn_plot.save(RESULT_PATH + "knn_visualisation")
 
-encoder = sre(20, 10, 5)
-latent = encoder(data.pos[knn_inds], knn_cluster)
-
-decoder = srd(5, 10, 20, 20)
-out = decoder(latent)
-slayer = SimpleRelativeLayer(20, 20, 10, 5)
-slayer(data.pos)
+# encoder = sre(20, 10, 5)
+# latent = encoder(data.pos[knn_inds], knn_cluster)
+#
+# decoder = srd(5, 10, 20, 20)
+# out = decoder(latent)
+# slayer = SimpleRelativeLayer(20, 20, 10, 5)
+# slayer(data.pos)
 
 
 

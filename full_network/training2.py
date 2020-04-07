@@ -2,35 +2,22 @@ import torch
 from torch.optim import Adam
 from torch_geometric.data import DataLoader
 
-from dataset.primitives import PrimitiveShapes
-from relative_layer.simple_layer import SimpleRelativeLayer
-from relative_layer.simple_layer2 import SimpleRelativeLayer2
-from relative_layer.simple_layer3 import SimpleRelativeLayer3
-from relative_layer.decoder2 import RelativeDecoder
-from relative_layer.encoder2 import RelativeEncoder
-from relative_layer.decoder3 import RelativeDecoder2
-from relative_layer.rotation_invariant_layer import RotationInvariantLayer
-from LossFunctions import ChamferDistLoss
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-FROM_EPOCH = 20
-NB_EPOCHS = 30
+from dataset.primitives import PrimitiveShapes
+from LossFunctions import ChamferDistLoss
+from full_network.full_nework import FullNetwork
+
+FROM_EPOCH = 90
+NB_EPOCHS = 110
 RESULT_PATH = "D:/Documenten/Results/"
-NAME = "LearningRate2/"
+NAME = "FullNetwork/"
 START_LR = 0.001
 LR_NB = 1
-NB_NEIGHS = 25
-NB_NEIGHS2 = 16
-NB_NEIGHS3 = 9
 NB_POINTS = 3600
-TRAIN_SIZE = 200
-VAL_SIZE = 20
-RADIUS = 0.23
-RADIUS2 = 1.3
-RADIUS3 = 2.0
-
+TRAIN_SIZE = 50
+VAL_SIZE = 5
 
 print("STARTING TRAINTNG")
 print("DATASET PREP")
@@ -57,58 +44,61 @@ for lr in range(LR_NB):
     print(learning_rate)
     print(round(learning_rate*100000))
 
+    net = FullNetwork()
     train_losses = np.empty(0)
     val_losses = np.empty(0)
-    # net = SimpleRelativeLayer(NB_NEIGHS, 80, 40, 20, radius=RADIUS, mean=False)
-    # net.set_decoder(RelativeDecoder2(NB_NEIGHS, 20, 40, 80))
-    # net = RotationInvariantLayer(NB_NEIGHS, RADIUS, 80, 40, 20)
-    # net = SimpleRelativeLayer2(NB_NEIGHS, NB_NEIGHS2, 80, 40, 20, RADIUS2)
-    net = SimpleRelativeLayer3(NB_NEIGHS, NB_NEIGHS2, NB_NEIGHS3, 80, 40, 20, radius=RADIUS3)
-
     if not FROM_EPOCH == 0:
-        print('LOADING NET...')
+        print('loaded net')
         net.load_state_dict(
             torch.load(path + "model_epoch{}.pt".format(FROM_EPOCH))
         )
         train_losses = np.load(path + "trainloss_epoch{}.npy".format(FROM_EPOCH))
         val_losses = np.load(path + "valloss_epoch{}.npy".format(FROM_EPOCH))
-
     optimizer = Adam(net.parameters(), lr=learning_rate, weight_decay=5e-4)
 
+    net.train()
     for i in range(NB_EPOCHS + 1 - FROM_EPOCH):
         epoch = i + FROM_EPOCH
         print(epoch)
-
-        if not FROM_EPOCH == 0 and epoch == FROM_EPOCH:
-            continue
-
-        net.train()
         temp_loss = []
+
         for batch in train_loader:
             optimizer.zero_grad()
 
-            origin, cluster, output = net(batch.pos, batch.batch)
-            # origin, cluster, output, cluster_out = net(batch.pos, batch.norm)
-            loss = loss_fn(origin, output, batch_in=cluster)
-            # loss = loss_fn(origin, output, batch_in=cluster, batch_out=cluster_out)
+            pos = batch.pos
+            batch_inds = batch.batch
+
+            samples2_out, batch_samples2_out, samples_out, batch_samples_out, points_out, batch_out = net(pos, batch_inds)
+            loss = loss_fn(
+                pos,
+                points_out,
+                batch_in=batch_inds,
+                batch_out=batch_out
+            )
             loss.backward()
             optimizer.step()
-            temp_loss.append(loss)
+            temp_loss.append(loss.item())
 
-        train_loss = (sum(temp_loss) / (len(train_loader) * NB_NEIGHS)).detach().numpy()
+        train_loss = sum(temp_loss) / len(train_loader)
         print(train_loss)
         train_losses = np.append(train_losses, train_loss)
 
         net.eval()
         temp_loss = []
         for val_batch in val_loader:
-            origin, cluster, output = net(val_batch.pos, batch.batch)
-            # origin, cluster, output, cluster_out = net(val_batch.pos, val_batch.norm)
-            loss = loss_fn(origin, output, batch_in=cluster)
-            # loss = loss_fn(origin, output, batch_in=cluster, batch_out=cluster_out)
+            pos = val_batch.pos
+            batch_inds = val_batch.batch
+
+            points_out, batch_out = net(pos, batch_inds)
+            loss = loss_fn(
+                pos,
+                points_out,
+                batch_in=batch_inds,
+                batch_out=batch_out
+            )
             temp_loss.append(loss.item())
 
-        val_loss = sum(temp_loss) / (len(val_loader) * NB_NEIGHS)
+        val_loss = sum(temp_loss) / len(val_loader)
         print(val_loss)
         val_losses = np.append(val_losses, val_loss)
 
@@ -128,12 +118,4 @@ for lr in range(LR_NB):
             plt.savefig(
                 path + "loss_epoch{}.png".format(epoch)
             )
-
-
-
-
-
-
-
-
 

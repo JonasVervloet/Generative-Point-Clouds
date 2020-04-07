@@ -1,26 +1,24 @@
-from torch_geometric.data import DataLoader
+import torch
+import torch.nn as nn
+import numpy as np
+import math
+import point_cloud_utils as pcu
 
-from dataset.primitives import PrimitiveShapes
-from full_network.full_nework import FullNetwork
+from dataset.primitives import PrimitiveShapes as ps
+import meshplot as mp
 
-dataset = PrimitiveShapes.generate_dataset(1, 2000)
-loader = DataLoader(dataset=dataset, batch_size=2)
+from relative_layer.decoder3 import RelativeDecoder2
+from relative_layer.decoder import SimpleRelativeDecoder
+from relative_layer.rotation_invariant_layer import RotationInvariantLayer
+from relative_layer.encoder3 import RotationInvariantEncoder
 
-done = False
+RESULT_PATH = "D:/Documenten/Results/"
 
-for batch_data in loader:
-    if done:
-        break
-    else:
-        done = True
-    print(batch_data)
-
-    net = FullNetwork()
-    out = net(batch_data.pos, batch_data.batch)
-
-    print()
-    print(out.size())
-
+test = torch.tensor([1, 2, 3, 4, 5])
+test2 = test.clone()
+test2[0] = 5
+print(test)
+print(test2)
 
 
 

@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 
 class SimpleRelativeEncoder(nn.Module):
-    def __init__(self, nb_feats1, nb_feats2, nb_feats_out, mean=False):
+    def __init__(self, nb_feats1=80, nb_feats2=40, nb_feats_out=20, mean=False):
         super(SimpleRelativeEncoder, self).__init__()
         self.conv = nn.Conv1d(3, nb_feats1, 1)
 

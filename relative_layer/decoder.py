@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 class SimpleRelativeDecoder(nn.Module):
-    def __init__(self, nb_feats_in, nb_feats1, nb_feats2, nb_outputs):
+    def __init__(self, nb_feats_in=20, nb_feats1=40, nb_feats2=80, nb_outputs=25):
         super(SimpleRelativeDecoder, self).__init__()
 
         self.fc1 = nn.Linear(nb_feats_in, nb_feats1)
@@ -17,6 +17,8 @@ class SimpleRelativeDecoder(nn.Module):
 
         self.feats2 = nb_feats2
         # self.feats1 = nb_feats1
+
+        self.nb_outputs = nb_outputs
 
     def forward(self, feats):
         # feats = nb_batch x nb_feats_in
@@ -46,5 +48,7 @@ class SimpleRelativeDecoder(nn.Module):
         out = conv.transpose(1, 2)
         # out = 1 x (nb_batch * nb_outputs) x 3
 
-        return out[0]
+        cluster = torch.arange(feats.size(0)).repeat_interleave(self.nb_outputs)
+
+        return out[0], cluster
 

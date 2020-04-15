@@ -10,10 +10,10 @@ class NeighborhoodEncoder(nn.Module):
         The module is permutation invariant and can handle neighborhoods of
         different sizes.
     """
-    def __init__(self, nb_features, mean=False):
+    def __init__(self, nbs_features, pool_index, mean=False):
         """
         Initializes the parameters of this module.
-        :param nb_features: A list of three integers representing the number of
+        :param nbs_features: A list of three integers representing the number of
             features at each stage of the encoding. These numbers are translated
             into three different fully connected networks. The first fc network
             works on each input point separately after which a clusterwise pooling
@@ -23,14 +23,26 @@ class NeighborhoodEncoder(nn.Module):
             size and permutation invariant.
         """
         super(NeighborhoodEncoder, self).__init__()
+        assert(len(nbs_features) > 0)
+        assert(pool_index <= len(nbs_features))
 
-        assert(len(nb_features) == 3)
-
-        self.fc1 = nn.Linear(3, nb_features[0])
-        self.fc2 = nn.Linear(nb_features[0], nb_features[1])
-        self.fc3 = nn.Linear(nb_features[1], nb_features[2])
-
+        self.fc_layers = nn.ModuleList()
+        self.pool_index = pool_index
+        self.output_size = 3
         self.mean = mean
+
+        self.initiate_fc_layers(nbs_features)
+
+    def initiate_fc_layers(self, nbs_features):
+        output_size = 3
+        for i in range(len(nbs_features)):
+            self.fc_layers.append(
+                nn.Linear(output_size,
+                          nbs_features[i])
+            )
+            output_size = nbs_features[i]
+
+        self.output_size = output_size
 
     def forward(self, points, cluster):
         """
@@ -40,25 +52,31 @@ class NeighborhoodEncoder(nn.Module):
         :param cluster: Torch tensor that assigns each point in points to
             a certain cluster.
         :return: Returns for each cluster a single encoded vector of size
-            nb_features[2].
+            [number of clusters, output_size].
         """
-        # points = (nb_cluster * nb_points) x 3
-        # batch = (nb_cluster * nb_points)
 
-        # fc1 = (nb_cluster * nb_points) x nb_features[0]
-        fc1 = F.relu(self.fc1(points))
+        encoded = points
+        i = 0
+        for fc_layer in self.fc_layers:
+            if i == self.pool_index:
+                if self.mean:
+                    encoded = gnn.global_mean_pool(encoded, cluster)
+                else:
+                    encoded = gnn.global_max_pool(encoded, cluster)
 
-        # pool = nb_cluster x nb_features[0]
-        if self.mean:
-            pool = gnn.global_mean_pool(fc1, cluster)
-        else:
-            pool = gnn.global_max_pool(fc1, cluster)
+            encoded = F.relu(fc_layer(encoded))
+            i += 1
 
-        # fc2 = nb_cluster x nb_features[1]
-        fc2 = F.relu(self.fc2(pool))
+        if i == self.pool_index:
+            if self.mean:
+                encoded = gnn.global_mean_pool(encoded, cluster)
+            else:
+                encoded = gnn.global_max_pool(encoded, cluster)
 
-        # out = nb_cluster x nb_features[2]
-        return F.relu(self.fc3(fc2))
+        return encoded
+
+    def get_output_size(self):
+        return self.output_size
 
     @staticmethod
     def accept_parent(parent):

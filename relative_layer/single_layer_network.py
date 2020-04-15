@@ -50,12 +50,9 @@ class SingleLayerNetwork(nn.Module):
         :return: The origal points and the cluster they belong to is returned as well as the
             output points and the cluster that they belong to.
         """
-        # points = (nb_batch * nb_points) x 3
-        # points = (nb_batch * nb_points) x 1
         points = batch_object.pos
         batch = batch_object.batch
 
-        # normals = (nb_batch * nb_points) x 3
         if self.normal_required:
             normals = batch_object.norm
 

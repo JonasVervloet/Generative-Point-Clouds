@@ -2,138 +2,160 @@ import torch
 from torch.optim import Adam
 from torch_geometric.data import DataLoader
 
-from dataset.primitives import PrimitiveShapes
-from relative_layer.simple_layer import SimpleRelativeLayer
-from relative_layer.simple_layer2 import SimpleRelativeLayer2
-from relative_layer.simple_layer3 import SimpleRelativeLayer3
-from relative_layer.decoder2 import RelativeDecoder
-from relative_layer.encoder2 import RelativeEncoder
-from relative_layer.decoder3 import RelativeDecoder2
-from relative_layer.rotation_invariant_layer import RotationInvariantLayer
-from LossFunctions import ChamferDistLoss
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-FROM_EPOCH = 20
-NB_EPOCHS = 30
-RESULT_PATH = "D:/Documenten/Results/"
-NAME = "LearningRate2/"
-START_LR = 0.001
-LR_NB = 1
-NB_NEIGHS = 25
-NB_NEIGHS2 = 16
-NB_NEIGHS3 = 9
+from dataset.primitives import PrimitiveShapes
+from LossFunctions import ChamferDistLoss
+from relative_layer.single_layer_network import SingleLayerNetwork
+from relative_layer.neighborhood_encoder import NeighborhoodEncoder
+from relative_layer.neighborhood_decoder import NeighborhoodDecoder
+
+# PATH VARIABLES
+RESULT_PATH = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
+NAME = "Network3/"
+PATH = RESULT_PATH + NAME
+
+# EPOCH + LEARNING RATE
+FROM_EPOCH = 0
+END_EPOCH = 50
+LEARNING_RATE = 0.001
+
+# DATASET VARIABLES
 NB_POINTS = 3600
-TRAIN_SIZE = 200
-VAL_SIZE = 20
+SPHERE = True
+CUBE = True
+CYLINDER = True
+PYRAMID = True
+TORUS = True
+SHAPES = [SPHERE, CUBE, CYLINDER, PYRAMID, TORUS]
+NORMALS = False
+TRAIN_SIZE = 50
+VAL_SIZE = 5
+BATCH_SIZE = 5
+
+# SINGLE LAYER NETWORK VARIABLES
+NB_LAYERS = 1
+NBS_NEIGHS = [25]
+FINAL_LAYER = False
 RADIUS = 0.23
-RADIUS2 = 1.3
-RADIUS3 = 2.0
+if FINAL_LAYER:
+    NB_CLUSTER = 1
+else:
+    nb_points = NB_POINTS
+    for i in range(NB_LAYERS):
+        nb_points /= NBS_NEIGHS[i]
+    NB_CLUSTER = nb_points
+
+# ENCODER AND DECODER
+ENCODER = NeighborhoodEncoder(
+    nbs_features=[80, 40, 20],
+    pool_index=1,
+    mean=False
+)
+DECODER = NeighborhoodDecoder(
+    nbs_features=[20, 40, 80],
+    unpool_index=2,
+    nb_neighbors=NBS_NEIGHS[-1]
+)
 
 
-print("STARTING TRAINTNG")
+print("SCRIPT STARTED")
 print("DATASET PREP")
 print("train data")
 train_dataset = PrimitiveShapes.generate_dataset(
-    TRAIN_SIZE, NB_POINTS,
-    shapes=[True, True, True, True, True], normals=False
+    nb_objects=TRAIN_SIZE, nb_points=NB_POINTS,
+    shapes=SHAPES, normals=NORMALS
 )
 print("validation data")
 val_dataset = PrimitiveShapes.generate_dataset(
-    VAL_SIZE, NB_POINTS,
-    shapes=[True, True, True, True, True], normals=False
+    nb_objects=VAL_SIZE, nb_points=NB_POINTS,
+    shapes=SHAPES, normals=NORMALS
 )
-train_loader = DataLoader(dataset=train_dataset, batch_size=5)
-val_loader = DataLoader(dataset=val_dataset, batch_size=5)
-print(len(train_loader))
-print(len(val_loader))
+train_loader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE)
+val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE)
+print("train loader length: {}".format(len(train_loader)))
+print("val loader length: {}".format(len(val_loader)))
 
 loss_fn = ChamferDistLoss()
 
-for lr in range(LR_NB):
-    learning_rate = START_LR / max(1, (lr * 10))
-    path = RESULT_PATH + NAME + "LearningRate{}/".format(round(learning_rate * 100000))
-    print(learning_rate)
-    print(round(learning_rate*100000))
+print("NETWORK SETUP")
+print("nb clusters: {}".format(NB_CLUSTER))
+print("nb shape types: {}".format(sum(SHAPES)))
+print("nb layers: {}".format(NB_LAYERS))
+print("nbs neighbors: {}".format(NBS_NEIGHS))
+print("final layer: {}".format(FINAL_LAYER))
+print("radius: {}".format(RADIUS))
+train_losses = np.empty(0)
+val_losses = np.empty(0)
+net = SingleLayerNetwork(
+    nb_layers=NB_LAYERS,
+    nbs_neighbors=NBS_NEIGHS,
+    final_layer=FINAL_LAYER,
+    radius=RADIUS
+)
+net.set_encoder(ENCODER)
+net.set_decoder(DECODER)
 
-    train_losses = np.empty(0)
-    val_losses = np.empty(0)
-    # net = SimpleRelativeLayer(NB_NEIGHS, 80, 40, 20, radius=RADIUS, mean=False)
-    # net.set_decoder(RelativeDecoder2(NB_NEIGHS, 20, 40, 80))
-    # net = RotationInvariantLayer(NB_NEIGHS, RADIUS, 80, 40, 20)
-    # net = SimpleRelativeLayer2(NB_NEIGHS, NB_NEIGHS2, 80, 40, 20, RADIUS2)
-    net = SimpleRelativeLayer3(NB_NEIGHS, NB_NEIGHS2, NB_NEIGHS3, 80, 40, 20, radius=RADIUS3)
+if not FROM_EPOCH == 0:
+    print('loading net...')
+    net.load_state_dict(
+        torch.load(PATH + "model_epoch{}.pt".format(FROM_EPOCH))
+    )
+    train_losses = np.load(PATH + "trainloss_epoch{}.npy".format(FROM_EPOCH))
+    val_losses = np.load(PATH + "valloss_epoch{}.npy".format(FROM_EPOCH))
 
-    if not FROM_EPOCH == 0:
-        print('LOADING NET...')
-        net.load_state_dict(
-            torch.load(path + "model_epoch{}.pt".format(FROM_EPOCH))
+optimizer = Adam(net.parameters(), lr=LEARNING_RATE, weight_decay=5e-4)
+
+print("TRAINING STARTING")
+print("learning rate: {}".format(LEARNING_RATE))
+print("from epoch: {}".format(FROM_EPOCH))
+print("end epoch: {}".format(END_EPOCH))
+for i in range(END_EPOCH + 1 - FROM_EPOCH):
+    epoch = i + FROM_EPOCH
+    print("epoch {}".format(epoch))
+
+    if not FROM_EPOCH == 0 and epoch == FROM_EPOCH:
+        continue
+
+    net.train()
+    temp_loss = []
+    for batch in train_loader:
+        optimizer.zero_grad()
+        input_points, cluster_in, output_points, cluster_out = net(batch)
+        loss = loss_fn(input_points, output_points, batch_in=cluster_in, batch_out=cluster_out)
+        loss.backward()
+        optimizer.step()
+        temp_loss.append(loss.item())
+
+    train_loss = sum(temp_loss) / (TRAIN_SIZE * sum(SHAPES) * NB_CLUSTER)
+    train_losses = np.append(train_losses, train_loss)
+    print("train loss: {}".format(train_loss))
+
+    net.eval()
+    temp_loss = []
+    for val_batch in val_loader:
+        input_points, cluster_in, output_points, cluster_out = net(batch)
+        loss = loss_fn(input_points, output_points, batch_in=cluster_in, batch_out=cluster_out)
+        temp_loss.append(loss.item())
+
+    val_loss = sum(temp_loss) / (VAL_SIZE * sum(SHAPES) * NB_CLUSTER)
+    val_losses = np.append(val_losses, val_loss)
+    print("val loss: {}".format(val_loss))
+
+    if epoch % 5 == 0:
+        np.save(PATH + "trainloss_epoch{}.npy".format(epoch), train_losses)
+        np.save(PATH + "valloss_epoch{}.npy".format(epoch), val_losses)
+        torch.save(
+            net.state_dict(),
+            PATH + "model_epoch{}.pt".format(epoch)
         )
-        train_losses = np.load(path + "trainloss_epoch{}.npy".format(FROM_EPOCH))
-        val_losses = np.load(path + "valloss_epoch{}.npy".format(FROM_EPOCH))
-
-    optimizer = Adam(net.parameters(), lr=learning_rate, weight_decay=5e-4)
-
-    for i in range(NB_EPOCHS + 1 - FROM_EPOCH):
-        epoch = i + FROM_EPOCH
-        print(epoch)
-
-        if not FROM_EPOCH == 0 and epoch == FROM_EPOCH:
-            continue
-
-        net.train()
-        temp_loss = []
-        for batch in train_loader:
-            optimizer.zero_grad()
-
-            origin, cluster, output = net(batch.pos, batch.batch)
-            # origin, cluster, output, cluster_out = net(batch.pos, batch.norm)
-            loss = loss_fn(origin, output, batch_in=cluster)
-            # loss = loss_fn(origin, output, batch_in=cluster, batch_out=cluster_out)
-            loss.backward()
-            optimizer.step()
-            temp_loss.append(loss)
-
-        train_loss = (sum(temp_loss) / (len(train_loader) * NB_NEIGHS)).detach().numpy()
-        print(train_loss)
-        train_losses = np.append(train_losses, train_loss)
-
-        net.eval()
-        temp_loss = []
-        for val_batch in val_loader:
-            origin, cluster, output = net(val_batch.pos, batch.batch)
-            # origin, cluster, output, cluster_out = net(val_batch.pos, val_batch.norm)
-            loss = loss_fn(origin, output, batch_in=cluster)
-            # loss = loss_fn(origin, output, batch_in=cluster, batch_out=cluster_out)
-            temp_loss.append(loss.item())
-
-        val_loss = sum(temp_loss) / (len(val_loader) * NB_NEIGHS)
-        print(val_loss)
-        val_losses = np.append(val_losses, val_loss)
-
-        if epoch % 5 == 0:
-            np.save(path + "trainloss_epoch{}.npy".format(epoch), train_losses)
-            np.save(path + "valloss_epoch{}.npy".format(epoch), val_losses)
-            torch.save(
-                net.state_dict(),
-                path + "model_epoch{}.pt".format(epoch)
-            )
-            plt.clf()
-            x = range(len(train_losses))
-            plt.plot(x, train_losses, x, val_losses)
-            plt.legend(['train loss', 'validation loss'])
-            plt.title('Simple Relative Layer train loss')
-            plt.yscale('log')
-            plt.savefig(
-                path + "loss_epoch{}.png".format(epoch)
-            )
-
-
-
-
-
-
-
-
-
+        plt.clf()
+        x = range(len(train_losses))
+        plt.plot(x, train_losses, x, val_losses)
+        plt.legend(['train loss', 'validation loss'])
+        plt.title('Simple Relative Layer train loss')
+        plt.yscale('log')
+        plt.savefig(
+            PATH + "loss_epoch{}.png".format(epoch)
+        )

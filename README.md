@@ -16,11 +16,11 @@ In each layer, the decoder outputs a set of relative points. Using the points of
 ## Result
 The image below show the result of the network for some basic geometric shapes. Currently, the network is being tested on data from ShapeNet.
 
-![Result1](/images/FULL NETWORK RESULTS.png)
+![Result1](/images/fulle_network_result.png)
 
 Due to the layered sturcture of the network, the different stages of the network learning can be visualized. Currently, the network learns differently than expected. Experiments are currently being conducted where the loss funtion is adapted to force the network to better represent the intermediate point clouds as well.
 
-![Result2](/images/TORUS.png)
+![Result2](/images/stages_torus.png)
 
 
 

@@ -1,6 +1,5 @@
 # Generative Mesh Models
-In this project, deep generative neural networks are used to create unseen point clouds.
-The project uses neighborhoods of points to encoded and decoded point clouds in a layered structure.
+In this project, deep generative neural networks are used to create unseen point clouds. Neighborhoods of points are encoded and decoded using a layered structure. This layered structure enables parameter sharing and it gives insight in what the network is learning.
 
 ## Encoding
 In each layer, Furthest Point Sampling (FPS) is used to select points that best represent the point cloud in that layer. Next, the neighborhoods are defined by searching all points within a certain radius of the fps points. The neighborhoods are normalized, using the fps points and the radius, so that parameter sharing can be applied.

@@ -1,2 +1,2 @@
 # Generative Mesh Models
- Masterproef 2019-2020
+In this project, deep generative neural networks are used to create unseen point clouds.

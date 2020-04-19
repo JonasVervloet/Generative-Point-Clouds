@@ -17,7 +17,7 @@ The image below show the result of the network for some basic geometric shapes. 
 
 ![Result1](/images/full_network_result.PNG)
 
-Due to the layered sturcture of the network, the different stages of the network learning can be visualized. Currently, the network learns differently than expected. Experiments are currently being conducted where the loss funtion is adapted to force the network to better represent the intermediate point clouds as well.
+Due to the layered sturcture of the network, visualization of what the network is learning in each layer can give some useful information. Currently, the network learns differently than expected. Experiments are being conducted where the loss funtion is adapted to force the network to better represent the intermediate point clouds as well.
 
 ![Result2](/images/stages_torus.PNG)
 

@@ -1,10 +1,8 @@
 import numpy as np
 import math
 import random
-import matplotlib.pyplot as plt
 
 import torch
-import torch_geometric.nn as gnn
 from torch_geometric.data import Data
 import point_cloud_utils as pcu
 
@@ -31,13 +29,14 @@ class PrimitiveShapes:
             points = fn(sqrt_nb)
             perm = torch.randperm(len(points))
             points = torch.tensor(points)[perm]
+            points = points[:max_nb]
             if normals:
                 normal = torch.tensor(
                     pcu.estimate_normals(np.array(points), k=16)
                 )
-                datalist.append(Data(pos=points[:max_nb], norm=normal[:max_nb]))
+                datalist.append(Data(pos=points, norm=normal[:max_nb]))
             else:
-                datalist.append(Data(pos=points[:max_nb]))
+                datalist.append(Data(pos=points))
 
         return datalist
 
@@ -104,7 +103,6 @@ class PrimitiveShapes:
     """
     SPHERES
     """
-
     @staticmethod
     def generate_spheres(sqrt_nb):
 
@@ -133,7 +131,6 @@ class PrimitiveShapes:
     """
     CUBES
     """
-
     @staticmethod
     def generate_cube(sqrt_nb):
 
@@ -168,7 +165,6 @@ class PrimitiveShapes:
     """
     CYLINDER
     """
-
     @staticmethod
     def generate_cylinder(sqrt_nb):
 
@@ -244,7 +240,6 @@ class PrimitiveShapes:
     """
     PYRAMIDS
     """
-
     @staticmethod
     def generate_pyramid(sqrt_nb):
         points = []
@@ -335,7 +330,6 @@ class PrimitiveShapes:
     """
     TORUS
     """
-
     @staticmethod
     def generate_torus(sqrt_nb):
         points = []

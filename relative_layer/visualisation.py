@@ -1,16 +1,43 @@
 import torch
 import torch_geometric.nn as gnn
+from torch_geometric.data import Batch
 import meshplot as mp
 
 import numpy as np
 
 from dataset.primitives import PrimitiveShapes
-from relative_layer.simple_layer import SimpleRelativeLayer
-from relative_layer.encoder2 import RelativeEncoder
-from relative_layer.decoder2 import RelativeDecoder
-from relative_layer.decoder3 import RelativeDecoder2
+from relative_layer.neighborhood_encoder import NeighborhoodEncoder
+from relative_layer.neighborhood_decoder import NeighborhoodDecoder
+from relative_layer.single_layer_network import SingleLayerNetwork
 from relative_layer.rotation_invariant_layer import RotationInvariantLayer
-from relative_layer.simple_layer2 import SimpleRelativeLayer2
+
+# PATH VARIABLES
+RESULT_PATH = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
+NAME = "Network3/"
+PATH = RESULT_PATH + NAME
+
+# EPOCH + DATASET + TESTS
+NB_EPOCHS = 50
+NB_POINTS = 3600
+NB_TESTS = 20
+
+# SINGLE LAYER NETWORK VARIABLES
+NB_LAYERS = 1
+NBS_NEIGHS = [25]
+FINAL_LAYER = False
+RADIUS = 0.23
+
+# ENCODER AND DECODER
+ENCODER = NeighborhoodEncoder(
+    nbs_features=[80, 40, 20],
+    pool_index=1,
+    mean=False
+)
+DECODER = NeighborhoodDecoder(
+    nbs_features=[20, 40, 80],
+    unpool_index=2,
+    nb_neighbors=NBS_NEIGHS[-1]
+)
 
 
 def visualize_learing_process(pos, neighs, rels, cluster, model, nb_vis, path):
@@ -63,35 +90,22 @@ def visualize_learing_process(pos, neighs, rels, cluster, model, nb_vis, path):
     plot.save(path + "learning_process")
 
 
-def visualize_neighbourhoods(shape, nb_neighs, radius, net, path, nb_tests):
+def visualize_neighbourhoods(shape, model, nb_tests, path):
     mp.offline()
-
-    net.eval()
-    ae = net.ae
+    model.eval()
 
     pos = shape.pos
+    batch_obj = Batch(pos=pos, batch=torch.zeros(pos.size(0), dtype=torch.int64))
     np_pos = pos.numpy()
 
-    fps_inds = gnn.fps(pos, ratio=1 / nb_neighs)
-    fps_points = pos[fps_inds]
-
-    rad_cluster, rad_inds = gnn.radius(pos, fps_points, r=radius)
-    rad_points = pos[rad_inds]
-    rad_midpoints = fps_points[rad_cluster]
-    relatives = (rad_points - rad_midpoints) / radius
+    input_points, cluster_in, output_points, cluster_out = model(batch_obj)
 
     plot_created = False
-
     for i in range(nb_tests):
-        neighs = rad_points[rad_cluster == i]
-        neighs_np = neighs.numpy()
-
-        neighs_rel = relatives[rad_cluster == i]
-        neighs_rel_np = neighs_rel.numpy()
-
-        cluster = torch.zeros((neighs_rel.size(0)), dtype=torch.int64)
-        output = ae(neighs_rel, cluster)
-        output_np = output.detach().numpy()
+        inputs = input_points[cluster_in == i]
+        outputs = output_points[cluster_out == i]
+        inputs_np = inputs.numpy()
+        outputs_np = outputs.detach().numpy()
 
         if not plot_created:
             plot = mp.subplot(
@@ -105,13 +119,13 @@ def visualize_neighbourhoods(shape, nb_neighs, radius, net, path, nb_tests):
                 data=plot, shading={"point_size": 0.3}
             )
         plot.rows[2 * i][0].add_points(
-            neighs_np, shading={"point_size": 0.4}
+            inputs_np, shading={"point_size": 0.4}
         )
 
-        points = np.concatenate((neighs_rel_np, output_np))
+        points = np.concatenate((inputs_np, outputs_np))
         colors = np.concatenate(
-            (np.tile([1.0, 0, 0], (neighs_rel_np.shape[0], 1)),
-             np.tile([0, 0, 1.0], (output_np.shape[0], 1)))
+            (np.tile([1.0, 0, 0], (inputs_np.shape[0], 1)),
+             np.tile([0, 0, 1.0], (outputs_np.shape[0], 1)))
         )
         mp.subplot(
             points, c=colors, s=[nb_tests * 2, 1, 2 * i + 1],
@@ -317,25 +331,16 @@ def visualize_rot_inv_layer(shape, nb_neighs, radius, net, path, nb_tests):
     plot.save(path)
 
 
-def get_net():
-    # model = SimpleRelativeLayer(NB_NEIGHS, 80, 40, 20)
-    # model.set_encoder(RelativeEncoder(80, 40, 20, 20))
-    # model.set_decoder(RelativeDecoder(20, 40, 80, NB_NEIGHS))
-    # model = RotationInvariantLayer(25, 0.195, 80, 40, 20)
-    model = SimpleRelativeLayer2(25, 16, 80, 40, 20, 1.3)
-    return model
-
-
-NB_EPOCHS = 60
-NB_TESTS = 20
-RADIUS = 1.3
-NB_NEIGHS = 25
-NB_POINTS = 3600
-RESULT_PATH = "D:/Documenten/Results/"
-NAME = "LearningRate2/LearningRate100/"
+net = SingleLayerNetwork(
+    nb_layers=NB_LAYERS,
+    nbs_neighbors=NBS_NEIGHS,
+    final_layer=FINAL_LAYER,
+    radius=RADIUS
+)
+net.set_encoder(ENCODER)
+net.set_decoder(DECODER)
 
 print("STARTING EVALUATING")
-
 print("DATASET PREP")
 sphere = PrimitiveShapes.generate_dataset(1, NB_POINTS, [True, False, False, False, False], True)[0]
 cube = PrimitiveShapes.generate_dataset(1, NB_POINTS, [False, True, False, False, False], True)[0]
@@ -343,8 +348,8 @@ cylinder = PrimitiveShapes.generate_dataset(1, NB_POINTS, [False, False, True, F
 pyramid = PrimitiveShapes.generate_dataset(1, NB_POINTS, [False, False, False, True, False], True)[0]
 torus = PrimitiveShapes.generate_dataset(1, NB_POINTS, [False, False, False, False, True], True)[0]
 
-shape = pyramid
-
+# shape = pyramid
+#
 # print("Visualize learning process")
 #
 # nb_evals = int(NB_EPOCHS / 5) + 1
@@ -368,18 +373,17 @@ shape = pyramid
 # visualize_learing_process(pos, neighbourhood, neighs_rel, cluster, net, nb_evals, RESULT_PATH + NAME)
 
 print("Visualize different shapes")
-net = get_net()
 net.load_state_dict(
     torch.load(RESULT_PATH + NAME + "model_epoch{}.pt".format(NB_EPOCHS))
 )
-visualize_fn = visualize_neighbourhoods2
+visualize_fn = visualize_neighbourhoods
 print("sphere")
-visualize_fn(sphere, NB_NEIGHS, RADIUS, net, RESULT_PATH+NAME+"sphere_visualisation", NB_TESTS)
+visualize_fn(sphere, net, NB_TESTS, RESULT_PATH+NAME+"sphere_visualisation")
 print("cube")
-visualize_fn(cube, NB_NEIGHS, RADIUS, net, RESULT_PATH+NAME+"cube_visualisation", NB_TESTS)
+visualize_fn(cube, net, NB_TESTS, RESULT_PATH+NAME+"cube_visualisation")
 print("cylinder")
-visualize_fn(cylinder, NB_NEIGHS, RADIUS, net, RESULT_PATH+NAME+"cylinder_visualisation", NB_TESTS)
+visualize_fn(cylinder, net, NB_TESTS, RESULT_PATH+NAME+"cylinder_visualisation")
 print("pyramid")
-visualize_fn(pyramid, NB_NEIGHS, RADIUS, net, RESULT_PATH+NAME+"pyramid_visualisation", NB_TESTS)
+visualize_fn(pyramid, net, NB_TESTS, RESULT_PATH+NAME+"pyramid_visualisation")
 print("torus")
-visualize_fn(torus, NB_NEIGHS, RADIUS, net, RESULT_PATH+NAME+"torus_visualisation", NB_TESTS)
+visualize_fn(torus, net, NB_TESTS, RESULT_PATH+NAME+"torus_visualisation")

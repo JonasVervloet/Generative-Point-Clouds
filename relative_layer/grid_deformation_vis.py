@@ -3,7 +3,7 @@ import torch_geometric.nn as gnn
 import numpy as np
 import meshplot as mp
 
-from relative_layer.decoder3 import RelativeDecoder2
+from relative_layer.grid_deform_decoder import GridDeformationDecoder
 from relative_layer.simple_layer import SimpleRelativeLayer
 from dataset.primitives import PrimitiveShapes as ps
 
@@ -99,7 +99,7 @@ torus = ps.generate_dataset(1, NB_POINTS, [False, False, False, False, True])[0]
 
 print("Visualize different shapes")
 net = SimpleRelativeLayer(NB_NEIGHBOURS, 80, 40, 20, RADIUS)
-net.set_decoder(RelativeDecoder2(NB_NEIGHBOURS, 20, 40, 80))
+net.set_decoder(GridDeformationDecoder(NB_NEIGHBOURS, 20, 40, 80))
 net.load_state_dict(
     torch.load(RESULT_PATH + "model_epoch{}.pt".format(NB_EPOCHS))
 )

@@ -10,7 +10,7 @@ class NeighborhoodEncoder(nn.Module):
         The module is permutation invariant and can handle neighborhoods of
         different sizes.
     """
-    def __init__(self, nbs_features, pool_index, mean=False):
+    def __init__(self, nbs_features, nbs_features_global, mean=False):
         """
         Initializes the parameters of this module.
         :param nbs_features: A list of three integers representing the number of
@@ -24,25 +24,29 @@ class NeighborhoodEncoder(nn.Module):
         """
         super(NeighborhoodEncoder, self).__init__()
         assert(len(nbs_features) > 0)
-        assert(pool_index <= len(nbs_features))
 
         self.fc_layers = nn.ModuleList()
-        self.pool_index = pool_index
+        self.fc_layers_global = nn.ModuleList()
         self.output_size = 3
         self.mean = mean
 
-        self.initiate_fc_layers(nbs_features)
+        self.initiate_fc_layers(nbs_features, nbs_features_global)
 
-    def initiate_fc_layers(self, nbs_features):
-        output_size = 3
-        for i in range(len(nbs_features)):
+    def initiate_fc_layers(self, nbs_features, nbs_features_global):
+        input_size = 3
+        for nb in nbs_features:
             self.fc_layers.append(
-                nn.Linear(output_size,
-                          nbs_features[i])
+                nn.Linear(input_size, nb)
             )
-            output_size = nbs_features[i]
+            input_size = nb
 
-        self.output_size = output_size
+        for nb in nbs_features_global:
+            self.fc_layers_global.append(
+                nn.Linear(input_size, nb)
+            )
+            input_size = nb
+
+        self.output_size = input_size
 
     def forward(self, points, cluster):
         """
@@ -56,24 +60,19 @@ class NeighborhoodEncoder(nn.Module):
         """
 
         encoded = points
-        i = 0
         for fc_layer in self.fc_layers:
-            if i == self.pool_index:
-                if self.mean:
-                    encoded = gnn.global_mean_pool(encoded, cluster)
-                else:
-                    encoded = gnn.global_max_pool(encoded, cluster)
-
             encoded = F.relu(fc_layer(encoded))
-            i += 1
 
-        if i == self.pool_index:
-            if self.mean:
-                encoded = gnn.global_mean_pool(encoded, cluster)
-            else:
-                encoded = gnn.global_max_pool(encoded, cluster)
+        if self.mean:
+            encoded = gnn.global_mean_pool(encoded, cluster)
+        else:
+            encoded = gnn.global_max_pool(encoded, cluster)
 
-        return encoded
+        encoded_global = encoded
+        for fc_layer in self.fc_layers_global:
+            encoded_global = F.relu(fc_layer(encoded_global))
+
+        return encoded_global
 
     def get_output_size(self):
         return self.output_size

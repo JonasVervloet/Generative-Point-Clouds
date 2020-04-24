@@ -11,14 +11,9 @@ from relative_layer.single_layer_network import SingleLayerNetwork
 from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.grid_deform_decoder import GridDeformationDecoder
 
-import datetime
-
-begin_time = datetime.datetime.now()
-print("Begin-time: {}".format(begin_time))
-
 # PATH VARIABLES
-RESULT_PATH = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
-NAME = "Network5/"
+RESULT_PATH = "results/SingleLayerNetwork/"
+NAME = "Network1/"
 PATH = RESULT_PATH + NAME
 
 # EPOCH + LEARNING RATE
@@ -172,7 +167,3 @@ for i in range(END_EPOCH + 1 - FROM_EPOCH):
             PATH + "loss_epoch{}.png".format(epoch)
         )
 
-end_time = datetime.datetime.now()
-print("End-time: {}".format(end_time))
-
-print("Execution time: {}".format(end_time - begin_time))

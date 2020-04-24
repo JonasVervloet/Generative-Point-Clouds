@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/full_network/ae_training.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/training_vsc.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset/primitives.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/primitives.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/decoder3.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/grid_deform_decoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/grid_deformation_vis.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/grid_deformation_vis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/relative_layer/neighborhood_decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/neighborhood_decoder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/relative_layer/neighborhood_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/neighborhood_encoder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/relative_layer/single_layer_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/single_layer_network.py" afterDir="false" />
@@ -58,7 +61,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.ae_training">
+  <component name="RunManager" selected="Python.training">
     <configuration name="MnistVAE" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -195,9 +198,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.ae_training" />
-        <item itemvalue="Python.Test" />
         <item itemvalue="Python.training" />
+        <item itemvalue="Python.Test" />
+        <item itemvalue="Python.ae_training" />
         <item itemvalue="Python.visualisation" />
         <item itemvalue="Python.training2" />
       </list>

@@ -7,7 +7,7 @@ class NeighborhoodDecoder(nn.Module):
     """
     Module that decodes a single vector into a local neighborhood of 3D points.
     """
-    def __init__(self, nbs_features, unpool_index, nb_neighbors=25):
+    def __init__(self, input_size, nbs_features_global, nbs_features, nb_neighbors=25):
         """
         Initializes the parameters of this module.
         :param nbs_features: A list of three integers representing the number of
@@ -20,33 +20,35 @@ class NeighborhoodDecoder(nn.Module):
             cluster.
         """
         super(NeighborhoodDecoder, self).__init__()
-        assert(len(nbs_features) > 0)
-        assert(unpool_index <= len(nbs_features))
 
+        self.fc_layers_global = nn.ModuleList()
         self.fc_layers = nn.ModuleList()
-        self.unpool_index = unpool_index
         self.unpool_layer = None
 
-        self.input_size = 3
-        self.middle_size = (nbs_features + [3])[unpool_index]
+        self.input_size = input_size
+        self.middle_size = None
         self.nb_neighbors = nb_neighbors
 
-        self.initiate_fc_layers(nbs_features)
+        self.initiate_fc_layers(nbs_features_global, nbs_features)
         self.create_unpool_layer()
 
-    def initiate_fc_layers(self, nbs_features):
-        input_size = 3
-        new_fc_layers = []
-        for i in range(len(nbs_features)):
-            new_fc_layers.append(
-                nn.Linear(nbs_features[-i-1],
-                          input_size)
+    def initiate_fc_layers(self, nbs_features_global, nbs_features):
+        input_size = self.input_size
+        for nb in nbs_features_global:
+            self.fc_layers_global.append(
+                nn.Linear(input_size, nb)
             )
-            input_size = nbs_features[-i-1]
-        new_fc_layers.reverse()
-        self.fc_layers.extend(new_fc_layers)
+            input_size = nb
 
-        self.input_size = input_size
+        self.middle_size = input_size
+
+        for nb in nbs_features:
+            self.fc_layers.append(
+                nn.Linear(input_size, nb)
+            )
+            input_size = nb
+
+        assert(input_size == 3)
 
     def create_unpool_layer(self):
         """
@@ -77,28 +79,16 @@ class NeighborhoodDecoder(nn.Module):
         assert(features.size(1) == self.input_size)
         nb_clusters = features.size(0)
 
-        decoded = features
-        i = 0
-        max_i = len(self.fc_layers) - 1
+        decoded_global = features
+        for fc_layer in self.fc_layers_global:
+            decoded_global = F.relu(fc_layer(decoded_global))
+
+        unpool = self.unpool_layer(decoded_global)
+        decoded = unpool.view(nb_clusters * self.nb_neighbors, -1)
+
         for fc_layer in self.fc_layers:
-            if i == self.unpool_index:
-                unpool = F.relu(self.unpool_layer(decoded))
-                decoded = unpool.view(
-                    nb_clusters * self.nb_neighbors, -1
-                )
-
-            if i == max_i:
-                decoded = torch.tanh(fc_layer(decoded))
-            else:
-                decoded = F.relu(fc_layer(decoded))
-
-            i += 1
-
-        if i == self.unpool_index:
-            unpool = F.relu(self.unpool_layer(decoded))
-            decoded = unpool.view(
-                nb_clusters * self.nb_neighbors, -1
-            )
+            decoded = fc_layer(F.relu(decoded))
+        decoded = torch.tanh(decoded)
 
         cluster = torch.arange(
             nb_clusters

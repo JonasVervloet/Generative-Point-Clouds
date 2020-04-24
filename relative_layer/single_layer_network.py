@@ -13,7 +13,7 @@ class SingleLayerNetwork(nn.Module):
         only trained to encode this local neighborhood and no other information that can
         be present at points in the full network.
     """
-    def __init__(self, nb_layers, nbs_neighbors, final_layer, radius):
+    def __init__(self, nb_layers, nbs_neighbors, final_layer, radius, device):
         """
         Initializes all parameters of the SingleLayerNetwork. The encoder and decoder are
             as default set to SimpleRelativeEncoder and SimpleRelativeDecoder. These can
@@ -38,20 +38,21 @@ class SingleLayerNetwork(nn.Module):
         self.final_layer = final_layer
 
         self.radius = radius
+        self.device = device
 
         self.normal_required = False
 
     def forward(self, batch_object):
         """
         The train function of this network.
-        :param batch_object: Batch object of the pytorch_geometric librarie. The object should
-            have a pos attribute and a batch attribute. A norm attribtue should be provided when
+        :param batch_object: Batch object of the pytorch_geometric library. The object should
+            have a pos attribute and a batch attribute. A norm attribute should be provided when
             normal_required is set to true.
-        :return: The origal points and the cluster they belong to is returned as well as the
+        :return: The original points and the cluster they belong to is returned as well as the
             output points and the cluster that they belong to.
         """
-        points = batch_object.pos
-        batch = batch_object.batch
+        points = batch_object.pos.to(self.device)
+        batch = batch_object.batch.to(self.device)
 
         if self.normal_required:
             normals = batch_object.norm
@@ -128,6 +129,9 @@ class SingleLayerNetwork(nn.Module):
             represents.
         """
         return self.nbs_neighbors[-1]
+
+    def get_device(self):
+        return self.device
 
     def set_encoder(self, encoder):
         """

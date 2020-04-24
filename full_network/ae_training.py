@@ -5,8 +5,8 @@ from torch_geometric.data import DataLoader
 import matplotlib.pyplot as plt
 import numpy as np
 
-from dataset.primitives import PrimitiveShapes
-from LossFunctions import ChamferDistLoss
+from dataset.primitive_shapes import PrimitiveShapes
+from loss_function import ChamferDistLoss
 
 from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.neighborhood_decoder import NeighborhoodDecoder

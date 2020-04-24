@@ -1,5 +1,5 @@
 from torch_geometric.datasets import ShapeNet
-from dataset.functionality import ShapeNetFunctionality as snf
+from dataset.shapenet import ShapeNetFunctionality as snf
 
 name = "Mug"
 

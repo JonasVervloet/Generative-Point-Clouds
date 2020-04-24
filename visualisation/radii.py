@@ -2,7 +2,7 @@ import torch_geometric.nn as gnn
 import torch
 import numpy as np
 import meshplot as mp
-from dataset.primitives import PrimitiveShapes as ps
+from dataset.primitive_shapes import PrimitiveShapes as ps
 import matplotlib.pyplot as plt
 
 RESULT_PATH = "D:/Documenten/Results/Visualisations/"

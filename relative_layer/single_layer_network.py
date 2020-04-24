@@ -2,9 +2,6 @@ import torch
 import torch.nn as nn
 import torch_geometric.nn as gnn
 
-from relative_layer.encoder import SimpleRelativeEncoder
-from relative_layer.decoder import SimpleRelativeDecoder
-
 
 class SingleLayerNetwork(nn.Module):
     """
@@ -30,8 +27,8 @@ class SingleLayerNetwork(nn.Module):
 
         assert(nb_layers == len(nbs_neighbors))
 
-        self.encoder = SimpleRelativeEncoder()
-        self.decoder = SimpleRelativeDecoder()
+        self.encoder = None
+        self.decoder = None
 
         self.nb_layers = nb_layers
         self.nbs_neighbors = nbs_neighbors
@@ -51,6 +48,9 @@ class SingleLayerNetwork(nn.Module):
         :return: The original points and the cluster they belong to is returned as well as the
             output points and the cluster that they belong to.
         """
+        assert(self.encoder is not None)
+        assert(self.decoder is not None)
+
         points = batch_object.pos.to(self.device)
         batch = batch_object.batch.to(self.device)
 

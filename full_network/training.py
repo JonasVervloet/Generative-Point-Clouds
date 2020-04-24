@@ -5,8 +5,8 @@ from torch_geometric.data import DataLoader
 import matplotlib.pyplot as plt
 import numpy as np
 
-from dataset.primitives import PrimitiveShapes
-from LossFunctions import ChamferDistLoss
+from dataset.primitive_shapes import PrimitiveShapes
+from loss_function import ChamferDistLoss
 from full_network.full_nework import FullNetwork
 
 FROM_EPOCH = 40

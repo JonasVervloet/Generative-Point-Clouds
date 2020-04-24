@@ -2,14 +2,12 @@ import torch
 import torch_geometric.nn as gnn
 from torch_geometric.data import Batch
 import meshplot as mp
-
 import numpy as np
 
-from dataset.primitives import PrimitiveShapes
+from dataset.primitive_shapes import PrimitiveShapes
 from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.neighborhood_decoder import NeighborhoodDecoder
 from relative_layer.single_layer_network import SingleLayerNetwork
-from relative_layer.rotation_invariant_layer import RotationInvariantLayer
 
 # PATH VARIABLES
 RESULT_PATH = "D:/Documenten/Results/Structured/SingleLayerNetwork/"

@@ -5,8 +5,8 @@ from torch_geometric.data import DataLoader
 import matplotlib.pyplot as plt
 import numpy as np
 
-from dataset.primitives import PrimitiveShapes
-from LossFunctions import ChamferDistLoss
+from dataset.primitive_shapes import PrimitiveShapes
+from loss_function import ChamferDistLoss
 from relative_layer.single_layer_network import SingleLayerNetwork
 from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.grid_deform_decoder import GridDeformationDecoder
@@ -82,8 +82,8 @@ val_dataset = PrimitiveShapes.generate_dataset(
     nb_objects=VAL_SIZE, nb_points=NB_POINTS,
     shapes=SHAPES, normals=NORMALS
 )
-train_loader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE)
-val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE)
+train_loader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True)
 print("train loader length: {}".format(len(train_loader)))
 print("val loader length: {}".format(len(val_loader)))
 

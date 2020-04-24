@@ -2,7 +2,7 @@ import point_cloud_utils as pcu
 import numpy as np
 import meshplot as mp
 
-from dataset.primitives import PrimitiveShapes as ps
+from dataset.primitive_shapes import PrimitiveShapes as ps
 
 
 def generate_normals_for_dataset(dataset, path):

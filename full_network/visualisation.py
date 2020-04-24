@@ -3,7 +3,7 @@ from torch_geometric.data import DataLoader
 
 import meshplot as mp
 
-from dataset.primitives import PrimitiveShapes
+from dataset.primitive_shapes import PrimitiveShapes
 from full_network.full_nework import FullNetwork
 
 

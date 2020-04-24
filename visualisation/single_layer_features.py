@@ -4,7 +4,7 @@ import torch_geometric.nn as gnn
 import numpy as np
 import meshplot as mp
 
-from dataset.primitives import PrimitiveShapes
+from dataset.primitive_shapes import PrimitiveShapes
 from relative_layer.simple_layer import SimpleRelativeLayer
 
 

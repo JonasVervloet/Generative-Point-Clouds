@@ -5,7 +5,7 @@ import meshplot as mp
 
 from relative_layer.grid_deform_decoder import GridDeformationDecoder
 from relative_layer.simple_layer import SimpleRelativeLayer
-from dataset.primitives import PrimitiveShapes as ps
+from dataset.primitive_shapes import PrimitiveShapes as ps
 
 
 def visualize_grid_deformation(shape, nb_neighs, radius, net, path, nb_tests):

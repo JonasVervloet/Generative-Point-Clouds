@@ -2,54 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/variational_ae/variational_auto_encoder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DynamicEdgeConv.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/EncodeLayer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LossFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/loss_function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MnistVAE.py" beforeDir="false" afterPath="$PROJECT_DIR$/mnist_vae.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ModelNet.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PointCloudAE.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PoolLayer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RandomPermutation.py" beforeDir="false" afterPath="$PROJECT_DIR$/rdn_permutation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temporary.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Upsample.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/download.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/shapenet_download.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/functionality.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/shapenet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/primitives.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/primitive_shapes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/full_network/ae_training.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/ae_training.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/full_network/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/training.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/full_network/training2.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/training2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/full_network/visualisation.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/visualisation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/auto_encoder.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/decoder.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/pointnet.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/pointnet_pp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/utils/PointCloudAE_Eval.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/utils/PointCloudAE_Train.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/utils/PointCloudVAE_Eval.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pointnet/utils/PointCloudVAE_Train.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/decoder.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/decoder2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/encoder.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/encoder2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/encoder3.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/grid_deformation_vis.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/grid_deformation_vis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/relative_ae.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/rotation_invariant_layer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/simple_layer.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/simple_layer2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/simple_layer3.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/single_layer_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/single_layer_network.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/training_vsc.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training_vsc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/visualisation.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/visualisation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/visualisation/fps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/visualisation/normals.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualisation/normals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/visualisation/one_layer_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualisation/single_layer_features.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/visualisation/radius.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualisation/radii.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rdn_permutation.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -79,11 +32,11 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\visualisation" />
       <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\dataset" />
       <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\Datasets" />
       <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloudNetwork" />
       <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train" />
-      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\Visualisation" />
     </key>
   </component>
   <component name="RunDashboard">

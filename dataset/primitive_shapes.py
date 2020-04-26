@@ -100,6 +100,36 @@ class PrimitiveShapes:
 
         return dataset
 
+    @staticmethod
+    def generate_spheres(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [True, False, False, False, False], normals
+        )
+
+    @staticmethod
+    def generate_cubes(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [False, True, False, False, False], normals
+        )
+
+    @staticmethod
+    def generate_cylinders(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [False, False, True, False, False], normals
+        )
+
+    @staticmethod
+    def generate_pyramids(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [False, False, False, True, False], normals
+        )
+
+    @staticmethod
+    def generate_tori(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [False, False, False, False, True], normals
+        )
+
     """
     SPHERES
     """

@@ -5,65 +5,87 @@ import meshplot as mp
 from dataset.primitive_shapes import PrimitiveShapes as ps
 import matplotlib.pyplot as plt
 
+# PATH VARIABLES
 RESULT_PATH = "D:/Documenten/Results/Visualisations/"
+NAME = "Visalisation1/"
+PATH = RESULT_PATH + NAME
+
+# DATASET VARIABLES
+DATASET_SIZE = 20
+NB_POINTS = 3600
+NORMALS = False
+
+# SINGLE LAYER NETWORK VARIABLES.
+NB_LAYERS = 1
+FINAL_LAYER = False
+NBS_NEIGHBOURS = [25]
+INTERVAL = np.arange(0.1, 0.3, 0.005)
 
 
-def radius_plot(dataset, interval, nb_neighs, title, path, second_layer=False, nb_neighs2=16):
-    ratio = 1 / nb_neighs
+def radius_plot(dataset, name):
     avgs = []
-
-    for radius in interval:
+    for radius in INTERVAL:
         print(radius)
         nbs = []
         for shape in dataset:
-            if not second_layer:
-                nbs += get_nb_neighbours(shape.pos, ratio, radius)
-            else:
-                ratio2 = 1/nb_neighs2
-                nbs += get_nb_neighbours2(shape.pos, ratio, ratio2, radius)
+            nbs += get_nb_neighbors(shape.pos, radius)
 
         avgs.append(sum(nbs) / len(nbs))
 
-    plt.plot(interval, avgs)
-    plt.legend(['radius'])
-    plt.title(title)
-    plt.savefig(path)
+    np.save(
+        PATH + name + "_avg_nb_neighbors.npy", np.array(avgs)
+    )
+    plt.plot(INTERVAL, avgs)
+    plt.legend([name])
+    plt.title("Average number of neighbors: {}".format(name))
+    plt.savefig(PATH + name + "_avg_nb_neighbors_plot")
     plt.show()
 
 
-def get_nb_neighbours(points, ratio, radius):
-    fps_inds = gnn.fps(points, ratio=ratio)
-    fps_points = points[fps_inds]
+def get_nbs_neighbors_dataset(dataset):
+    total_nbs = None
+    for shape in dataset:
+        nbs = get_nbs_neighbors(shape.pos)
 
-    rad_cluster, rad_inds = gnn.radius(points, fps_points, radius)
-    nb_clusters = torch.max(rad_cluster)
+        if total_nbs is None:
+            total_nbs = nbs
+        else:
+            total_nbs = np.concatenate((total_nbs, nbs), axis=1)
 
-    nbs = []
-    for i in range(nb_clusters + 1):
-        nbs.append(
-            len(rad_cluster[rad_cluster==i])
+    return total_nbs
+
+
+def get_nbs_neighbors(points):
+    assert(not FINAL_LAYER)
+
+    current_points = points
+    current_fps_points = points
+
+    for i in range(NB_LAYERS):
+        current_points = current_points
+
+        ratio = 1/NBS_NEIGHBOURS[i]
+        fps_inds = gnn.fps(current_points, ratio=ratio)
+        current_fps_points = current_points[fps_inds]
+
+    total_nbs = None
+    for radius in INTERVAL:
+        rad_cluster, rad_inds = gnn.radius(
+            current_points, current_fps_points, r=radius
         )
 
-    return nbs
+        nbs = []
+        for i in range(torch.max(rad_cluster) + 1):
+            nbs.append(
+                len(rad_cluster[rad_cluster==i])
+            )
+        nbs_np = np.array(nbs)
+        if total_nbs is None:
+            total_nbs = nbs_np
+        else:
+            total_nbs = np.concatenate((total_nbs, nbs_np), axis=0)
 
-
-def get_nb_neighbours2(points, ratio, ratio2, radius):
-    fps_inds = gnn.fps(points, ratio=ratio)
-    fps_points = points[fps_inds]
-
-    fps_inds2 = gnn.fps(fps_points, ratio=ratio2)
-    fps_points2 = fps_points[fps_inds2]
-
-    rad_cluster, rad_inds = gnn.radius(fps_points, fps_points2, radius)
-    nb_clusters = torch.max(rad_cluster)
-
-    nbs = []
-    for i in range(nb_clusters + 1):
-        nbs.append(
-            len(rad_cluster[rad_cluster == i])
-        )
-
-    return nbs
+    return total_nbs
 
 
 def create_radius_hist(dataset, nb_neighs, radius, title, path, second_layer=False, nb_neighs2=16):
@@ -146,23 +168,20 @@ def plot_neighbourhoods(data, nb_neighs1, nb_neighs2, radius1, radius2, path):
     plot.save(path)
 
 
-NB_NEIGHBOURS = 25
-NB_NEIGHBOURS2 = 16
-RADIUS = 0.23
-RADIUS2 = 1.1
-SECOND_LAYER = True
+print("CHECKING GLOBAL VARIABLES")
+assert(NB_LAYERS == len(NBS_NEIGHBOURS))
 
 print("CREATING DATASETS")
 print("spheres")
-spheres = ps.generate_dataset(20, 3600, [True, False, False, False, False])
+spheres = ps.generate_spheres(DATASET_SIZE, NB_POINTS, NORMALS)
 print("cubes")
-cubes = ps.generate_dataset(20, 3600, [False, True, False, False, False])
+cubes = ps.generate_cubes(DATASET_SIZE, NB_POINTS, NORMALS)
 print("cylinders")
-cylinders = ps.generate_dataset(20, 3600, [False, False, True, False, False])
+cylinders = ps.generate_cylinders(DATASET_SIZE, NB_POINTS, NORMALS)
 print("pyramids")
-pyramids = ps.generate_dataset(20, 3600, [False, False, False, True, False])
+pyramids = ps.generate_pyramids(DATASET_SIZE, NB_POINTS, NORMALS)
 print("torus")
-torus = ps.generate_dataset(20, 3600, [False, False, False, False, True])
+torus = ps.generate_tori(DATASET_SIZE, NB_POINTS, NORMALS)
 print("full")
 full = spheres + cubes + cylinders + pyramids + torus
 

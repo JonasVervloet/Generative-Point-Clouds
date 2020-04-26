@@ -18,12 +18,12 @@ print("Begin-time: {}".format(begin_time))
 
 # PATH VARIABLES
 RESULT_PATH = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
-NAME = "Network5/"
+NAME = "ParameterReduction2/"
 PATH = RESULT_PATH + NAME
 
 # EPOCH + LEARNING RATE
 FROM_EPOCH = 0
-END_EPOCH = 30
+END_EPOCH = 100
 LEARNING_RATE = 0.001
 
 # DATASET VARIABLES
@@ -35,8 +35,8 @@ PYRAMID = True
 TORUS = True
 SHAPES = [SPHERE, CUBE, CYLINDER, PYRAMID, TORUS]
 NORMALS = False
-TRAIN_SIZE = 10
-VAL_SIZE = 1
+TRAIN_SIZE = 100
+VAL_SIZE = 10
 BATCH_SIZE = 5
 
 # SINGLE LAYER NETWORK VARIABLES.
@@ -59,11 +59,11 @@ else:
 # ENCODER AND DECODER
 ENCODER = NeighborhoodEncoder(
     nbs_features=[32, 64, 64],
-    nbs_features_global=[64, 32, 32],
+    nbs_features_global=[64, 32, 16],
     mean=False
 )
 DECODER = GridDeformationDecoder(
-    input_size=32,
+    input_size=16,
     nbs_features_global=[32, 64, 64],
     nbs_features=[64, 32, 3],
     nb_neighbors=NBS_NEIGHS[-1]

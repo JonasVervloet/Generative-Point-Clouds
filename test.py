@@ -4,34 +4,26 @@ import numpy as np
 import math
 import point_cloud_utils as pcu
 
-from relative_layer.neighborhood_encoder import NeighborhoodEncoder
-from relative_layer.neighborhood_decoder import NeighborhoodDecoder
-from relative_layer.grid_deform_decoder import GridDeformationDecoder
-
-from full_network.middlelayer_encoder import MiddleLayerEncoder
-from full_network.middlelayer_decoder import MiddleLayerDecoder
-from full_network.point_cloud_ae import PointCloudAE
-
-from torch_geometric.data import Batch
-
 RESULT_PATH = "D:/Documenten/Results/"
 
-print(torch.cuda.is_available())
+test1 = [
+    [1, 2, 3, 4, 5],
+]
+arr1 = np.array(test1)
+test2 = [
+    [16, 17, 18, 19, 20]
+]
+arr2 = np.array(test2)
+test3 = [
+    [16, 17, 18, 19, 20]
+]
+arr3 = np.array(test3)
 
-decoder = GridDeformationDecoder(
-    input_size=32,
-    nbs_features_global=[32, 64, 64],
-    nbs_features=[64, 32, 3],
-    nb_neighbors=25
-)
-print(decoder)
+res1 = np.concatenate((arr1, arr2), axis=0)
+res2 = np.concatenate((res1, arr3), axis=0)
 
-latent_vec = torch.rand((5, 32))
-print(latent_vec.size())
-
-decoded, cluster = decoder(latent_vec)
-print(decoded.size())
-print(cluster.size())
+print(res1)
+print(res2)
 
 
 

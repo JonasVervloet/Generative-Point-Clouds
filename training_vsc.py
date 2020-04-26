@@ -12,7 +12,7 @@ from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.grid_deform_decoder import GridDeformationDecoder
 
 # PATH VARIABLES
-RESULT_PATH = "results/SingleLayerNetwork/"
+RESULT_PATH = "/data/leuven/335/vsc33597/SingleLayerNetwork/"
 NAME = "Network1/"
 PATH = RESULT_PATH + NAME
 

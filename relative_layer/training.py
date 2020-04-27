@@ -17,7 +17,13 @@ begin_time = datetime.datetime.now()
 print("Begin-time: {}".format(begin_time))
 
 # PATH VARIABLES
-RESULT_PATH = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
+RESULT_PATH_LAPTOP = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
+RESULT_PATH_PC = "D:/Documenten/Documenten Molenpolder/Jonas/Results/"
+LAPTOP = True
+if LAPTOP:
+    RESULT_PATH = RESULT_PATH_LAPTOP
+else:
+    RESULT_PATH = RESULT_PATH_PC
 NAME = "ParameterReduction2/"
 PATH = RESULT_PATH + NAME
 

@@ -11,9 +11,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FavoritesManager">
-    <favorites_list name="Generative-Mesh-Models" />
-  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -174,9 +171,9 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.mnist_vae" />
       <item itemvalue="Python.Test" />
       <item itemvalue="Python.ae_training" />
-      <item itemvalue="Python.mnist_vae" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python.training" />
       <item itemvalue="Python.visualisation" />
@@ -217,9 +214,25 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="341" y="149" key="SettingsEditor" timestamp="1587933429321">
+    <state width="1659" height="272" key="GridCell.Tab.0.bottom" timestamp="1588003164573">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="341" y="149" key="SettingsEditor/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1587933429321" />
+    <state width="1659" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588003164573" />
+    <state width="1659" height="272" key="GridCell.Tab.0.center" timestamp="1588003164572">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.center/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588003164572" />
+    <state width="1659" height="272" key="GridCell.Tab.0.left" timestamp="1588003164572">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.left/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588003164572" />
+    <state width="1659" height="272" key="GridCell.Tab.0.right" timestamp="1588003164572">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.right/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588003164572" />
+    <state x="341" y="149" key="SettingsEditor" timestamp="1587981089101">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="341" y="149" key="SettingsEditor/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1587981089101" />
   </component>
 </project>

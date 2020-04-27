@@ -24,7 +24,7 @@ if LAPTOP:
     RESULT_PATH = RESULT_PATH_LAPTOP
 else:
     RESULT_PATH = RESULT_PATH_PC
-NAME = "ParameterReduction2/"
+NAME = "ParameterReduction3/"
 PATH = RESULT_PATH + NAME
 
 # EPOCH + LEARNING RATE
@@ -65,11 +65,11 @@ else:
 # ENCODER AND DECODER
 ENCODER = NeighborhoodEncoder(
     nbs_features=[32, 64, 64],
-    nbs_features_global=[64, 32, 16],
+    nbs_features_global=[64, 32, 8],
     mean=False
 )
 DECODER = GridDeformationDecoder(
-    input_size=16,
+    input_size=8,
     nbs_features_global=[32, 64, 64],
     nbs_features=[64, 32, 3],
     nb_neighbors=NBS_NEIGHS[-1]

@@ -46,18 +46,6 @@
       <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloudNetwork" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager" selected="Python.training">
     <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
@@ -186,9 +174,9 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.mnist_vae" />
       <item itemvalue="Python.Test" />
       <item itemvalue="Python.ae_training" />
+      <item itemvalue="Python.mnist_vae" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python.training" />
       <item itemvalue="Python.visualisation" />
@@ -221,13 +209,12 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="341" y="149" key="SettingsEditor" timestamp="1587933429321">

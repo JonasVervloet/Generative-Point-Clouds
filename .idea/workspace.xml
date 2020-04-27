@@ -3,11 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/primitive_shapes.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/primitive_shapes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/training_vsc.py" beforeDir="false" afterPath="$PROJECT_DIR$/training_vsc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/visualisation/radii.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualisation/radii.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

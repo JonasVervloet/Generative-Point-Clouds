@@ -46,7 +46,7 @@ VAL_SIZE = 10
 BATCH_SIZE = 5
 
 # SINGLE LAYER NETWORK VARIABLES.
-CUDA = True
+CUDA = False
 DEVICE = torch.device(
     "cuda:0" if CUDA and torch.cuda.is_available() else "cpu"
 )

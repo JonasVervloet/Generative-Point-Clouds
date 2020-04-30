@@ -19,17 +19,17 @@ print("Begin-time: {}".format(begin_time))
 # PATH VARIABLES
 RESULT_PATH_LAPTOP = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
 RESULT_PATH_PC = "D:/Documenten/Documenten Molenpolder/Jonas/Results/"
-LAPTOP = True
+LAPTOP = False
 if LAPTOP:
     RESULT_PATH = RESULT_PATH_LAPTOP
 else:
     RESULT_PATH = RESULT_PATH_PC
-NAME = "ParameterReduction3/"
+NAME = "ParameterReduction4/"
 PATH = RESULT_PATH + NAME
 
 # EPOCH + LEARNING RATE
 FROM_EPOCH = 0
-END_EPOCH = 100
+END_EPOCH = 30
 LEARNING_RATE = 0.001
 
 # DATASET VARIABLES
@@ -41,8 +41,8 @@ PYRAMID = True
 TORUS = True
 SHAPES = [SPHERE, CUBE, CYLINDER, PYRAMID, TORUS]
 NORMALS = False
-TRAIN_SIZE = 100
-VAL_SIZE = 10
+TRAIN_SIZE = 10
+VAL_SIZE = 1
 BATCH_SIZE = 5
 
 # SINGLE LAYER NETWORK VARIABLES.
@@ -65,11 +65,11 @@ else:
 # ENCODER AND DECODER
 ENCODER = NeighborhoodEncoder(
     nbs_features=[32, 64, 64],
-    nbs_features_global=[64, 32, 8],
+    nbs_features_global=[64, 32, 4],
     mean=False
 )
 DECODER = GridDeformationDecoder(
-    input_size=8,
+    input_size=4,
     nbs_features_global=[32, 64, 64],
     nbs_features=[64, 32, 3],
     nb_neighbors=NBS_NEIGHS[-1]

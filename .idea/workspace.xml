@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/visualisation/single_layer_interpolation2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/visualisation/single_layer_loss_plots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Generative-Mesh-Models.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Generative-Mesh-Models.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Experiments.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataset/primitive_shapes.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/primitive_shapes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/single_layer_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/single_layer_network.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/relative_layer/training_laptop.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training_laptop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shapenet_download.py" beforeDir="false" afterPath="$PROJECT_DIR$/shapenet_download.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/visualisation/single_layer_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualisation/single_layer_interpolation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -53,10 +53,10 @@ def get_neighborhood_encoder(latent_size, mean):
 
 def get_neighborhood_decoder(latent_size, nb_neighbors):
     return NeighborhoodDecoder(
-        input_size=LAT1,
+        input_size=latent_size,
         nbs_features_global=[32, 64, 64],
         nbs_features=[64, 32, 3],
-        nb_neighbors=latent_size
+        nb_neighbors=nb_neighbors
     )
 
 

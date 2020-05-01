@@ -5,7 +5,7 @@ from torch_geometric.data import DataLoader
 import matplotlib.pyplot as plt
 import numpy as np
 
-from dataset.primitive_shapes import PrimitiveShapes
+from torch_geometric.datasets.shapenet import ShapeNet
 from loss_function import ChamferDistLoss
 
 from relative_layer.neighborhood_encoder import NeighborhoodEncoder
@@ -15,7 +15,7 @@ from full_network.middlelayer_decoder import MiddleLayerDecoder
 from full_network.point_cloud_ae import PointCloudAE
 
 #  PATH VARIABLES
-RESULT_PATH = "D:/Documenten/Documenten Molenpolder/Jonas/Results/FullNetwork/"
+RESULT_PATH = "/data/leuven/335/vsc33597/FullNetwork/"
 NAME = "ParameterReduction1/"
 PATH = RESULT_PATH + NAME
 
@@ -25,16 +25,10 @@ END_EPOCH = 100
 LEARNING_RATE = 0.001
 
 # DATASET VARIABLES
-NB_POINTS = 3600
-SPHERE = True
-CUBE = True
-CYLINDER = True
-PYRAMID = True
-TORUS = True
-SHAPES = [SPHERE, CUBE, CYLINDER, PYRAMID, TORUS]
+CATEGORY = "Airplane"
+CATEGORIES = [CATEGORY]
+DATA_PATH = "/data/leuven/335/vsc33597/Data/" + CATEGORY + "/"
 NORMALS = False
-TRAIN_SIZE = 100
-VAL_SIZE = 10
 BATCH_SIZE = 5
 
 # FULL AUTOENCODER NETWORK VARIABLES
@@ -107,15 +101,17 @@ DECODERS = [decoder1, decoder2, decoder3]
 
 print("SCRIPT STARTED")
 print("DATASET PREP")
-print("train data")
-train_dataset = PrimitiveShapes.generate_dataset(
-    nb_objects=TRAIN_SIZE, nb_points=NB_POINTS,
-    shapes=SHAPES, normals=NORMALS
+print("train")
+path = DATA_PATH + "train/"
+train_dataset = ShapeNet(
+    root=path, categories=CATEGORIES,
+    include_normals=NORMALS, split="train"
 )
-print("validation data")
-val_dataset = PrimitiveShapes.generate_dataset(
-    nb_objects=VAL_SIZE, nb_points=NB_POINTS,
-    shapes=SHAPES, normals=NORMALS
+print("validation")
+path = DATA_PATH + "validation/"
+val_dataset = ShapeNet(
+    root=path, categories=CATEGORIES,
+    include_normals=NORMALS, split="val"
 )
 train_loader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True)
@@ -178,7 +174,7 @@ for i in range(END_EPOCH + 1 - FROM_EPOCH):
         optimizer.step()
         temp_loss.append(loss.item())
 
-    train_loss = sum(temp_loss) / (TRAIN_SIZE * sum(SHAPES))
+    train_loss = sum(temp_loss) / len(train_dataset)
     train_losses = np.append(train_losses, train_loss)
     print("train loss: {}".format(train_loss))
 
@@ -199,7 +195,7 @@ for i in range(END_EPOCH + 1 - FROM_EPOCH):
         )
         temp_loss.append(loss.item())
 
-    val_loss = sum(temp_loss) / (VAL_SIZE * sum(SHAPES))
+    val_loss = sum(temp_loss) / len(val_dataset)
     val_losses = np.append(val_losses, val_loss)
     print("val loss: {}".format(val_loss))
 

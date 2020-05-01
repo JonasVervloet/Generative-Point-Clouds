@@ -6,22 +6,16 @@ import point_cloud_utils as pcu
 
 RESULT_PATH = "D:/Documenten/Results/"
 
-arange = torch.arange(10)
+arr1 = np.array(
+    [[1, 2, 3, 4, 5, 6]]
+)
+arr2 = np.array(
+    [4, 5, 6, 7, 8, 9]
+)
+arr2 = [arr2]
 
-mean = torch.rand(8)
-
-repeated = mean.repeat((10, 1))
-
-print(arange.size())
-print(arange)
-print(mean.size())
-print(mean)
-print(repeated.size())
-print(repeated)
-
-repeated[:, 2] = arange
-print(repeated.size())
-print(repeated)
+concat = np.concatenate((arr1, arr2), axis=0)
+print(concat)
 
 
 

@@ -6,12 +6,12 @@ from dataset.primitive_shapes import PrimitiveShapes as ps
 import matplotlib.pyplot as plt
 
 # PATH VARIABLES
-RESULT_PATH = "D:/Documenten/Results/Visualisations/"
-NAME = "Visalisation1/"
+RESULT_PATH = "D:/Documenten/Results/Structured/"
+NAME = "Visualization/"
 PATH = RESULT_PATH + NAME
 
 # DATASET VARIABLES
-DATASET_SIZE = 20
+DATASET_SIZE = 50
 NB_POINTS = 3600
 NORMALS = False
 
@@ -19,30 +19,66 @@ NORMALS = False
 NB_LAYERS = 1
 FINAL_LAYER = False
 NBS_NEIGHBOURS = [25]
-INTERVAL = np.arange(0.1, 0.3, 0.005)
+MAX_NEIGHBORS = 500
+INTERVAL = np.arange(0.1, 0.31, 0.01)
+NB_DECIMALS = 2
 
 
-def radius_plot(dataset, name):
-    avgs = []
-    for radius in INTERVAL:
-        print(radius)
-        nbs = []
-        for shape in dataset:
-            nbs += get_nb_neighbors(shape.pos, radius)
+def analyse_dataset(dataset, name):
+    """
+    Analyses the given dataset and saves the results with the given name.
+        An average number of neighbors plot will be made, where for each
+        radius in INTERVAL, the average number of neighbors will be
+        computed. Also, for each radius in INTERVAL, a histogram will be
+        made that represents the distribution of number of neighbors for
+        that radius.
+    :param dataset: The dataset that will be analysed.
+    :param name: The name which is used to name all the files that will
+                    be saved.
+    """
+    nbs_neighbors = get_nbs_neighbors_dataset(dataset)
+    assert(nbs_neighbors.shape[0] == len(INTERVAL))
 
-        avgs.append(sum(nbs) / len(nbs))
+    average_nbs = np.average(nbs_neighbors, axis=1)
+    radius = None
+    ideal_nb = NBS_NEIGHBOURS[-1]
+    for i in range(len(average_nbs)):
+        if average_nbs[i] >= ideal_nb:
+            neigh_low = average_nbs[i - 1]
+            neigh_high = average_nbs[i]
+            alfa = (ideal_nb - neigh_low) / (neigh_high - neigh_low)
 
-    np.save(
-        PATH + name + "_avg_nb_neighbors.npy", np.array(avgs)
+            radius_low = INTERVAL[i - 1]
+            radius_step = INTERVAL[i] - radius_low
+            radius = radius_low + alfa * radius_step
+
+            break
+    print("optimal radius: {}".format(radius))
+
+    save_nbs = nbs_neighbors < 25
+    save_sum = np.sum(save_nbs, axis=1)
+    plot_avg_neigbors(
+        average_nbs, name=name,
+        ideal_radius=radius, save_index=np.argmax(save_sum==0)
     )
-    plt.plot(INTERVAL, avgs)
-    plt.legend([name])
-    plt.title("Average number of neighbors: {}".format(name))
-    plt.savefig(PATH + name + "_avg_nb_neighbors_plot")
-    plt.show()
+
+    for i in range(len(INTERVAL)):
+        plot_histogram(
+            nbs_neighbors[i],
+            name,
+            INTERVAL[i]
+        )
 
 
 def get_nbs_neighbors_dataset(dataset):
+    """
+    Get for each shape in the dataset and for each radius in INTERVAL
+        the number of neighbors in each neighborhood.
+    :param dataset: The dataset used to compute the neighborhoods.
+    :return: A numpy array of dimension [len(INTERVAL),
+                len(dataset) * number neighborhoods per shape]
+    """
+    print("computing nbs_neighbors")
     total_nbs = None
     for shape in dataset:
         nbs = get_nbs_neighbors(shape.pos)
@@ -52,26 +88,33 @@ def get_nbs_neighbors_dataset(dataset):
         else:
             total_nbs = np.concatenate((total_nbs, nbs), axis=1)
 
+    print(total_nbs.shape)
     return total_nbs
 
 
-def get_nbs_neighbors(points):
+def get_nbs_neighbors(input_points):
+    """
+    For this point cloud, get the number of neighbors in each
+        neighborhood. The neigborhoods are computed according
+        to the global information.
+        - NB_LAYERS
+        - FINAL_LAYERS
+        - NBS_NEIGHBORS
+        This is done for each radius in INTERVAL.
+    :param input_points: The input pointcloud that will be
+                examined.
+    :return: A numpy array of dimension [len(INTERVAL),
+                number of neighborhoods per shape]
+    """
     assert(not FINAL_LAYER)
 
-    current_points = points
-    current_fps_points = points
-
-    for i in range(NB_LAYERS):
-        current_points = current_points
-
-        ratio = 1/NBS_NEIGHBOURS[i]
-        fps_inds = gnn.fps(current_points, ratio=ratio)
-        current_fps_points = current_points[fps_inds]
+    points, fps_points = get_neighborhood(input_points)
 
     total_nbs = None
     for radius in INTERVAL:
         rad_cluster, rad_inds = gnn.radius(
-            current_points, current_fps_points, r=radius
+            points, fps_points, r=radius,
+            max_num_neighbors=MAX_NEIGHBORS
         )
 
         nbs = []
@@ -79,7 +122,7 @@ def get_nbs_neighbors(points):
             nbs.append(
                 len(rad_cluster[rad_cluster==i])
             )
-        nbs_np = np.array(nbs)
+        nbs_np = np.array([nbs])
         if total_nbs is None:
             total_nbs = nbs_np
         else:
@@ -88,23 +131,92 @@ def get_nbs_neighbors(points):
     return total_nbs
 
 
-def create_radius_hist(dataset, nb_neighs, radius, title, path, second_layer=False, nb_neighs2=16):
-    ratio = 1 / nb_neighs
-    hist = []
+def get_neighborhood(points):
+    """
+    Get the neighborhoods for the given points according to
+        the global information.
+        - NB_LAYERS
+        - FINAL_LAYERS
+        - NBS_NEIGHBORS
+    :param points: The point cloud for which the neighborhoods
+                will be computed
+    :return: Set of points and a set of fps points. The fps points
+                form the center of the neighborhoods. The set of
+                points can be used to sample a neighborhood around
+                these center points.
+    """
+    current_points = points
+    current_fps_points = points
 
-    for shape in dataset:
-        if not second_layer:
-            hist += get_nb_neighbours(shape.pos, ratio, radius)
-        else:
-            ratio2 = 1/nb_neighs2
-            hist += get_nb_neighbours2(shape.pos, ratio, ratio2, radius)
+    for i in range(NB_LAYERS):
+        current_points = current_points
 
-    print(len(hist))
-    np_hist = np.array(hist)
-    plt.hist(np_hist, bins=range(35))
-    plt.title(title)
-    plt.savefig(path)
-    plt.show()
+        ratio = 1 / NBS_NEIGHBOURS[i]
+        fps_inds = gnn.fps(current_points, ratio=ratio)
+        current_fps_points = current_points[fps_inds]
+
+    return current_points, current_fps_points
+
+
+def plot_avg_neigbors(avg_neighbors, ideal_radius, save_index, name):
+    """
+    Plot the given average number of neighbors and save according
+        the given name.
+    :param avg_neighbors: The average number of neighbors for
+                eacht radius in INTERVAL.
+    :param name: A general name that will be extended to reflect
+                the plot of average number of neighbors.
+    """
+    print("Average number of neigbors {}: layer {}".format(name, NB_LAYERS))
+    assert(len(avg_neighbors) == len(INTERVAL))
+    np.save(
+        PATH + name + "_avg_nb_neighbors.npy", np.array(avg_neighbors)
+    )
+
+    plt.clf()
+    plt.plot(INTERVAL, avg_neighbors)
+    plt.legend([name])
+    plt.plot(
+        (INTERVAL[0], ideal_radius),
+        (25, 25),
+        'r'
+    )
+    plt.plot(
+        (ideal_radius, ideal_radius),
+        (avg_neighbors[0], 25),
+        'r'
+    )
+    plt.plot(
+        (INTERVAL[0], INTERVAL[save_index]),
+        (avg_neighbors[save_index], avg_neighbors[save_index]),
+        'g'
+    )
+    plt.plot(
+        (INTERVAL[save_index], INTERVAL[save_index]),
+        (avg_neighbors[0], avg_neighbors[save_index]),
+        'g'
+    )
+    plt.title("Average number of neighbors {}: layer {}".format(name, NB_LAYERS))
+    plt.savefig(PATH + "{}_layer{}_avg_nb_neighbors_plot".format(name, NB_LAYERS))
+
+
+def plot_histogram(nbs_neighbors, name, radius):
+    """
+    Plot the given distribution of number of neighbors and save
+        according to the given name and radius.
+    :param nbs_neighbors: The number of neighbors of neighborhoods
+                sampled with the given radius.
+    :param name: A general name that will be extended to reflect
+                the histogram of number of neighbors for this radius.
+    :param radius: The radius that was used to sample the neighborhoods
+                that led to nbs_neighbors
+    """
+    radius = round(radius, 2)
+    print("Histogram {}: layer {}, radius {}".format(name, NB_LAYERS, radius))
+    plt.clf()
+    plt.hist(nbs_neighbors, bins=range(75))
+    plt.title("Histogram {}: layer {}, radius {}".format(name, NB_LAYERS, radius))
+    plt.savefig(PATH + "{}_layer{}_histogram_radius_{}.png".format(name, NB_LAYERS, radius))
 
 
 def plot_neighbourhoods(data, nb_neighs1, nb_neighs2, radius1, radius2, path):
@@ -170,94 +282,37 @@ def plot_neighbourhoods(data, nb_neighs1, nb_neighs2, radius1, radius2, path):
 
 print("CHECKING GLOBAL VARIABLES")
 assert(NB_LAYERS == len(NBS_NEIGHBOURS))
+print(INTERVAL)
 
 print("CREATING DATASETS")
 print("spheres")
-spheres = ps.generate_spheres(DATASET_SIZE, NB_POINTS, NORMALS)
+spheres = ps.generate_spheres_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 print("cubes")
-cubes = ps.generate_cubes(DATASET_SIZE, NB_POINTS, NORMALS)
+cubes = ps.generate_cubes_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 print("cylinders")
-cylinders = ps.generate_cylinders(DATASET_SIZE, NB_POINTS, NORMALS)
+cylinders = ps.generate_cylinders_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 print("pyramids")
-pyramids = ps.generate_pyramids(DATASET_SIZE, NB_POINTS, NORMALS)
+pyramids = ps.generate_pyramids_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 print("torus")
-torus = ps.generate_tori(DATASET_SIZE, NB_POINTS, NORMALS)
+tori = ps.generate_tori_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 print("full")
-full = spheres + cubes + cylinders + pyramids + torus
+full = spheres + cubes + cylinders + pyramids + tori
 
-# print("CREATING HISTOGRAMS")
-# if not SECOND_LAYER:
-#     radius = RADIUS
-# else:
-#     radius = RADIUS2
-# print("radius: {}".format(radius))
-# print("spheres")
-# create_radius_hist(spheres, NB_NEIGHBOURS, radius,
-#                    "Spheres: {} neighbours, {} radius".format(NB_NEIGHBOURS, radius),
-#                    RESULT_PATH + "radius_hist_spheres", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("cubes")
-# create_radius_hist(cubes, NB_NEIGHBOURS, radius,
-#                    "Cubes: {} neighbours, {} radius".format(NB_NEIGHBOURS, radius),
-#                    RESULT_PATH + "radius_hist_cubes", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("cylinders")
-# create_radius_hist(cylinders, NB_NEIGHBOURS, radius,
-#                    "Cylinders: {} neighbours, {} radius".format(NB_NEIGHBOURS, radius),
-#                    RESULT_PATH + "radius_hist_cylinders", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("pyramids")
-# create_radius_hist(pyramids, NB_NEIGHBOURS, radius,
-#                    "Pyramids: {} neighbours, {} radius".format(NB_NEIGHBOURS, radius),
-#                    RESULT_PATH + "radius_hist_pyramids", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("torus")
-# create_radius_hist(torus, NB_NEIGHBOURS, radius,
-#                    "Torus: {} neighbours, {} radius".format(NB_NEIGHBOURS, radius),
-#                    RESULT_PATH + "radius_hist_torus", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("full")
-# create_radius_hist(full, NB_NEIGHBOURS, radius,
-#                    "Full: {} neighbours, {} radius".format(NB_NEIGHBOURS, radius),
-#                    RESULT_PATH + "radius_hist_full", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-
-# print("CREATING RADIUS PLOTS")
-# if not SECOND_LAYER:
-#     interval = np.arange(0.1, 0.3, 0.005)
-# else:
-#     interval = np.arange(0.5, 1.5, 0.05)
-# print("interval: {}".format(interval))
-# print("spheres")
-# radius_plot(spheres, interval, NB_NEIGHBOURS, "Spheres: {} neighbours".format(NB_NEIGHBOURS2),
-#             RESULT_PATH + "radius_plot_spheres", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("cubes")
-# radius_plot(cubes, interval, NB_NEIGHBOURS, "Cubes: {} neighbours".format(NB_NEIGHBOURS2),
-#             RESULT_PATH + "radius_plot_cubes", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("cylinders")
-# radius_plot(cylinders, interval, NB_NEIGHBOURS, "Cylinders: {} neighbours".format(NB_NEIGHBOURS2),
-#             RESULT_PATH + "radius_plot_cylinders", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("pyramids")
-# radius_plot(pyramids, interval, NB_NEIGHBOURS, "Pyramids: {} neighbours".format(NB_NEIGHBOURS2),
-#             RESULT_PATH + "radius_plot_pyramids", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("torus")
-# radius_plot(torus, interval, NB_NEIGHBOURS, "Torus: {} neighbours".format(NB_NEIGHBOURS2),
-#             RESULT_PATH + "radius_plot_torus", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-# print("full")
-# radius_plot(full, interval, NB_NEIGHBOURS, "Full: {} neighbours".format(NB_NEIGHBOURS2),
-#             RESULT_PATH + "radius_plot_full", second_layer=SECOND_LAYER, nb_neighs2=NB_NEIGHBOURS2)
-
-print("CREATING NEIGHBOURHOODS")
-mp.offline()
+print("ANALYSING DATASETS")
 print("spheres")
-plot_neighbourhoods(spheres[0], NB_NEIGHBOURS, NB_NEIGHBOURS2,
-                    RADIUS, RADIUS2, RESULT_PATH + "neighbourhoods_spheres")
+analyse_dataset(spheres, "sphere")
 print("cubes")
-plot_neighbourhoods(cubes[0], NB_NEIGHBOURS, NB_NEIGHBOURS2,
-                    RADIUS, RADIUS2, RESULT_PATH + "neighbourhoods_cubes")
+analyse_dataset(cubes, "cube")
 print("cylinders")
-plot_neighbourhoods(cylinders[0], NB_NEIGHBOURS, NB_NEIGHBOURS2,
-                    RADIUS, RADIUS2, RESULT_PATH + "neighbourhoods_cylinders")
+analyse_dataset(cylinders, "cylinder")
 print("pyramids")
-plot_neighbourhoods(pyramids[0], NB_NEIGHBOURS, NB_NEIGHBOURS2,
-                    RADIUS, RADIUS2, RESULT_PATH + "neighbourhoods_pyramids")
-print("torus")
-plot_neighbourhoods(torus[0], NB_NEIGHBOURS, NB_NEIGHBOURS2,
-                    RADIUS, RADIUS2, RESULT_PATH + "neighbourhoods_torus")
+analyse_dataset(pyramids, "pyramid")
+print("tori")
+analyse_dataset(tori, "torus")
+print("full")
+analyse_dataset(full, "full")
+
+
 
 
 

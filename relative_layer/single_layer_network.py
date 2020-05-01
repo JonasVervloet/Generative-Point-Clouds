@@ -121,6 +121,79 @@ class SingleLayerNetwork(nn.Module):
 
         return original_points, cluster, out, cluster_decoded
 
+    def encode(self, batch_object):
+        assert(self.encoder is not None)
+
+        points = batch_object.pos.to(self.device)
+        batch = batch_object.batch.to(self.device)
+
+        if self.normal_required:
+            normals = batch_object.norm
+
+        current_points = points
+        current_fps_points = points
+        current_batch = batch
+        current_fps_batch = batch
+        if self.normal_required:
+            current_normals = normals
+            current_fps_normals = normals
+
+        if not self.final_layer:
+            nb_loops = self.nb_layers
+        else:
+            nb_loops = self.nb_layers - 1
+
+        fps_inds_list = []
+        for i in range(nb_loops):
+            current_points = current_fps_points
+            current_batch = current_fps_batch
+
+            ratio = 1 / self.nbs_neighbors[i]
+            fps_inds = gnn.fps(current_points, ratio=ratio, batch=current_batch)
+            fps_inds_list.append(fps_inds)
+
+            current_fps_points = current_points[fps_inds]
+            current_fps_batch = current_batch[fps_inds]
+            if self.normal_required:
+                current_normals = current_fps_normals
+                current_fps_normals = current_normals[fps_inds]
+
+        if not self.final_layer:
+            rad_cluster, rad_inds = gnn.radius(
+                current_points, current_fps_points,
+                batch_x=current_batch, batch_y=current_fps_batch, r=self.radius
+            )
+
+            rad_points = current_points[rad_inds]
+            mid_points = current_fps_points[rad_cluster]
+
+            original_points = rad_points
+            relative_points = (rad_points - mid_points) / self.radius
+            cluster = rad_cluster
+
+            if self.normal_required:
+                normals_in = current_normals[rad_inds]
+
+        else:
+            original_points = current_fps_points
+            relative_points = current_fps_points / self.radius
+            cluster = current_fps_batch
+            if self.normal_required:
+                normals_in = current_fps_normals
+
+        if not self.normal_required:
+            encoded = self.encoder(relative_points, cluster)
+        else:
+            encoded = self.encoder(relative_points, normals_in, cluster)
+
+        return encoded
+
+    def decode(self, encoded):
+        assert(self.decoder is not None)
+
+        decoded, cluster_decoded = self.decoder(encoded)
+        return decoded, cluster_decoded
+
     def get_number_neighbors(self):
         """
         Get the number of neighbors of the layer that this network represents. This is the

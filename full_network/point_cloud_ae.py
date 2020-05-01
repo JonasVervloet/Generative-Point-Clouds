@@ -2,9 +2,6 @@ import torch
 import torch.nn as nn
 import torch_geometric.nn as gnn
 
-from full_network.full_encoder import FullEncoder
-from full_network.full_decoder import FullDecoder
-
 
 class PointCloudAE(nn.Module):
     def __init__(self, nb_layers, nbs_neighbors, radii, encoders, decoders):

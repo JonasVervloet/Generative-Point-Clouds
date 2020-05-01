@@ -32,3 +32,5 @@ dataset = ShapeNet(
     root=path, categories=CATEGORY,
     include_normals=False, split="test"
 )
+
+print("done")

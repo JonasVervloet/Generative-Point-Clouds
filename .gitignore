@@ -4,3 +4,4 @@
 *.pt
 result/
 .idea/
+__pycache__/

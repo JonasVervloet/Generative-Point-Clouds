@@ -17,13 +17,7 @@ begin_time = datetime.datetime.now()
 print("Begin-time: {}".format(begin_time))
 
 # PATH VARIABLES
-RESULT_PATH_LAPTOP = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
-RESULT_PATH_PC = "D:/Documenten/Documenten Molenpolder/Jonas/Results/"
-LAPTOP = True
-if LAPTOP:
-    RESULT_PATH = RESULT_PATH_LAPTOP
-else:
-    RESULT_PATH = RESULT_PATH_PC
+RESULT_PATH = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
 NAME = "ParameterReduction4/"
 PATH = RESULT_PATH + NAME
 
@@ -46,7 +40,7 @@ VAL_SIZE = 1
 BATCH_SIZE = 5
 
 # SINGLE LAYER NETWORK VARIABLES.
-CUDA = True
+CUDA = False
 DEVICE = torch.device(
     "cuda:0" if CUDA and torch.cuda.is_available() else "cpu"
 )

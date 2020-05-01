@@ -18,13 +18,13 @@ print("Begin-time: {}".format(begin_time))
 
 # PATH VARIABLES
 RESULT_PATH_LAPTOP = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
-RESULT_PATH_PC = "D:/Documenten/Documenten Molenpolder/Jonas/Results/"
-LAPTOP = True
+RESULT_PATH_PC = "D:/Documenten/Documenten Molenpolder/Jonas/Results/SingleLayerNetwork/"
+LAPTOP = False
 if LAPTOP:
     RESULT_PATH = RESULT_PATH_LAPTOP
 else:
     RESULT_PATH = RESULT_PATH_PC
-NAME = "ParameterReduction3/"
+NAME = "ParameterReduction4/"
 PATH = RESULT_PATH + NAME
 
 # EPOCH + LEARNING RATE
@@ -65,11 +65,11 @@ else:
 # ENCODER AND DECODER
 ENCODER = NeighborhoodEncoder(
     nbs_features=[32, 64, 64],
-    nbs_features_global=[64, 32, 8],
+    nbs_features_global=[64, 32, 4],
     mean=False
 )
 DECODER = GridDeformationDecoder(
-    input_size=8,
+    input_size=4,
     nbs_features_global=[32, 64, 64],
     nbs_features=[64, 32, 3],
     nb_neighbors=NBS_NEIGHS[-1]

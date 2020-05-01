@@ -44,7 +44,7 @@
       <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloudNetwork" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.training">
+  <component name="RunManager" selected="Python.training_pc">
     <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -150,7 +150,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="visualisation" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="training_pc" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -162,7 +162,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\visualisation\single_layer_training.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/relative_layer/training_pc.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -177,15 +177,15 @@
       <item itemvalue="Python.ae_training" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python.training" />
-      <item itemvalue="Python.visualisation" />
+      <item itemvalue="Python.training_pc" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.training_pc" />
         <item itemvalue="Python.training" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.Test" />
         <item itemvalue="Python.ae_training" />
-        <item itemvalue="Python.visualisation" />
       </list>
     </recent_temporary>
   </component>
@@ -215,25 +215,29 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1659" height="272" key="GridCell.Tab.0.bottom" timestamp="1588003164573">
+    <state x="619" y="259" key="FileChooserDialogImpl" timestamp="1588060150597">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1659" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588003164573" />
-    <state width="1659" height="272" key="GridCell.Tab.0.center" timestamp="1588003164572">
+    <state x="619" y="259" key="FileChooserDialogImpl/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588060150597" />
+    <state width="1659" height="272" key="GridCell.Tab.0.bottom" timestamp="1588113287556">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1659" height="272" key="GridCell.Tab.0.center/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588003164572" />
-    <state width="1659" height="272" key="GridCell.Tab.0.left" timestamp="1588003164572">
+    <state width="1659" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588113287556" />
+    <state width="1659" height="272" key="GridCell.Tab.0.center" timestamp="1588113287556">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1659" height="272" key="GridCell.Tab.0.left/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588003164572" />
-    <state width="1659" height="272" key="GridCell.Tab.0.right" timestamp="1588003164572">
+    <state width="1659" height="272" key="GridCell.Tab.0.center/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588113287556" />
+    <state width="1659" height="272" key="GridCell.Tab.0.left" timestamp="1588113287556">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state width="1659" height="272" key="GridCell.Tab.0.right/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588003164572" />
-    <state x="341" y="149" key="SettingsEditor" timestamp="1587981089101">
+    <state width="1659" height="272" key="GridCell.Tab.0.left/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588113287556" />
+    <state width="1659" height="272" key="GridCell.Tab.0.right" timestamp="1588113287556">
       <screen x="0" y="0" width="1680" height="1010" />
     </state>
-    <state x="341" y="149" key="SettingsEditor/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1587981089101" />
+    <state width="1659" height="272" key="GridCell.Tab.0.right/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588113287556" />
+    <state x="341" y="149" key="SettingsEditor" timestamp="1588060175252">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="341" y="149" key="SettingsEditor/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588060175252" />
   </component>
 </project>

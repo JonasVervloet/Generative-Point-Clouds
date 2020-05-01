@@ -15,8 +15,8 @@ from full_network.middlelayer_decoder import MiddleLayerDecoder
 from full_network.point_cloud_ae import PointCloudAE
 
 #  PATH VARIABLES
-RESULT_PATH = "D:/Documenten/Documenten Molenpolder/Jonas/Results/"
-NAME = "Network2/"
+RESULT_PATH = "D:/Documenten/Documenten Molenpolder/Jonas/Results/FullNetwork/"
+NAME = "ParameterReduction1/"
 PATH = RESULT_PATH + NAME
 
 # EPOCH + LEARNING RATE
@@ -33,8 +33,8 @@ PYRAMID = True
 TORUS = True
 SHAPES = [SPHERE, CUBE, CYLINDER, PYRAMID, TORUS]
 NORMALS = False
-TRAIN_SIZE = 10
-VAL_SIZE = 1
+TRAIN_SIZE = 100
+VAL_SIZE = 10
 BATCH_SIZE = 5
 
 # FULL AUTOENCODER NETWORK VARIABLES

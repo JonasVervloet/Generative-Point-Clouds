@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/relative_layer/training_pc.py" afterDir="false" />
@@ -24,6 +42,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1UFVFdOgv1Gg4gQtSvfGiZg9Mm5" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -44,7 +63,7 @@
       <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloudNetwork" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.training_pc">
+  <component name="RunManager" selected="Python.ae_training_pc">
     <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Generative-Mesh-Models" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -66,8 +85,8 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="ae_training" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Generative-Mesh-Models" />
+    <configuration name="ae_training_pc" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Generative-Point-Clouds" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -78,7 +97,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/full_network/ae_training.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/full_network/ae_training_pc.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -174,18 +193,18 @@
     <list>
       <item itemvalue="Python.mnist_vae" />
       <item itemvalue="Python.Test" />
-      <item itemvalue="Python.ae_training" />
       <item itemvalue="Python.test" />
       <item itemvalue="Python.training" />
       <item itemvalue="Python.training_pc" />
+      <item itemvalue="Python.ae_training_pc" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.ae_training_pc" />
         <item itemvalue="Python.training_pc" />
         <item itemvalue="Python.training" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.Test" />
-        <item itemvalue="Python.ae_training" />
       </list>
     </recent_temporary>
   </component>

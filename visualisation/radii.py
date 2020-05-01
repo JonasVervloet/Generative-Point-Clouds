@@ -20,7 +20,7 @@ NB_LAYERS = 1
 FINAL_LAYER = False
 NBS_NEIGHBOURS = [25]
 MAX_NEIGHBORS = 500
-INTERVAL = np.arange(0.1, 0.31, 0.01)
+INTERVAL = np.arange(0.1, 0.36, 0.01)
 NB_DECIMALS = 2
 
 
@@ -36,12 +36,14 @@ def analyse_dataset(dataset, name):
     :param name: The name which is used to name all the files that will
                     be saved.
     """
-    nbs_neighbors = get_nbs_neighbors_dataset(dataset)
+    nbs_neighbors, coverages = get_nbs_neighbors_dataset(dataset)
     assert(nbs_neighbors.shape[0] == len(INTERVAL))
 
     average_nbs = np.average(nbs_neighbors, axis=1)
+    average_cov = np.average(coverages, axis=1)
     radius = None
     ideal_nb = NBS_NEIGHBOURS[-1]
+    ideal_coverage = None
     for i in range(len(average_nbs)):
         if average_nbs[i] >= ideal_nb:
             neigh_low = average_nbs[i - 1]
@@ -52,14 +54,19 @@ def analyse_dataset(dataset, name):
             radius_step = INTERVAL[i] - radius_low
             radius = radius_low + alfa * radius_step
 
+            coverage_low = average_cov[i - 1]
+            coverage_step = average_cov[i] - coverage_low
+            ideal_coverage = coverage_low + alfa * coverage_step
+
             break
     print("optimal radius: {}".format(radius))
 
     save_nbs = nbs_neighbors < 25
     save_sum = np.sum(save_nbs, axis=1)
-    plot_avg_neigbors(
-        average_nbs, name=name,
-        ideal_radius=radius, save_index=np.argmax(save_sum==0)
+    radius_plot(
+        avg_neighbors=average_nbs, coverages=average_cov, name=name,
+        ideal_radius=radius, ideal_coverage=ideal_coverage,
+        save_index=np.argmax(save_sum==0)
     )
 
     for i in range(len(INTERVAL)):
@@ -80,16 +87,21 @@ def get_nbs_neighbors_dataset(dataset):
     """
     print("computing nbs_neighbors")
     total_nbs = None
+    total_cov = None
     for shape in dataset:
-        nbs = get_nbs_neighbors(shape.pos)
+        nbs, coverage = get_nbs_neighbors(shape.pos)
 
         if total_nbs is None:
             total_nbs = nbs
+            total_cov = coverage
         else:
             total_nbs = np.concatenate((total_nbs, nbs), axis=1)
+            total_cov = np.concatenate((total_cov, coverage), axis=0)
+    total_cov = total_cov.transpose()
 
     print(total_nbs.shape)
-    return total_nbs
+    print(total_cov.shape)
+    return total_nbs, total_cov
 
 
 def get_nbs_neighbors(input_points):
@@ -111,10 +123,14 @@ def get_nbs_neighbors(input_points):
     points, fps_points = get_neighborhood(input_points)
 
     total_nbs = None
+    coverage = []
     for radius in INTERVAL:
         rad_cluster, rad_inds = gnn.radius(
             points, fps_points, r=radius,
             max_num_neighbors=MAX_NEIGHBORS
+        )
+        coverage.append(
+            get_coverage(points, rad_inds)
         )
 
         nbs = []
@@ -128,7 +144,7 @@ def get_nbs_neighbors(input_points):
         else:
             total_nbs = np.concatenate((total_nbs, nbs_np), axis=0)
 
-    return total_nbs
+    return total_nbs, np.array([coverage])
 
 
 def get_neighborhood(points):
@@ -158,7 +174,12 @@ def get_neighborhood(points):
     return current_points, current_fps_points
 
 
-def plot_avg_neigbors(avg_neighbors, ideal_radius, save_index, name):
+def get_coverage(points, indices):
+    return len(torch.unique(indices))/len(points)
+
+
+def radius_plot(avg_neighbors, coverages,
+                ideal_radius, ideal_coverage, save_index, name):
     """
     Plot the given average number of neighbors and save according
         the given name.
@@ -170,32 +191,65 @@ def plot_avg_neigbors(avg_neighbors, ideal_radius, save_index, name):
     print("Average number of neigbors {}: layer {}".format(name, NB_LAYERS))
     assert(len(avg_neighbors) == len(INTERVAL))
     np.save(
-        PATH + name + "_avg_nb_neighbors.npy", np.array(avg_neighbors)
+        PATH + name + "_avg_nb_neighbors.npy", avg_neighbors
+    )
+    np.save(
+        PATH + name + "_avg_coverages.npy", coverages
     )
 
     plt.clf()
-    plt.plot(INTERVAL, avg_neighbors)
-    plt.legend([name])
-    plt.plot(
+    fig, ax1 = plt.subplots()
+
+    ax1.set_xlabel('radius')
+    ax1.set_ylabel('average number of neighbors', color='c')
+    ax1.plot(INTERVAL, avg_neighbors, color='c')
+    ax1.legend([name + " avg neighbors"], loc='lower left')
+    ax1.plot(
         (INTERVAL[0], ideal_radius),
         (25, 25),
         'r'
     )
-    plt.plot(
+    ax1.plot(
         (ideal_radius, ideal_radius),
         (avg_neighbors[0], 25),
         'r'
     )
-    plt.plot(
+    ax1.plot(
         (INTERVAL[0], INTERVAL[save_index]),
         (avg_neighbors[save_index], avg_neighbors[save_index]),
         'g'
     )
-    plt.plot(
+    ax1.plot(
         (INTERVAL[save_index], INTERVAL[save_index]),
         (avg_neighbors[0], avg_neighbors[save_index]),
         'g'
     )
+
+    ax2 = ax1.twinx()
+    ax2.set_ylabel('average coverage', color='m')
+    ax2.plot(INTERVAL, coverages, color='m')
+    ax2.legend([name + " avg coverage"], loc='lower right')
+    ax2.plot(
+        (ideal_radius, INTERVAL[-1]),
+        (ideal_coverage, ideal_coverage),
+        'r'
+    )
+    ax2.plot(
+        (ideal_radius, ideal_radius),
+        (coverages[0], ideal_coverage),
+        'r'
+    )
+    ax2.plot(
+        (INTERVAL[save_index], INTERVAL[-1]),
+        (coverages[save_index], coverages[save_index]),
+        'g'
+    )
+    ax2.plot(
+        (INTERVAL[save_index], INTERVAL[save_index]),
+        (coverages[0], coverages[save_index]),
+        'g'
+    )
+
     plt.title("Average number of neighbors {}: layer {}".format(name, NB_LAYERS))
     plt.savefig(PATH + "{}_layer{}_avg_nb_neighbors_plot".format(name, NB_LAYERS))
 
@@ -214,7 +268,7 @@ def plot_histogram(nbs_neighbors, name, radius):
     radius = round(radius, 2)
     print("Histogram {}: layer {}, radius {}".format(name, NB_LAYERS, radius))
     plt.clf()
-    plt.hist(nbs_neighbors, bins=range(75))
+    plt.hist(nbs_neighbors, bins=range(100))
     plt.title("Histogram {}: layer {}, radius {}".format(name, NB_LAYERS, radius))
     plt.savefig(PATH + "{}_layer{}_histogram_radius_{}.png".format(name, NB_LAYERS, radius))
 

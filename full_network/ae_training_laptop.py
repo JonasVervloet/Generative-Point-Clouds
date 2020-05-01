@@ -16,12 +16,12 @@ from full_network.point_cloud_ae import PointCloudAE
 
 #  PATH VARIABLES
 RESULT_PATH = "D:/Documenten/Results/Structured/FullAutoEncoder/"
-NAME = "Network1/"
+NAME = "Network2/"
 PATH = RESULT_PATH + NAME
 
 # EPOCH + LEARNING RATE
-FROM_EPOCH = 20
-END_EPOCH = 50
+FROM_EPOCH = 0
+END_EPOCH = 100
 LEARNING_RATE = 0.001
 
 # DATASET VARIABLES
@@ -33,8 +33,8 @@ PYRAMID = True
 TORUS = True
 SHAPES = [SPHERE, CUBE, CYLINDER, PYRAMID, TORUS]
 NORMALS = False
-TRAIN_SIZE = 50
-VAL_SIZE = 5
+TRAIN_SIZE = 10
+VAL_SIZE = 1
 BATCH_SIZE = 5
 
 # FULL AUTOENCODER NETWORK VARIABLES
@@ -43,76 +43,63 @@ NBS_NEIGHS = [25, 16, 9]
 RADII = [0.23, 1.3, 2.0]
 
 
+def get_neighborhood_encoder(latent_size, mean):
+    return NeighborhoodEncoder(
+        nbs_features=[32, 64, 64],
+        nbs_features_global=[64, 32, latent_size],
+        mean=mean
+    )
+
+
+def get_neighborhood_decoder(latent_size, nb_neighbors):
+    return NeighborhoodDecoder(
+        input_size=LAT1,
+        nbs_features_global=[32, 64, 64],
+        nbs_features=[64, 32, 3],
+        nb_neighbors=latent_size
+    )
+
+
 # ENCODERS AND DECODERS
-NEIGH_ENC_FEATS = [80]
-NEIGH_ENC_GLOBAL = [40, 20]
-NEIGH_ENC_MEAN = False
+LAT1 = 8
+LAT2 = 64
+LAT3 = 128
+MEAN = False
 
-NEIGH_DEC_INPUT = 20
-NEIGH_DEC_GLOBAL = [40, 80]
-NEIGH_DEC_FEATS = [3]
-
-neigh_enc1 = NeighborhoodEncoder(
-    NEIGH_ENC_FEATS,
-    NEIGH_ENC_GLOBAL,
-    NEIGH_ENC_MEAN
-)
+neigh_enc1 = get_neighborhood_encoder(LAT1, MEAN)
 encoder1 = neigh_enc1
-neigh_enc2 = NeighborhoodEncoder(
-    NEIGH_ENC_FEATS,
-    NEIGH_ENC_GLOBAL,
-    NEIGH_ENC_MEAN
-)
+neigh_enc2 = get_neighborhood_encoder(LAT1, MEAN)
 encoder2 = MiddleLayerEncoder(
     neighborhood_enc=neigh_enc2,
-    input_size=20,
-    nbs_features=[80, 100],
-    nbs_features_global=[75, 50],
-    mean=False
+    input_size=LAT1,
+    nbs_features=[64, 128, 128],
+    nbs_features_global=[128, 64, LAT2],
+    mean=MEAN
 )
-neigh_enc3 = NeighborhoodEncoder(
-    NEIGH_ENC_FEATS,
-    NEIGH_ENC_GLOBAL,
-    NEIGH_ENC_MEAN
-)
+neigh_enc3 = get_neighborhood_encoder(LAT1, MEAN)
 encoder3 = MiddleLayerEncoder(
     neighborhood_enc=neigh_enc3,
-    input_size=50,
-    nbs_features=[100, 150],
-    nbs_features_global=[100, 70],
-    mean=False
+    input_size=LAT2,
+    nbs_features=[128, 256, 256],
+    nbs_features_global=[256, 128, LAT3],
+    mean=MEAN
 )
 
-neigh_dec1 = NeighborhoodDecoder(
-    input_size=NEIGH_DEC_INPUT,
-    nbs_features_global=NEIGH_DEC_GLOBAL,
-    nbs_features=NEIGH_DEC_FEATS,
-    nb_neighbors=NBS_NEIGHS[-1]
-)
+neigh_dec1 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-1])
 decoder1 = MiddleLayerDecoder(
     neighborhood_dec=neigh_dec1,
-    input_size=70,
-    nbs_features_global=[100, 20],
-    nbs_features=[150, 50]
+    input_size=LAT3,
+    nbs_features_global=[128, 256, LAT1],
+    nbs_features=[128, 256, LAT2]
 )
-neigh_dec2 = NeighborhoodDecoder(
-    input_size=NEIGH_DEC_INPUT,
-    nbs_features_global=NEIGH_DEC_GLOBAL,
-    nbs_features=NEIGH_DEC_FEATS,
-    nb_neighbors=NBS_NEIGHS[-2]
-)
+neigh_dec2 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-2])
 decoder2 = MiddleLayerDecoder(
     neighborhood_dec=neigh_dec2,
-    input_size=50,
-    nbs_features_global=[100, 20],
-    nbs_features=[100, 20]
+    input_size=LAT2,
+    nbs_features_global=[64, 128, LAT1],
+    nbs_features=[64, 128, LAT1]
 )
-neigh_dec3 = NeighborhoodDecoder(
-    input_size=NEIGH_DEC_INPUT,
-    nbs_features_global=NEIGH_DEC_GLOBAL,
-    nbs_features=NEIGH_DEC_FEATS,
-    nb_neighbors=NBS_NEIGHS[-3]
-)
+neigh_dec3 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-3])
 decoder3 = neigh_dec3
 
 ENCODERS = [encoder1, encoder2, encoder3]
@@ -130,8 +117,8 @@ val_dataset = PrimitiveShapes.generate_dataset(
     nb_objects=VAL_SIZE, nb_points=NB_POINTS,
     shapes=SHAPES, normals=NORMALS
 )
-train_loader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE)
-val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE)
+train_loader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
 print("train loader length: {}".format(len(train_loader)))
 print("val loader length: {}".format(len(val_loader)))

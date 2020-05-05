@@ -7,9 +7,11 @@ import numpy as np
 
 from dataset.primitive_shapes import PrimitiveShapes
 from loss_function import ChamferDistLoss
+from loss_function import LayerChamferDistLoss
 
 from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.neighborhood_decoder import NeighborhoodDecoder
+from relative_layer.grid_deform_decoder import GridDeformationDecoder
 from full_network.middlelayer_encoder import MiddleLayerEncoder
 from full_network.middlelayer_decoder import MiddleLayerDecoder
 from full_network.point_cloud_ae import PointCloudAE
@@ -52,7 +54,7 @@ def get_neighborhood_encoder(latent_size, mean):
 
 
 def get_neighborhood_decoder(latent_size, nb_neighbors):
-    return NeighborhoodDecoder(
+    return GridDeformationDecoder(
         input_size=latent_size,
         nbs_features_global=[32, 64, 64],
         nbs_features=[64, 32, 3],
@@ -123,7 +125,7 @@ val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True
 print("train loader length: {}".format(len(train_loader)))
 print("val loader length: {}".format(len(val_loader)))
 
-loss_fn = ChamferDistLoss()
+loss_fn = LayerChamferDistLoss([1.0, 1.0, 1.0])
 
 print("NETWORK SETUP")
 net = PointCloudAE(
@@ -163,16 +165,16 @@ for i in range(END_EPOCH + 1 - FROM_EPOCH):
     for batch in train_loader:
         optimizer.zero_grad()
         points_list, batch_list, points_list_out, batch_list_out = net(batch)
-        points_in = points_list[0]
-        batch_in = batch_list[0]
-        points_out = points_list_out[-1]
-        batch_out = batch_list_out[-1]
+        # points_in = points_list[0]
+        # batch_in = batch_list[0]
+        # points_out = points_list_out[-1]
+        # batch_out = batch_list_out[-1]
 
         loss = loss_fn(
-            points_in,
-            points_out,
-            batch_in=batch_in,
-            batch_out=batch_out
+            points_list,
+            points_list_out,
+            batch_list,
+            batch_list_out
         )
         loss.backward()
         optimizer.step()
@@ -186,16 +188,16 @@ for i in range(END_EPOCH + 1 - FROM_EPOCH):
     temp_loss = []
     for val_batch in val_loader:
         points_list, batch_list, points_list_out, batch_list_out = net(batch)
-        points_in = points_list[0]
-        batch_in = batch_list[0]
-        points_out = points_list_out[-1]
-        batch_out = batch_list_out[-1]
+        # points_in = points_list[0]
+        # batch_in = batch_list[0]
+        # points_out = points_list_out[-1]
+        # batch_out = batch_list_out[-1]
 
         loss = loss_fn(
-            points_in,
-            points_out,
-            batch_in=batch_in,
-            batch_out=batch_out
+            points_list,
+            points_list_out,
+            batch_list,
+            batch_list_out
         )
         temp_loss.append(loss.item())
 

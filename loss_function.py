@@ -113,3 +113,29 @@ class ChamferVAELoss(Module):
 
         return chamf_loss + self.alfa * kl_loss
 
+
+class LayerChamferDistLoss(Module):
+    def __init__(self, coefficient_list):
+        super(LayerChamferDistLoss, self).__init__()
+
+        self.coefficients = coefficient_list
+        self.chamfer = ChamferDistLoss()
+
+    def forward(self, points_list, points_list_out, batch_list, batch_list_out):
+        length = len(self.coefficients)
+        assert(length == len(points_list))
+        assert(length == len(batch_list))
+        assert(length == len(points_list_out))
+        assert(length == len(batch_list_out))
+
+        loss = 0
+        for i in range(length):
+            loss += self.coefficients[i] * self.chamfer(
+                points_list[i],
+                points_list_out[-i],
+                batch_list[i],
+                batch_list_out[-i]
+            )
+
+        return loss
+

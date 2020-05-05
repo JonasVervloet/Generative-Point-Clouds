@@ -89,3 +89,9 @@ class GridDeformationDecoder(nn.Module):
                 )
         return torch.stack(grid).to(device)
 
+    def get_input_size(self):
+        """
+        :return: The input size this module expects to receive.
+        """
+        return self.input_size
+

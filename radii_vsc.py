@@ -19,10 +19,10 @@ NORMALS = False
 # SINGLE LAYER NETWORK VARIABLES.
 NB_LAYERS = 1
 FINAL_LAYER = False
-NBS_NEIGHBOURS = [25]
-MAX_NEIGHBORS = 500
-INTERVAL = np.arange(0.1, 0.41, 0.01)
-NB_DECIMALS = 2
+NBS_NEIGHBOURS = [16]
+MAX_NEIGHBORS = 1000
+INTERVAL = np.arange(0.002, 0.52, 0.002)
+NB_DECIMALS = 3
 
 
 def analyse_dataset(dataset, name):
@@ -191,6 +191,7 @@ def radius_plot(avg_neighbors, coverages,
     """
     print("Average number of neigbors {}: layer {}".format(name, NB_LAYERS))
     assert(len(avg_neighbors) == len(INTERVAL))
+    assert(len(coverages) == len(INTERVAL))
     np.save(
         PATH + name + "_avg_nb_neighbors.npy", avg_neighbors
     )
@@ -266,7 +267,7 @@ def plot_histogram(nbs_neighbors, name, radius):
     :param radius: The radius that was used to sample the neighborhoods
                 that led to nbs_neighbors
     """
-    radius = round(radius, 2)
+    radius = round(radius, NB_DECIMALS)
     print("Histogram {}: layer {}, radius {}".format(name, NB_LAYERS, radius))
     plt.clf()
     plt.hist(nbs_neighbors, bins=range(100))
@@ -346,12 +347,14 @@ train_dataset = ShapeNet(
     root=path, categories=CATEGORIES,
     include_normals=NORMALS, split="train"
 )
+print(len(train_dataset))
 print("validation")
 path = DATA_PATH + "validation/"
 val_dataset = ShapeNet(
     root=path, categories=CATEGORIES,
     include_normals=NORMALS, split="val"
 )
+print(len(val_dataset))
 
 print("ANALYSING DATASETS")
 print("train")

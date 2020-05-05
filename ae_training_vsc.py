@@ -33,7 +33,7 @@ BATCH_SIZE = 5
 
 # FULL AUTOENCODER NETWORK VARIABLES
 NB_LAYERS = 3
-NBS_NEIGHS = [25, 16, 9]
+NBS_NEIGHS = [16, 16, 9]
 RADII = [0.23, 1.3, 2.0]
 
 
@@ -55,7 +55,7 @@ def get_neighborhood_decoder(latent_size, nb_neighbors):
 
 
 # ENCODERS AND DECODERS
-LAT1 = 8
+LAT1 = 16
 LAT2 = 64
 LAT3 = 128
 MEAN = False

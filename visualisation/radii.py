@@ -265,7 +265,7 @@ def plot_histogram(nbs_neighbors, name, radius):
     :param radius: The radius that was used to sample the neighborhoods
                 that led to nbs_neighbors
     """
-    radius = round(radius, 2)
+    radius = round(radius, NB_DECIMALS)
     print("Histogram {}: layer {}, radius {}".format(name, NB_LAYERS, radius))
     plt.clf()
     plt.hist(nbs_neighbors, bins=range(100))

@@ -6,12 +6,18 @@ import point_cloud_utils as pcu
 from torch_geometric.data import Batch
 
 from relative_layer.neighborhood_encoder import NeighborhoodEncoder
+from relative_layer.neighborhood_decoder import NeighborhoodDecoder
 from relative_layer.grid_deform_decoder import GridDeformationDecoder
 from full_network.point_cloud_ae import PointCloudAE
 from full_network.middlelayer_encoder import MiddleLayerEncoder
 from full_network.middlelayer_decoder import MiddleLayerDecoder
 
-RESULT_PATH = "D:/Documenten/Results/"
+RESULT_PATH = "D:/Documenten/Results/FullNetwork/LearningRate100/"
+
+# FULL AUTOENCODER NETWORK VARIABLES
+NB_LAYERS = 3
+NBS_NEIGHS = [25, 16, 9]
+RADII = [0.23, 1.3, 2.0]
 
 
 def get_neighborhood_encoder(latent_size, mean):
@@ -23,7 +29,7 @@ def get_neighborhood_encoder(latent_size, mean):
 
 
 def get_neighborhood_decoder(latent_size, nb_neighbors):
-    return GridDeformationDecoder(
+    return NeighborhoodDecoder(
         input_size=latent_size,
         nbs_features_global=[32, 64, 64],
         nbs_features=[64, 32, 3],
@@ -31,10 +37,7 @@ def get_neighborhood_decoder(latent_size, nb_neighbors):
     )
 
 
-NB_LAYERS = 3
-NBS_NEIGHS = [25, 16, 9]
-RADII = [0.23, 1.3, 2.0]
-
+# ENCODERS AND DECODERS
 LAT1 = 8
 LAT2 = 64
 LAT3 = 128
@@ -79,38 +82,20 @@ decoder3 = neigh_dec3
 ENCODERS = [encoder1, encoder2, encoder3]
 DECODERS = [decoder1, decoder2, decoder3]
 
-
-ae = PointCloudAE(
-    NB_LAYERS,
-    NBS_NEIGHS,
-    RADII,
-    ENCODERS,
-    DECODERS
+net = PointCloudAE(
+    nb_layers=NB_LAYERS,
+    nbs_neighbors=NBS_NEIGHS,
+    radii=RADII,
+    encoders=ENCODERS,
+    decoders=DECODERS
 )
 
-input_tens = torch.rand((7200, 3))
-input_batch = torch.arange(2).repeat_interleave(3600)
-batch_obj = Batch(pos=input_tens, batch=input_batch)
-
-print(batch_obj)
-
-points_list, batch_list, points_list_out, batch_list_out = ae(batch_obj)
-
-length = len(points_list)
-assert(length == len(batch_list))
-assert(length == len(points_list_out))
-assert(length == len(batch_list_out))
-
-for i in range(length):
-    print()
-    print(points_list[i].size())
-    print(batch_list[i].size())
-
-for i in range(length):
-    print()
+encoded = torch.rand((2, 128))
+points_list_out, batch_list_out = net.decode(encoded)
+for i in range(len(points_list_out)):
     print(points_list_out[i].size())
     print(batch_list_out[i].size())
-
+    print(max(batch_list_out[i]))
 
 
 

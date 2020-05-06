@@ -10,7 +10,7 @@ from relative_layer.grid_deform_decoder import GridDeformationDecoder
 
 # PATH VARIABLES + VARIA
 RESULT_PATH = "D:/Documenten/Results/Structured/SingleLayerNetwork/"
-LOAD_NAME = "ParameterReduction4/"
+LOAD_NAME = "ParameterReduction2/"
 LOAD_PATH = RESULT_PATH + LOAD_NAME
 SAVE_NAME = "Interpolation2/"
 SAVE_PATH = RESULT_PATH + SAVE_NAME
@@ -27,7 +27,7 @@ PYRAMID = True
 TORUS = True
 SHAPES = [SPHERE, CUBE, CYLINDER, PYRAMID, TORUS]
 NORMALS = False
-SIZE = 50
+SIZE = 5
 BATCH_SIZE = 5
 
 # SINGLE LAYER NETWORK VARIABLES.
@@ -43,11 +43,11 @@ RADIUS = 0.23
 # ENCODER AND DECODER
 ENCODER = NeighborhoodEncoder(
     nbs_features=[32, 64, 64],
-    nbs_features_global=[64, 32, 4],
+    nbs_features_global=[64, 32, 16],
     mean=False
 )
 DECODER = GridDeformationDecoder(
-    input_size=4,
+    input_size=16,
     nbs_features_global=[32, 64, 64],
     nbs_features=[64, 32, 3],
     nb_neighbors=NBS_NEIGHS[-1]
@@ -93,56 +93,56 @@ print(latent.size())
 
 print("min")
 latent_min, inds = torch.min(latent, dim=0)
-print(latent_min.size())
+print(latent_min)
 
 print("max")
 latent_max, inds = torch.max(latent, dim=0)
-print(latent_max.size())
+print(latent_max)
 
 print("mean")
 latent_mean = torch.mean(latent, dim=0)
-print(latent_mean.size())
+print(latent_mean)
 
-print("INTERPOLATION")
-for index in range(latent_mean.size(0)):
-    print("Index: {}".format(index))
-    maximum = latent_max[index].item()
-    minimum = latent_min[index].item()
-    print(maximum - minimum)
-    if (maximum - minimum) < EPSILON:
-        print("No interpolation possible: continue")
-        continue
-    interval = torch.arange(
-        minimum,
-        maximum,
-        (maximum-minimum)/(NB_TESTS)
-    )
-
-    repeated = latent_mean.repeat((NB_TESTS, 1))
-    repeated[:, index] = interval
-    print(repeated.size())
-
-    decoded, cluster = net.decode(repeated)
-    print(decoded.size())
-    print(cluster.size())
-    print(torch.max(cluster))
-
-    plot = None
-    for i in range(torch.max(cluster) + 1):
-        decoded_points = decoded[cluster==i]
-        dec_np = decoded_points.detach().numpy()
-
-        if plot is None:
-            plot = mp.subplot(
-                dec_np, c=dec_np[:, 0],
-                s=[NB_TESTS, 1, i], shading={"point_size": 0.3}
-            )
-        else:
-            mp.subplot(
-                dec_np, c=dec_np[:, 0], data=plot,
-                s=[NB_TESTS, 1, i], shading={"point_size": 0.3}
-            )
-
-    plot.save(SAVE_PATH + "feature_visualization{}".format(index))
+# print("INTERPOLATION")
+# for index in range(latent_mean.size(0)):
+#     print("Index: {}".format(index))
+#     maximum = latent_max[index].item()
+#     minimum = latent_min[index].item()
+#     print(maximum - minimum)
+#     if (maximum - minimum) < EPSILON:
+#         print("No interpolation possible: continue")
+#         continue
+#     interval = torch.arange(
+#         minimum,
+#         maximum,
+#         (maximum-minimum)/(NB_TESTS)
+#     )
+# 
+#     repeated = latent_mean.repeat((NB_TESTS, 1))
+#     repeated[:, index] = interval
+#     print(repeated.size())
+# 
+#     decoded, cluster = net.decode(repeated)
+#     print(decoded.size())
+#     print(cluster.size())
+#     print(torch.max(cluster))
+# 
+#     plot = None
+#     for i in range(torch.max(cluster) + 1):
+#         decoded_points = decoded[cluster==i]
+#         dec_np = decoded_points.detach().numpy()
+# 
+#         if plot is None:
+#             plot = mp.subplot(
+#                 dec_np, c=dec_np[:, 0],
+#                 s=[NB_TESTS, 1, i], shading={"point_size": 0.3}
+#             )
+#         else:
+#             mp.subplot(
+#                 dec_np, c=dec_np[:, 0], data=plot,
+#                 s=[NB_TESTS, 1, i], shading={"point_size": 0.3}
+#             )
+# 
+#     plot.save(SAVE_PATH + "feature_visualization{}".format(index))
 
 

@@ -5,7 +5,7 @@ import torch_geometric.nn as gnn
 
 
 class MiddleLayerDecoder(nn.Module):
-    def __init__(self, neighborhood_dec, input_size, nbs_features_global, nbs_features):
+    def __init__(self, neighborhood_dec, input_size, nbs_features_global, nbs_features, leaky=False):
         super(MiddleLayerDecoder, self).__init__()
         assert(len(nbs_features_global) > 0)
         assert(neighborhood_dec.get_input_size() == nbs_features_global[-1])
@@ -15,6 +15,8 @@ class MiddleLayerDecoder(nn.Module):
         self.fc_layers = nn.ModuleList()
         self.input_size = input_size
         self.output_size = input_size
+
+        self.leaky = leaky
 
         self.initialize_fc_layers(input_size, nbs_features_global, nbs_features)
 
@@ -35,9 +37,14 @@ class MiddleLayerDecoder(nn.Module):
         self.output_size = nbs_features_in
 
     def forward(self, input_features):
+        if not self.leaky:
+            activation_fn = F.relu
+        else:
+            activation_fn = nn.LeakyReLU()
+
         neighborhood_feats = input_features
         for fc_layer in self.fc_layers_global:
-            neighborhood_feats = F.relu(fc_layer(neighborhood_feats))
+            neighborhood_feats = activation_fn(fc_layer(neighborhood_feats))
 
         relative_points, cluster = self.neighborhood_dec(neighborhood_feats)
         neighborhood_feats_duplicated = neighborhood_feats[cluster]
@@ -47,6 +54,6 @@ class MiddleLayerDecoder(nn.Module):
             [input_feats_duplicated, neighborhood_feats_duplicated, relative_points], 1
         )
         for fc_layer in self.fc_layers:
-            decoded_features = F.relu(fc_layer(decoded_features))
+            decoded_features = activation_fn(fc_layer(decoded_features))
 
         return relative_points, decoded_features, cluster

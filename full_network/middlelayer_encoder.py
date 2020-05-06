@@ -5,7 +5,7 @@ import torch_geometric.nn as gnn
 
 
 class MiddleLayerEncoder(nn.Module):
-    def __init__(self, neighborhood_enc, input_size, nbs_features, nbs_features_global, mean=False):
+    def __init__(self, neighborhood_enc, input_size, nbs_features, nbs_features_global, mean=False, leaky=False):
         super(MiddleLayerEncoder, self).__init__()
 
         self.neighborhood_enc = neighborhood_enc
@@ -15,6 +15,7 @@ class MiddleLayerEncoder(nn.Module):
         self.input_size = input_size
         self.output_size = nbs_features[-1]
         self.mean = mean
+        self.leaky = leaky
 
         self.initiate_fc_layers(input_size, nbs_features, nbs_features_global)
 
@@ -36,12 +37,17 @@ class MiddleLayerEncoder(nn.Module):
         self.output_size = output_size
 
     def forward(self, relative_points, features, cluster):
+        if not self.leaky:
+            activation_fn = F.relu
+        else:
+            activation_fn = nn.LeakyReLU()
+
         neighborhoods_encoding = self.neighborhood_enc(relative_points, cluster)
         neighborhoods_duplication = neighborhoods_encoding[cluster]
 
         encoded = torch.cat([relative_points, features, neighborhoods_duplication], 1)
         for fc_layer in self.fc_layers:
-            encoded = F.relu(fc_layer(encoded))
+            encoded = activation_fn(fc_layer(encoded))
 
         if self.mean:
             encoded_global = gnn.global_mean_pool(encoded, cluster)
@@ -49,6 +55,6 @@ class MiddleLayerEncoder(nn.Module):
             encoded_global = gnn.global_max_pool(encoded, cluster)
 
         for fc_layer in self.fc_layers_global:
-            encoded_global = F.relu(fc_layer(encoded_global))
+            encoded_global = activation_fn(fc_layer(encoded_global))
 
         return encoded_global

@@ -10,7 +10,7 @@ class NeighborhoodEncoder(nn.Module):
         The module is permutation invariant and can handle neighborhoods of
         different sizes.
     """
-    def __init__(self, nbs_features, nbs_features_global, mean=False):
+    def __init__(self, nbs_features, nbs_features_global, mean=False, leaky=False):
         """
         Initializes the parameters of this module.
         :param nbs_features: A list of three integers representing the number of
@@ -29,6 +29,7 @@ class NeighborhoodEncoder(nn.Module):
         self.fc_layers_global = nn.ModuleList()
         self.output_size = 3
         self.mean = mean
+        self.leaky = leaky
 
         self.initiate_fc_layers(nbs_features, nbs_features_global)
 
@@ -58,10 +59,14 @@ class NeighborhoodEncoder(nn.Module):
         :return: Returns for each cluster a single encoded vector of size
             [number of clusters, output_size].
         """
+        if not self.leaky:
+            activation_fn = F.relu
+        else:
+            activation_fn = nn.LeakyReLU()
 
         encoded = points
         for fc_layer in self.fc_layers:
-            encoded = F.relu(fc_layer(encoded))
+            encoded = activation_fn(fc_layer(encoded))
 
         if self.mean:
             encoded = gnn.global_mean_pool(encoded, cluster)
@@ -70,7 +75,7 @@ class NeighborhoodEncoder(nn.Module):
 
         encoded_global = encoded
         for fc_layer in self.fc_layers_global:
-            encoded_global = F.relu(fc_layer(encoded_global))
+            encoded_global = activation_fn(fc_layer(encoded_global))
 
         return encoded_global
 

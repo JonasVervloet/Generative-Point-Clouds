@@ -6,7 +6,7 @@ import math
 
 
 class GridDeformationDecoder(nn.Module):
-    def __init__(self, input_size, nbs_features_global, nbs_features, nb_neighbors=25):
+    def __init__(self, input_size, nbs_features_global, nbs_features, nb_neighbors=25, leaky=False):
         super(GridDeformationDecoder, self).__init__()
         assert(len(nbs_features) > 0)
 
@@ -19,6 +19,8 @@ class GridDeformationDecoder(nn.Module):
         self.grid = GridDeformationDecoder.create_grid(
             self.nb_neighbors, self.device
         )
+
+        self.leaky = leaky
 
         self.initiate_fc_layers(nbs_features_global, nbs_features)
 
@@ -40,11 +42,16 @@ class GridDeformationDecoder(nn.Module):
         assert(input_size == 3)
 
     def forward(self, features):
+        if not self.leaky:
+            activation_fn = F.relu
+        else:
+            activation_fn = nn.LeakyReLU()
+
         nb_clusters = features.size(0)
 
         decoded_global = features
         for fc_layer in self.fc_layers_global:
-            decoded_global = F.relu(fc_layer(decoded_global))
+            decoded_global = activation_fn(fc_layer(decoded_global))
 
         decoded_global_repeated = torch.repeat_interleave(
             decoded_global, self.nb_neighbors, dim=0
@@ -60,7 +67,7 @@ class GridDeformationDecoder(nn.Module):
         for fc_layer in self.fc_layers:
             fc_output = fc_layer(decoded)
             if not i == len(self.fc_layers):
-                decoded = F.relu(fc_output)
+                decoded = activation_fn(fc_output)
             else:
                 decoded = torch.tanh(fc_output)
             i += 1

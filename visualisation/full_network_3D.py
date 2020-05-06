@@ -1,9 +1,9 @@
 import torch
-from torch_geometric.data import Batch
+from torch_geometric.data import DataLoader
 import meshplot as mp
+import numpy as np
 
 from dataset.primitive_shapes import PrimitiveShapes as ps
-
 from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.neighborhood_decoder import NeighborhoodDecoder
 from relative_layer.grid_deform_decoder import GridDeformationDecoder
@@ -14,17 +14,17 @@ from full_network.middlelayer_decoder import MiddleLayerDecoder
 
 # PATH VARIABLES
 RESULT_PATH = "D:/Documenten/Results/Structured/FullAutoEncoder/"
-NAME = "LayeredLoss/"
+NAME = "SmallLatentSpace1/"
 PATH = RESULT_PATH + NAME
 
 # DATASET VARIABLES
-DATASET_SIZE = 1
+DATASET_SIZE = 10
 NB_POINTS = 3600
 NORMALS = False
+BATCH_SIZE = 5
 
-# EPOCH + TESTS
-NB_EPOCHS = 80
-NB_TESTS = 20
+# EPOCH
+NB_EPOCHS = 100
 
 # FULL AUTOENCODER NETWORK VARIABLES
 NB_LAYERS = 3
@@ -41,7 +41,7 @@ def get_neighborhood_encoder(latent_size, mean):
 
 
 def get_neighborhood_decoder(latent_size, nb_neighbors):
-    return GridDeformationDecoder(
+    return NeighborhoodDecoder(
         input_size=latent_size,
         nbs_features_global=[32, 64, 64],
         nbs_features=[64, 32, 3],
@@ -50,9 +50,9 @@ def get_neighborhood_decoder(latent_size, nb_neighbors):
 
 
 # ENCODERS AND DECODERS
-LAT1 = 8
-LAT2 = 64
-LAT3 = 128
+LAT1 = 4
+LAT2 = 8
+LAT3 = 3
 MEAN = False
 
 neigh_enc1 = get_neighborhood_encoder(LAT1, MEAN)
@@ -95,53 +95,19 @@ ENCODERS = [encoder1, encoder2, encoder3]
 DECODERS = [decoder1, decoder2, decoder3]
 
 
-def plot_training(network, data_obj, name):
-    pos = data_obj.pos
-    points_list, batch_list, points_list_out, batch_list_out = network(
-        Batch(pos=pos, batch=torch.tensor(0, dtype=torch.long).repeat(pos.size(0)))
-    )
+def evaluate_dataset(network, dataset):
+    network.eval()
+    loader = DataLoader(dataset, batch_size=BATCH_SIZE)
 
-    points_np = points_list[0].detach().numpy()
-    points_out_np = points_list_out[-1].detach().numpy()
-
-    plot = mp.subplot(
-        points_np, c=points_np[:,0],
-        s=[2, 1, 0], shading={"point_size": 0.3}
-    )
-    mp.subplot(
-        points_out_np, c=points_out_np[:,0], data=plot,
-        s=[2, 1, 1], shading={"point_size": 0.3}
-    )
-
-    plot.save(PATH + "visualization_" + name)
-
-
-def plot_training_layered(network, data_obj, name):
-    pos = data_obj.pos
-    points_list, batch_list, points_list_out, batch_list_out = network(
-        Batch(pos=pos, batch=torch.tensor(0, dtype=torch.long).repeat(pos.size(0)))
-    )
-
-    plot = None
-    for i in range(NB_LAYERS):
-        points_np = points_list[i].detach().numpy()
-        points_out_np = points_list_out[i].detach().numpy()
-        if plot is None:
-            plot = mp.subplot(
-                points_np, c=points_np[:, 0],
-                s=[2*NB_LAYERS, 1, i], shading={"point_size": 0.3}
-            )
+    latent = None
+    for batch in loader:
+        encoded, points_list, batch_list = network.encode(batch.pos, batch.batch)
+        if latent is None:
+            latent = encoded
         else:
-            mp.subplot(
-                points_np, c=points_np[:, 0], data=plot,
-                s=[2*NB_LAYERS, 1, i], shading={"point_size": 0.3}
-            )
-        mp.subplot(
-            points_out_np, c=points_out_np[:, 0], data=plot,
-            s=[2 * NB_LAYERS, 1, NB_LAYERS + i], shading={"point_size": 0.3}
-        )
+            latent = torch.cat([latent, encoded], dim=0)
 
-    plot.save(PATH + "visualization_" + name + "_layered")
+    return latent
 
 
 print("SCRIPT STARTED")
@@ -149,15 +115,15 @@ mp.offline()
 
 print("CREATING DATASETS")
 print("spheres")
-sphere = ps.generate_spheres_dataset(DATASET_SIZE, NB_POINTS, NORMALS)[0]
+spheres = ps.generate_spheres_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 print("cubes")
-cube = ps.generate_cubes_dataset(DATASET_SIZE, NB_POINTS, NORMALS)[0]
+cubes = ps.generate_cubes_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 print("cylinders")
-cylinder = ps.generate_cylinders_dataset(DATASET_SIZE, NB_POINTS, NORMALS)[0]
+cylinders = ps.generate_cylinders_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 print("pyramids")
-pyramid = ps.generate_pyramids_dataset(DATASET_SIZE, NB_POINTS, NORMALS)[0]
+pyramids = ps.generate_pyramids_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 print("torus")
-torus = ps.generate_tori_dataset(DATASET_SIZE, NB_POINTS, NORMALS)[0]
+tori = ps.generate_tori_dataset(DATASET_SIZE, NB_POINTS, NORMALS)
 
 print("LOADING NETWORK")
 net = PointCloudAE(
@@ -172,26 +138,63 @@ net.load_state_dict(
     )
 net.eval()
 
-print("PLOT TRAINING")
-print("sphere")
-plot_training(net, sphere, "sphere")
-plot_training_layered(net, sphere, "sphere")
-print("cube")
-plot_training(net, cube, "cube")
-plot_training_layered(net, cube, "cube")
-print("cylinder")
-plot_training(net, cylinder, "cylinder")
-plot_training_layered(net, cylinder, "cylinder")
-print("pyramid")
-plot_training(net, pyramid, "pyramid")
-plot_training_layered(net, pyramid, "pyramid")
+print("ENCODING")
+print("spheres")
+spheres_encoded = evaluate_dataset(net, spheres)
+print("cubes")
+cubes_encoded = evaluate_dataset(net, cubes)
+print("cylinders")
+cylinders_encoded = evaluate_dataset(net, cylinders)
+print("pyramids")
+pyramids_encoded = evaluate_dataset(net, pyramids)
 print("torus")
-plot_training(net, torus, "torus")
-plot_training_layered(net, torus, "torus")
+tori_encoded = evaluate_dataset(net, tori)
 
+encoded_points = torch.cat(
+    [spheres_encoded,
+     cubes_encoded,
+     cylinders_encoded,
+     pyramids_encoded,
+     tori_encoded],
+    dim=0
+).detach().numpy()
+print(encoded_points.shape)
+print(np.amax(encoded_points, axis=0))
+print(np.amin(encoded_points, axis=0))
+# encoded_points = encoded_points/np.amax(encoded_points, axis=0)[0]
 
-
-
-
-
+# sphere_color = np.tile(
+#     np.array([1.0, 0.0, 0.0]),
+#     (spheres_encoded.shape[0], 1)
+# )
+# cube_color = np.tile(
+#     np.array([0.0, 1.0, 0.0]),
+#     (cubes_encoded.shape[0], 1)
+# )
+# cylinder_color = np.tile(
+#     np.array([0.0, 0.0, 1.0]),
+#     (cylinders_encoded.shape[0], 1)
+# )
+# pyramid_color = np.tile(
+#     np.array([1.0, 1.0, 0.0]),
+#     (pyramids_encoded.shape[0], 1)
+# )
+# torus_color = np.tile(
+#     np.array([0.0, 1.0, 1.0]),
+#     (tori_encoded.shape[0], 1)
+# )
+#
+# colors = np.concatenate(
+#     [sphere_color,
+#      cube_color,
+#      cylinder_color,
+#      pyramid_color,
+#      torus_color],
+#     axis=0
+# )
+# print(colors.shape)
+#
+# plot = mp.plot(
+#     encoded_points, c=colors, filename=PATH + "3D_plot"
+# )
 

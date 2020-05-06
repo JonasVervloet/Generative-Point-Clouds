@@ -63,9 +63,9 @@ def get_neighborhood_decoder(latent_size, nb_neighbors):
 
 
 # ENCODERS AND DECODERS
-LAT1 = 4
-LAT2 = 8
-LAT3 = 3
+LAT1 = 8
+LAT2 = 64
+LAT3 = 128
 MEAN = False
 
 neigh_enc1 = get_neighborhood_encoder(LAT1, MEAN)

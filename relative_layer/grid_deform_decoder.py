@@ -21,6 +21,8 @@ class GridDeformationDecoder(nn.Module):
         )
 
         self.leaky = leaky
+        self.nbs_features_global = nbs_features_global
+        self.nbs_features = nbs_features
 
         self.initiate_fc_layers(nbs_features_global, nbs_features)
 
@@ -101,4 +103,38 @@ class GridDeformationDecoder(nn.Module):
         :return: The input size this module expects to receive.
         """
         return self.input_size
+
+    def to_string(self):
+        string = str(GridDeformationDecoder.__name__) + "\n"
+        string += "> Input size: " + str(self.input_size) + "\n"
+        string += "> Numbers of global features: " + str(self.nbs_features_global) + "\n"
+        string += "> Numbers of features: " + str(self.nbs_features) + "\n"
+        string += "> Number of neighbors: " + str(self.nb_neighbors) + "\n"
+        string += "> Leaky: " + str(self.leaky) + "\n"
+
+        return string
+
+    @staticmethod
+    def from_string(input_string_lines, reader):
+        assert(len(input_string_lines) == 6)
+        assert(input_string_lines[0] == str(GridDeformationDecoder.__name__))
+
+        input_size = int(input_string_lines[1].replace("> Input size: ", ""))
+        nbs_features_global = list(map(
+            int, input_string_lines[2].replace(
+                "> Numbers of global features: [", ""
+            ).replace("]", "").split(",")
+        ))
+        nbs_features = list(map(
+            int, input_string_lines[3].replace(
+                "> Numbers of features: [", ""
+            ).replace("]", "").split(",")
+        ))
+        nb_neighbors = int(input_string_lines[4].replace("> Number of neighbors: ", ""))
+        leaky = input_string_lines[5].replace("> Leaky: ", "") == "True"
+
+        return GridDeformationDecoder(
+            input_size, nbs_features_global, nbs_features, nb_neighbors, leaky
+        )
+
 

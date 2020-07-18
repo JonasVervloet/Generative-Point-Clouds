@@ -8,13 +8,13 @@ from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.neighborhood_decoder import NeighborhoodDecoder
 from relative_layer.grid_deform_decoder import GridDeformationDecoder
 from full_network.point_cloud_ae import PointCloudAE
-from full_network.middlelayer_encoder import MiddleLayerEncoder
-from full_network.middlelayer_decoder import MiddleLayerDecoder
+from full_network.middlelayer_encoder import MiddleLayerEncoder, MiddleLayerEncoderSplit
+from full_network.middlelayer_decoder import MiddleLayerDecoder, MiddleLayerDecoderSplit
 
 
 # PATH VARIABLES
 RESULT_PATH = "D:/Documenten/Results/Structured/FullAutoEncoder/"
-NAME = "LayeredLoss/"
+NAME = "LeakyRelu1/"
 PATH = RESULT_PATH + NAME
 
 # DATASET VARIABLES
@@ -23,20 +23,22 @@ NB_POINTS = 3600
 NORMALS = False
 
 # EPOCH + TESTS
-NB_EPOCHS = 80
+NB_EPOCHS = 65
 NB_TESTS = 20
 
 # FULL AUTOENCODER NETWORK VARIABLES
 NB_LAYERS = 3
 NBS_NEIGHS = [25, 16, 9]
 RADII = [0.23, 1.3, 2.0]
+LEAKY = True
 
 
 def get_neighborhood_encoder(latent_size, mean):
     return NeighborhoodEncoder(
         nbs_features=[32, 64, 64],
         nbs_features_global=[64, 32, latent_size],
-        mean=mean
+        mean=mean,
+        leaky=LEAKY
     )
 
 
@@ -45,7 +47,8 @@ def get_neighborhood_decoder(latent_size, nb_neighbors):
         input_size=latent_size,
         nbs_features_global=[32, 64, 64],
         nbs_features=[64, 32, 3],
-        nb_neighbors=nb_neighbors
+        nb_neighbors=nb_neighbors,
+        leaky=LEAKY
     )
 
 
@@ -63,7 +66,8 @@ encoder2 = MiddleLayerEncoder(
     input_size=LAT1,
     nbs_features=[64, 128, 128],
     nbs_features_global=[128, 64, LAT2],
-    mean=MEAN
+    mean=MEAN,
+    leaky=LEAKY
 )
 neigh_enc3 = get_neighborhood_encoder(LAT1, MEAN)
 encoder3 = MiddleLayerEncoder(
@@ -71,7 +75,8 @@ encoder3 = MiddleLayerEncoder(
     input_size=LAT2,
     nbs_features=[128, 256, 256],
     nbs_features_global=[256, 128, LAT3],
-    mean=MEAN
+    mean=MEAN,
+    leaky=LEAKY
 )
 
 neigh_dec1 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-1])
@@ -79,14 +84,16 @@ decoder1 = MiddleLayerDecoder(
     neighborhood_dec=neigh_dec1,
     input_size=LAT3,
     nbs_features_global=[128, 256, LAT1],
-    nbs_features=[128, 256, LAT2]
+    nbs_features=[128, 256, LAT2],
+    leaky=LEAKY
 )
 neigh_dec2 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-2])
 decoder2 = MiddleLayerDecoder(
     neighborhood_dec=neigh_dec2,
     input_size=LAT2,
     nbs_features_global=[64, 128, LAT1],
-    nbs_features=[64, 128, LAT1]
+    nbs_features=[64, 128, LAT1],
+    leaky=LEAKY
 )
 neigh_dec3 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-3])
 decoder3 = neigh_dec3

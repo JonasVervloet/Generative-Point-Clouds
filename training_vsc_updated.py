@@ -28,8 +28,8 @@ else:
     generator.make_incomplete_encoding()
 
 """DATASET GENERATOR"""
-train_size = 200
-val_size = 20
+train_size = 20
+val_size = 2
 nb_points = 3600
 batch_size = 5
 shuffle = True

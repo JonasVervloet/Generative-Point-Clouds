@@ -13,19 +13,17 @@ from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.neighborhood_decoder import NeighborhoodDecoder
 from relative_layer.grid_deform_decoder import GridDeformationDecoder
 from full_network.middlelayer_encoder import MiddleLayerEncoder
-from full_network.middlelayer_encoder import MiddleLayerEncoderSplit
 from full_network.middlelayer_decoder import MiddleLayerDecoder
-from full_network.middlelayer_decoder import MiddleLayerDecoderSplit
 from full_network.point_cloud_ae import PointCloudAE
 
 #  PATH VARIABLES
 RESULT_PATH = "D:/Documenten/Results/Structured/FullAutoEncoder/"
-NAME = "Network4/"
+NAME = "Network3/"
 PATH = RESULT_PATH + NAME
 
 # EPOCH + LEARNING RATE
 FROM_EPOCH = 0
-END_EPOCH = 100
+END_EPOCH = 10
 LEARNING_RATE = 0.001
 
 # DATASET VARIABLES
@@ -37,15 +35,15 @@ PYRAMID = True
 TORUS = True
 SHAPES = [SPHERE, CUBE, CYLINDER, PYRAMID, TORUS]
 NORMALS = False
-TRAIN_SIZE = 20
-VAL_SIZE = 2
+TRAIN_SIZE = 10
+VAL_SIZE = 1
 BATCH_SIZE = 5
 
 # FULL AUTOENCODER NETWORK VARIABLES
 NB_LAYERS = 3
 NBS_NEIGHS = [25, 16, 9]
 RADII = [0.23, 1.3, 2.0]
-LEAKY = False
+LEAKY = True
 
 
 def get_neighborhood_encoder(latent_size, mean):
@@ -76,7 +74,7 @@ MEAN = False
 neigh_enc1 = get_neighborhood_encoder(LAT1, MEAN)
 encoder1 = neigh_enc1
 neigh_enc2 = get_neighborhood_encoder(LAT1, MEAN)
-encoder2 = MiddleLayerEncoderSplit(
+encoder2 = MiddleLayerEncoder(
     neighborhood_enc=neigh_enc2,
     input_size=LAT1,
     nbs_features=[64, 128, 128],
@@ -85,9 +83,9 @@ encoder2 = MiddleLayerEncoderSplit(
     leaky=LEAKY
 )
 neigh_enc3 = get_neighborhood_encoder(LAT1, MEAN)
-encoder3 = MiddleLayerEncoderSplit(
+encoder3 = MiddleLayerEncoder(
     neighborhood_enc=neigh_enc3,
-    input_size=LAT2 + LAT1,
+    input_size=LAT2,
     nbs_features=[128, 256, 256],
     nbs_features_global=[256, 128, LAT3],
     mean=MEAN,
@@ -95,18 +93,18 @@ encoder3 = MiddleLayerEncoderSplit(
 )
 
 neigh_dec1 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-1])
-decoder1 = MiddleLayerDecoderSplit(
+decoder1 = MiddleLayerDecoder(
     neighborhood_dec=neigh_dec1,
     input_size=LAT3,
-    neigh_dec_size=LAT1,
-    nbs_features=[128, 256, LAT2 + LAT1],
+    nbs_features_global=[128, 256, LAT1],
+    nbs_features=[128, 256, LAT2],
     leaky=LEAKY
 )
 neigh_dec2 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-2])
-decoder2 = MiddleLayerDecoderSplit(
+decoder2 = MiddleLayerDecoder(
     neighborhood_dec=neigh_dec2,
     input_size=LAT2,
-    neigh_dec_size=LAT1,
+    nbs_features_global=[64, 128, LAT1],
     nbs_features=[64, 128, LAT1],
     leaky=LEAKY
 )
@@ -134,7 +132,7 @@ val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True
 print("train loader length: {}".format(len(train_loader)))
 print("val loader length: {}".format(len(val_loader)))
 
-loss_fn = ChamferDistLoss()
+loss_fn = LayerChamferDistLoss([1.0, 1.0, 1.0])
 
 print("NETWORK SETUP")
 net = PointCloudAE(
@@ -174,16 +172,16 @@ for i in range(END_EPOCH + 1 - FROM_EPOCH):
     for batch in train_loader:
         optimizer.zero_grad()
         points_list, batch_list, points_list_out, batch_list_out = net(batch)
-        points_in = points_list[0]
-        batch_in = batch_list[0]
-        points_out = points_list_out[-1]
-        batch_out = batch_list_out[-1]
+        # points_in = points_list[0]
+        # batch_in = batch_list[0]
+        # points_out = points_list_out[-1]
+        # batch_out = batch_list_out[-1]
 
         loss = loss_fn(
-            points_in,
-            points_out,
-            batch_in=batch_in,
-            batch_out=batch_out
+            points_list,
+            points_list_out,
+            batch_list,
+            batch_list_out
         )
         loss.backward()
         optimizer.step()
@@ -197,16 +195,16 @@ for i in range(END_EPOCH + 1 - FROM_EPOCH):
     temp_loss = []
     for val_batch in val_loader:
         points_list, batch_list, points_list_out, batch_list_out = net(batch)
-        points_in = points_list[0]
-        batch_in = batch_list[0]
-        points_out = points_list_out[-1]
-        batch_out = batch_list_out[-1]
+        # points_in = points_list[0]
+        # batch_in = batch_list[0]
+        # points_out = points_list_out[-1]
+        # batch_out = batch_list_out[-1]
 
         loss = loss_fn(
-            points_in,
-            points_out,
-            batch_in=batch_in,
-            batch_out=batch_out
+            points_list,
+            points_list_out,
+            batch_list,
+            batch_list_out
         )
         temp_loss.append(loss.item())
 

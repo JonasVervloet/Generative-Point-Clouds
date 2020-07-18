@@ -5,114 +5,14 @@ import random
 import torch
 from torch_geometric.data import Data
 import point_cloud_utils as pcu
-from dataset.dataset_generator import DatasetGenerator
 
 
-class PrimitiveShapes(DatasetGenerator):
-
-    def __init__(self, train_size, val_size, nb_points, batch_size, shuffle=True):
-        DatasetGenerator.__init__(self, batch_size, shuffle)
-        self.train_size = train_size
-        self.val_size = val_size
-        self.nb_points = nb_points
-        self.shapes = [True, True, True, True, True]
-        self.normals = False
-
-    def set_shapes(self, shapes):
-        self.shapes = shapes
-
-    def enable_spheres(self):
-        self.shapes[0] = True
-
-    def disable_spheres(self):
-        self.shapes[0] = False
-
-    def enable_cubes(self):
-        self.shapes[1] = True
-
-    def disable_cubes(self):
-        self.shapes[1] = False
-
-    def enable_cylinders(self):
-        self.shapes[2] = True
-
-    def disable_cylinders(self):
-        self.shapes[2] = False
-
-    def enable_pyramids(self):
-        self.shapes[3] = True
-
-    def disable_pyramids(self):
-        self.shapes[3] = False
-
-    def enable_tori(self):
-        self.shapes[4] = True
-
-    def disable_tori(self):
-        self.shapes[4] = False
-
-    def enable_normals(self):
-        self.normals = True
-
-    def disable_normals(self):
-        self.normals = False
-
-    def generate_train_dataset(self):
-        return PrimitiveShapes.generate_dataset(
-            nb_objects=self.train_size,
-            nb_points=self.nb_points,
-            shapes=self.shapes,
-            normals=False
-        )
-
-    def generate_validation_dataset(self):
-        return PrimitiveShapes.generate_dataset(
-            nb_objects=self.val_size,
-            nb_points=self.nb_points,
-            shapes=self.shapes,
-            normals=False
-        )
-
-    def get_train_size(self):
-        return self.train_size * sum(self.shapes)
-
-    def get_val_size(self):
-        return self.val_size * sum(self.shapes)
-
-    def to_string(self):
-        string = str(PrimitiveShapes.__name__) + "\n"
-        string += DatasetGenerator.to_string(self)
-        string += "> train size: " + str(self.train_size) + "\n"
-        string += "> validation size: " + str(self.val_size) + "\n"
-        string += "> number of points: " + str(self.nb_points) + "\n"
-        string += "> shapes: " + str(self.shapes) + "\n"
-        string += "> normals: " + str(self.normals) + "\n"
-
-        return string
-
-    @staticmethod
-    def from_string(input_lines, reader):
-        assert(input_lines[0] == str(PrimitiveShapes.__name__))
-        batch_size, shuffle = DatasetGenerator.from_string(input_lines[1:3])
-        train_size = int(input_lines[3].replace("> train size: ", ""))
-        val_size = int(input_lines[4].replace("> validation size: ", ""))
-        nb_points = int(input_lines[5].replace("> number of points: ", ""))
-        shapes = list(map(
-            lambda x: x == "True", input_lines[6].replace(
-                "> shapes: [", ""
-            ).replace("]", "").replace(" ", "").split(",")
-        ))
-        normals = input_lines[7].replace("> normals: ", "") == "True"
-
-        generator = PrimitiveShapes(train_size, val_size, nb_points,
-                               batch_size, shuffle)
-        generator.set_shapes(shapes)
-
-        return generator
+class PrimitiveShapes:
 
     """
     GENERAL
     """
+
     @staticmethod
     def generate_random_point(nb, interval):
         nb_low = nb * interval

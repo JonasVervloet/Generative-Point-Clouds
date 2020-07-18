@@ -29,9 +29,6 @@ class NeighborhoodDecoder(nn.Module):
         self.middle_size = None
         self.nb_neighbors = nb_neighbors
 
-        self.nbs_features_global = nbs_features_global
-        self.nbs_features = nbs_features
-
         self.initiate_fc_layers(nbs_features_global, nbs_features)
         self.create_unpool_layer()
 
@@ -107,36 +104,3 @@ class NeighborhoodDecoder(nn.Module):
         """
         self.nb_neighbors = parent.get_number_neighbors()
         self.create_unpool_layer()
-
-    def to_string(self):
-        string = str(NeighborhoodDecoder.__name__) + "\n"
-        string += "> Input size: " + str(self.input_size) + "\n"
-        string += "> Numbers of global features: " + str(self.nbs_features_global) + "\n"
-        string += "> Numbers of features: " + str(self.nbs_features) + "\n"
-        string += "> Number of neighbors: " + str(self.nb_neighbors) + "\n"
-        return string
-
-    @staticmethod
-    def from_string(input_string_list, reader):
-        assert(len(input_string_list) == 5)
-        assert(input_string_list[0] == str(NeighborhoodDecoder.__name__))
-
-        print(input_string_list)
-
-        input_size = int(input_string_list[1].replace("> Input size: ", ""))
-        nbs_features_global = list(map(
-            int, input_string_list[2].replace(
-                "> Numbers of global features: [", ""
-            ).replace("]", "").split(",")
-        ))
-        nbs_features = list(map(
-            int, input_string_list[3].replace(
-                "> Numbers of features: [", ""
-            ).replace("]", "").split(",")
-        ))
-        nb_neighbors = int(input_string_list[4].replace("> Number of neighbors: ", ""))
-
-        return NeighborhoodDecoder(
-            input_size, nbs_features_global, nbs_features, nb_neighbors
-        )
-

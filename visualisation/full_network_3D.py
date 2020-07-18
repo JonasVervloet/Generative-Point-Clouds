@@ -14,7 +14,7 @@ from full_network.middlelayer_decoder import MiddleLayerDecoder
 
 # PATH VARIABLES
 RESULT_PATH = "D:/Documenten/Results/Structured/FullAutoEncoder/"
-NAME = "LeakyRelu1/"
+NAME = "SmallLatentSpace1/"
 PATH = RESULT_PATH + NAME
 
 # DATASET VARIABLES
@@ -24,38 +24,35 @@ NORMALS = False
 BATCH_SIZE = 5
 
 # EPOCH
-NB_EPOCHS = 65
+NB_EPOCHS = 100
 
 # FULL AUTOENCODER NETWORK VARIABLES
 NB_LAYERS = 3
 NBS_NEIGHS = [25, 16, 9]
 RADII = [0.23, 1.3, 2.0]
-LEAKY = True
 
 
 def get_neighborhood_encoder(latent_size, mean):
     return NeighborhoodEncoder(
         nbs_features=[32, 64, 64],
         nbs_features_global=[64, 32, latent_size],
-        mean=mean,
-        leaky=LEAKY
+        mean=mean
     )
 
 
 def get_neighborhood_decoder(latent_size, nb_neighbors):
-    return GridDeformationDecoder(
+    return NeighborhoodDecoder(
         input_size=latent_size,
         nbs_features_global=[32, 64, 64],
         nbs_features=[64, 32, 3],
-        nb_neighbors=nb_neighbors,
-        leaky=LEAKY
+        nb_neighbors=nb_neighbors
     )
 
 
 # ENCODERS AND DECODERS
-LAT1 = 8
-LAT2 = 64
-LAT3 = 128
+LAT1 = 4
+LAT2 = 8
+LAT3 = 3
 MEAN = False
 
 neigh_enc1 = get_neighborhood_encoder(LAT1, MEAN)
@@ -66,8 +63,7 @@ encoder2 = MiddleLayerEncoder(
     input_size=LAT1,
     nbs_features=[64, 128, 128],
     nbs_features_global=[128, 64, LAT2],
-    mean=MEAN,
-    leaky=LEAKY
+    mean=MEAN
 )
 neigh_enc3 = get_neighborhood_encoder(LAT1, MEAN)
 encoder3 = MiddleLayerEncoder(
@@ -75,8 +71,7 @@ encoder3 = MiddleLayerEncoder(
     input_size=LAT2,
     nbs_features=[128, 256, 256],
     nbs_features_global=[256, 128, LAT3],
-    mean=MEAN,
-    leaky=LEAKY
+    mean=MEAN
 )
 
 neigh_dec1 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-1])
@@ -84,16 +79,14 @@ decoder1 = MiddleLayerDecoder(
     neighborhood_dec=neigh_dec1,
     input_size=LAT3,
     nbs_features_global=[128, 256, LAT1],
-    nbs_features=[128, 256, LAT2],
-    leaky=LEAKY
+    nbs_features=[128, 256, LAT2]
 )
 neigh_dec2 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-2])
 decoder2 = MiddleLayerDecoder(
     neighborhood_dec=neigh_dec2,
     input_size=LAT2,
     nbs_features_global=[64, 128, LAT1],
-    nbs_features=[64, 128, LAT1],
-    leaky=LEAKY
+    nbs_features=[64, 128, LAT1]
 )
 neigh_dec3 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-3])
 decoder3 = neigh_dec3

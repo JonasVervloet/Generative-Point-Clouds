@@ -1,92 +1,109 @@
 import torch
+import torch.nn as nn
+import numpy as np
+import math
+import point_cloud_utils as pcu
 from torch_geometric.data import Batch
-from dataset.primitive_shapes import PrimitiveShapes as ps
-from network_text_converter import NetworkTextFileConverter
-from network_manager import NetworkManager
-from loss_function import ChamferDistLoss, ChamferVAELoss, LayerChamferDistLoss, ChamferDistLossFullNetwork
-from full_network.network_generator import NetworkGenerator
 
-from full_network.middlelayer_decoder import MiddleLayerDecoder, MiddleLayerDecoderSplit
-from full_network.middlelayer_encoder import MiddleLayerEncoder, MiddleLayerEncoderSplit
-from full_network.point_cloud_ae import PointCloudAE
-from relative_layer.grid_deform_decoder import GridDeformationDecoder
 from relative_layer.neighborhood_encoder import NeighborhoodEncoder
 from relative_layer.neighborhood_decoder import NeighborhoodDecoder
+from relative_layer.grid_deform_decoder import GridDeformationDecoder
+from full_network.point_cloud_ae import PointCloudAE
+from full_network.middlelayer_encoder import MiddleLayerEncoder
+from full_network.middlelayer_decoder import MiddleLayerDecoder
 
-COMPLETE_ENCODING = False
+RESULT_PATH = "D:/Documenten/Results/FullNetwork/LearningRate100/"
 
-print()
-print("Test Generator")
-print()
+# FULL AUTOENCODER NETWORK VARIABLES
+NB_LAYERS = 3
+NBS_NEIGHS = [25, 16, 9]
+RADII = [0.23, 1.3, 2.0]
 
-generator = NetworkGenerator()
-generator.set_nb_layers(2)
 
-generator.add_nb_neighbor(25)
-generator.add_nb_neighbor(16)
-# generator.add_nb_neighbor(9)
+def get_neighborhood_encoder(latent_size, mean):
+    return NeighborhoodEncoder(
+        nbs_features=[32, 64, 64],
+        nbs_features_global=[64, 32, latent_size],
+        mean=mean
+    )
 
-generator.add_radius(0.23)
-generator.add_radius(1.3)
-# generator.add_radius(2.0)
 
-generator.add_latent_size(8)
-generator.add_latent_size(64)
-# generator.add_latent_size(128)
+def get_neighborhood_decoder(latent_size, nb_neighbors):
+    return NeighborhoodDecoder(
+        input_size=latent_size,
+        nbs_features_global=[32, 64, 64],
+        nbs_features=[64, 32, 3],
+        nb_neighbors=nb_neighbors
+    )
 
-generator.deactivate_leaky_relu()
-if COMPLETE_ENCODING:
-    generator.make_complete_encoding()
-else:
-    generator.make_incomplete_encoding()
-generator.set_max_pooling()
-generator.set_grid_decoder()
-generator.disable_split_networks()
 
-network = generator.generate_network()
-print(network.to_string())
-print()
+# ENCODERS AND DECODERS
+LAT1 = 8
+LAT2 = 64
+LAT3 = 128
+MEAN = False
 
-test_points = torch.randn(7200, 3)
-test_batch = torch.arange(2).repeat_interleave(3600)
-
-spheres = ps.generate_spheres_dataset(2, 3600, normals=False)
-spheres_input = torch.cat([spheres[0].pos, spheres[1].pos], 0)
-batch = Batch(pos=spheres_input, batch=test_batch)
-print("input: ")
-print(spheres_input.size())
-print(test_batch.size())
-
-input_points, input_clusters, features, fps_points = network.encode(
-    batch.pos, batch.batch
+neigh_enc1 = get_neighborhood_encoder(LAT1, MEAN)
+encoder1 = neigh_enc1
+neigh_enc2 = get_neighborhood_encoder(LAT1, MEAN)
+encoder2 = MiddleLayerEncoder(
+    neighborhood_enc=neigh_enc2,
+    input_size=LAT1,
+    nbs_features=[64, 128, 128],
+    nbs_features_global=[128, 64, LAT2],
+    mean=MEAN
+)
+neigh_enc3 = get_neighborhood_encoder(LAT1, MEAN)
+encoder3 = MiddleLayerEncoder(
+    neighborhood_enc=neigh_enc3,
+    input_size=LAT2,
+    nbs_features=[128, 256, 256],
+    nbs_features_global=[256, 128, LAT3],
+    mean=MEAN
 )
 
-print()
-print("decoding")
-print()
+neigh_dec1 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-1])
+decoder1 = MiddleLayerDecoder(
+    neighborhood_dec=neigh_dec1,
+    input_size=LAT3,
+    nbs_features_global=[128, 256, LAT1],
+    nbs_features=[128, 256, LAT2]
+)
+neigh_dec2 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-2])
+decoder2 = MiddleLayerDecoder(
+    neighborhood_dec=neigh_dec2,
+    input_size=LAT2,
+    nbs_features_global=[64, 128, LAT1],
+    nbs_features=[64, 128, LAT1]
+)
+neigh_dec3 = get_neighborhood_decoder(LAT1, NBS_NEIGHS[-3])
+decoder3 = neigh_dec3
 
-relative_points_list, clusters_list = network.decode_features(features)
-assert(len(relative_points_list) == len(clusters_list))
-for i in range(len(relative_points_list)):
-    print(relative_points_list[i].size())
-    print(clusters_list[i].size())
+ENCODERS = [encoder1, encoder2, encoder3]
+DECODERS = [decoder1, decoder2, decoder3]
 
-print()
+net = PointCloudAE(
+    nb_layers=NB_LAYERS,
+    nbs_neighbors=NBS_NEIGHS,
+    radii=RADII,
+    encoders=ENCODERS,
+    decoders=DECODERS
+)
 
-output_points = network.construct_output_points(relative_points_list, clusters_list, fps_points)
-for i in range(len(output_points)):
-    print(output_points[i].size())
+encoded = torch.rand((2, 128))
+points_list_out, batch_list_out = net.decode(encoded)
+for i in range(len(points_list_out)):
+    print(points_list_out[i].size())
+    print(batch_list_out[i].size())
+    print(max(batch_list_out[i]))
 
-print()
 
-output_clusters = network.construct_output_clusters(clusters_list, features)
-for i in range(len(output_clusters)):
-    print(output_clusters[i].size())
 
-print()
-output_points, output_clusters = network.decode(features, fps_points)
-assert(len(output_points) == len(output_clusters))
-for i in range(len(output_points)):
-    print(output_points[i].size())
-    print(output_clusters[i].size())
+
+
+
+
+
+
+
 

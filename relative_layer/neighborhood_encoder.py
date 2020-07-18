@@ -28,8 +28,6 @@ class NeighborhoodEncoder(nn.Module):
         self.fc_layers = nn.ModuleList()
         self.fc_layers_global = nn.ModuleList()
         self.output_size = 3
-        self.nbs_features = nbs_features
-        self.nbs_features_global = nbs_features_global
         self.mean = mean
         self.leaky = leaky
 
@@ -64,7 +62,7 @@ class NeighborhoodEncoder(nn.Module):
         if not self.leaky:
             activation_fn = F.relu
         else:
-            activation_fn = nn.LeakyReLU
+            activation_fn = nn.LeakyReLU()
 
         encoded = points
         for fc_layer in self.fc_layers:
@@ -92,35 +90,4 @@ class NeighborhoodEncoder(nn.Module):
         :param parent: A parent module that uses this module as part of its network.
         """
         parent.set_normal_not_required()
-
-    def to_string(self):
-        string = str(NeighborhoodEncoder.__name__) + "\n"
-        string += "> Numbers of features: " + str(self.nbs_features) + "\n"
-        string += "> Numbers of global features: " + str(self.nbs_features_global) + "\n"
-        string += "> Mean: " + str(self.mean) + "\n"
-        string += "> Leaky: " + str(self.leaky) + "\n"
-        return string
-
-    @staticmethod
-    def from_string(input_string_list, reader):
-        assert(len(input_string_list) == 5)
-        assert(input_string_list[0] == str(NeighborhoodEncoder.__name__))
-
-        nbs_features = list(map(
-            int, input_string_list[1].replace(
-                "> Numbers of features: [", ""
-            ).replace("]", "").split(",")
-        ))
-        nbs_global_features = list(map(
-            int, input_string_list[2].replace(
-                "> Numbers of global features: [", ""
-            ).replace("]", "").split(",")
-        ))
-        mean = input_string_list[3].replace("> Mean: ", "") == "True"
-        leaky = input_string_list[4].replace("> Leaky: ", "") == "True"
-
-        return NeighborhoodEncoder(
-            nbs_features, nbs_global_features, mean, leaky
-        )
-
 

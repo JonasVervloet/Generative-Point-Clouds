@@ -41,22 +41,63 @@ class PointCloudAE(nn.Module):
         return [input_points, input_clusters, output_points, output_clusters, encoding, anchor_points]
 
     def encode(self, points, batch, normals=None):
+        # print("ENCODE")
+
+        # fps points is a list that contains the fps points in each layer
+        #   the first element in the list are the input points
+        #   if the network is a complete encoding, the list will have a length that equals the number of layers
+        #   else the list will have a length of the list will be one more than the number of layers
+        # fps batches denotes to which batch every point in fps_points belongs to
+        #   therefore, the length of the fps_batches list equals the length of the fps_points list
         fps_points, fps_batches = self.do_fps_computations(
             points, batch
         )
+
+        # for i in range(len(fps_points)):
+        #     print("Fps layer {}:".format(i))
+        #     print(fps_points[i].size())
+        #     print(fps_batches[i].size())
+
         radius_clusters, radius_indices, radius_points = self.do_radius_computations(
             fps_points, fps_batches
         )
+
+        # print()
+        # for i in range(len(radius_clusters)):
+        #     print("radius layer {} - {}:".format(i, i+1))
+        #     print(radius_clusters[i].size())
+        #     print(radius_indices[i].size())
+        #     print(radius_points[i].size())
+
         relative_points = self.get_relative_points(
             fps_points, radius_points, radius_clusters
         )
+
+        # print()
+        # for i in range(len(relative_points)):
+        #     print("Relative points layer {}:".format(i))
+        #     print(relative_points[i].size())
+        #     print("max: {}".format(torch.max(relative_points[i])))
+
         features = self.encode_features(
             relative_points, radius_clusters, radius_indices
         )
 
+        # print()
+        # for i in range(len(features)):
+        #     print("Features layer {}:".format(i+1))
+        #     print(features[i].size())
+        #     print(features[i].grad_fn)
+
         input_points, input_clusters = self.get_used_input_points(
             fps_points, radius_indices, radius_clusters
         )
+
+        # print()
+        # for i in range(len(input_points)):
+        #     print("Input points layer {}:".format(i))
+        #     print(input_points[i].size())
+        #     print(input_clusters[i].size())
 
         return input_points, input_clusters, features, fps_points
 
@@ -193,13 +234,37 @@ class PointCloudAE(nn.Module):
         return input_points, input_clusters
 
     def decode(self, features, fps_points):
+        # print()
+        # print("DECODE")
+
         relative_points_list, clusters_list = self.decode_features(features)
+
+        # print()
+        # for i in range(len(relative_points_list)):
+        #     print("Decoded relative points layer {}:".format(i))
+        #     print(relative_points_list[i].size())
+        #     print(clusters_list[i].size())
+        #     print(relative_points_list[i].grad_fn)
+
         output_points = self.construct_output_points(
             relative_points_list, clusters_list, fps_points
         )
+
+        # print()
+        # for i in range(len(output_points)):
+        #     print("Output points layer {}:".format(i))
+        #     print(output_points[i].size())
+        #     print(output_points[i].grad_fn)
+
         output_clusters = self.construct_output_clusters(
             clusters_list, features
         )
+
+        # print()
+        # for i in range(len(output_clusters)):
+        #     print("Output clusters layer {}:".format(i))
+        #     print(output_clusters[i].size())
+        #     print(torch.max(output_clusters[i]))
 
         return output_points, output_clusters
 

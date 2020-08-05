@@ -1,8 +1,12 @@
 from torch.optim import Adam
+from torch.utils.tensorboard import SummaryWriter
 from full_network.network_generator import NetworkGenerator
 from dataset.primitive_shapes import PrimitiveShapes
 from network_manager import NetworkManager
 from loss_function import ChamferDistLossFullNetwork
+import wandb
+
+wandb.init(project="generative-point-clouds")
 
 """NETWORK GENERATOR"""
 complete_encoding = False
@@ -41,7 +45,7 @@ dataset_generator = PrimitiveShapes(
 )
 
 """NETWORK MANAGER"""
-path = "D:/Documenten/Results/Structured/Test/SingleLayer/"
+path = "D:/Documenten/Results/Structured/Test/TestWandB/"
 
 optimizer = Adam
 learning_rate = 0.001
@@ -58,10 +62,14 @@ if not load:
     manager.set_learning_rate(learning_rate)
     manager.set_weight_decay(weight_decay)
     manager.set_loss_function(loss_function)
-    manager.set_network(generator.generate_network())
+    network = generator.generate_network()
+    wandb.watch(network, log='all')
+    manager.set_network(network)
     manager.set_dataset_generator(dataset_generator)
 else:
     manager.load_from_file()
+    network = manager.network
+    wandb.watch(network, log='all')
 
-manager.train(end_epoch)
+manager.train(end_epoch, wandb_logging=True)
 

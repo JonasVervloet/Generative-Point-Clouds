@@ -7,7 +7,7 @@ import numpy as np
 import meshplot as mp
 
 path = path = "D:/Documenten/Results/Structured/Test/SingleLayer/"
-nb_tests = 9
+nb_tests = 10
 
 manager = NetworkManager()
 manager.set_path(path)

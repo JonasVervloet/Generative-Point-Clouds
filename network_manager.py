@@ -2,6 +2,7 @@ import torch
 import numpy as np
 import datetime
 from torch.optim import Adam
+import wandb
 
 from network_text_converter import NetworkTextFileConverter
 
@@ -55,7 +56,7 @@ class NetworkManager:
     def set_epoch_stops(self, stops):
         self.epoch_stops = stops
 
-    def train(self, end_epoch):
+    def train(self, end_epoch, wandb_logging=False):
         start_epoch = self.epoch_stops[-1]
         assert (end_epoch > start_epoch)
         assert(end_epoch % 5 == 0)
@@ -112,6 +113,14 @@ class NetworkManager:
             val_loss = sum(temp_loss) / val_size
             self.val_losses = np.append(self.val_losses, val_loss)
             print("val loss: {}".format(val_loss))
+
+            if wandb_logging:
+                wandb.log(
+                    {
+                        "train_loss": train_loss,
+                        "val_loss": val_loss
+                    }
+                )
 
             # saving
             if epoch % 5 == 0:

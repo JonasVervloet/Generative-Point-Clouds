@@ -1,0 +1,24 @@
+{
+    "root": "C:/Users/vervl/OneDrive/Documenten/GitHub/Generative-Mesh-Models",
+    "program": "C:/Users/vervl/OneDrive/Documenten/GitHub/Generative-Mesh-Models/training.py",
+    "git": {
+        "remote": "https://github.com/JonasVervloet/Generative-Point-Clouds.git",
+        "commit": "99914e3324d389e065b96b231972fccae4f965f4"
+    },
+    "email": "vervloetjonas@hotmail.com",
+    "startedAt": "2020-07-23T19:50:10.313333",
+    "host": "LAPTOP-AAQ21CE9",
+    "username": "vervl",
+    "executable": "C:\\Users\\vervl\\Anaconda3\\python.exe",
+    "os": "Windows-10-10.0.18362-SP0",
+    "python": "3.7.3",
+    "gpu": "GeForce GTX 1050 Ti",
+    "gpu_count": 1,
+    "cpu_count": 12,
+    "args": [],
+    "state": "running",
+    "jobType": null,
+    "mode": "run",
+    "project": "generative-point-clouds",
+    "heartbeatAt": "2020-07-23T19:54:14.966876"
+}

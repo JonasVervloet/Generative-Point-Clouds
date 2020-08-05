@@ -1,92 +1,66 @@
 import torch
-from torch_geometric.data import Batch
-from dataset.primitive_shapes import PrimitiveShapes as ps
-from network_text_converter import NetworkTextFileConverter
-from network_manager import NetworkManager
-from loss_function import ChamferDistLoss, ChamferVAELoss, LayerChamferDistLoss, ChamferDistLossFullNetwork
+from torch.utils.tensorboard import SummaryWriter
 from full_network.network_generator import NetworkGenerator
+from dataset.primitive_shapes import PrimitiveShapes
+from loss_function import ChamferDistLossFullNetwork
 
-from full_network.middlelayer_decoder import MiddleLayerDecoder, MiddleLayerDecoderSplit
-from full_network.middlelayer_encoder import MiddleLayerEncoder, MiddleLayerEncoderSplit
-from full_network.point_cloud_ae import PointCloudAE
-from relative_layer.grid_deform_decoder import GridDeformationDecoder
-from relative_layer.neighborhood_encoder import NeighborhoodEncoder
-from relative_layer.neighborhood_decoder import NeighborhoodDecoder
 
-COMPLETE_ENCODING = False
+"""NETWORK GENERATOR"""
+complete_encoding = False
+nb_layers = 1
 
-print()
-print("Test Generator")
-print()
+nbs_neighbors = [25, 16, 9]
+radii = [0.23, 1.3, 2.0]
+latent_sizes = [8, 64, 128]
 
 generator = NetworkGenerator()
-generator.set_nb_layers(2)
-
-generator.add_nb_neighbor(25)
-generator.add_nb_neighbor(16)
-# generator.add_nb_neighbor(9)
-
-generator.add_radius(0.23)
-generator.add_radius(1.3)
-# generator.add_radius(2.0)
-
-generator.add_latent_size(8)
-generator.add_latent_size(64)
-# generator.add_latent_size(128)
-
-generator.deactivate_leaky_relu()
-if COMPLETE_ENCODING:
-    generator.make_complete_encoding()
-else:
-    generator.make_incomplete_encoding()
 generator.set_max_pooling()
 generator.set_grid_decoder()
 generator.disable_split_networks()
+generator.deactivate_leaky_relu()
+
+generator.set_nb_layers(nb_layers)
+generator.set_nbs_neighbors(nbs_neighbors[:nb_layers])
+generator.set_radii(radii[:nb_layers])
+generator.set_latent_sizes(latent_sizes[:nb_layers])
+if complete_encoding:
+    generator.make_complete_encoding()
+else:
+    generator.make_incomplete_encoding()
 
 network = generator.generate_network()
-print(network.to_string())
-print()
 
-test_points = torch.randn(7200, 3)
-test_batch = torch.arange(2).repeat_interleave(3600)
+"""DATASET GENERATOR"""
+train_size = 1
+val_size = 1
+nb_points = 3600
+batch_size = 1
+shuffle = True
 
-spheres = ps.generate_spheres_dataset(2, 3600, normals=False)
-spheres_input = torch.cat([spheres[0].pos, spheres[1].pos], 0)
-batch = Batch(pos=spheres_input, batch=test_batch)
-print("input: ")
-print(spheres_input.size())
-print(test_batch.size())
-
-input_points, input_clusters, features, fps_points = network.encode(
-    batch.pos, batch.batch
+dataset_generator = PrimitiveShapes(
+    train_size, val_size,
+    nb_points, batch_size,
+    shuffle
 )
+dataset_generator.disable_cubes()
+dataset_generator.disable_cylinders()
+dataset_generator.disable_pyramids()
+dataset_generator.disable_tori()
+train_loader, val_loader = dataset_generator.generate_loaders()
 
-print()
-print("decoding")
-print()
+loss_fn = ChamferDistLossFullNetwork()
 
-relative_points_list, clusters_list = network.decode_features(features)
-assert(len(relative_points_list) == len(clusters_list))
-for i in range(len(relative_points_list)):
-    print(relative_points_list[i].size())
-    print(clusters_list[i].size())
+writer = SummaryWriter('D:/DocumentenResults/Test/runs/test_graph')
+for batch in train_loader:
+    writer.add_graph(network, batch)
+    break
+    # result_list = network(batch)
+    # loss = loss_fn(result_list)
+    #
+    # print()
+    # print(loss)
 
-print()
 
-output_points = network.construct_output_points(relative_points_list, clusters_list, fps_points)
-for i in range(len(output_points)):
-    print(output_points[i].size())
 
-print()
 
-output_clusters = network.construct_output_clusters(clusters_list, features)
-for i in range(len(output_clusters)):
-    print(output_clusters[i].size())
-
-print()
-output_points, output_clusters = network.decode(features, fps_points)
-assert(len(output_points) == len(output_clusters))
-for i in range(len(output_points)):
-    print(output_points[i].size())
-    print(output_clusters[i].size())
 

@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="">
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <change afterPath="$PROJECT_DIR$/relative_layer/training_pc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <change beforePath="$PROJECT_DIR$/relative_layer/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training_laptop.py" afterDir="false" />
+=======
+>>>>>>> parent of 47fc858... parameter reduction 3:.idea/workspace.xml
+=======
+      <change beforePath="$PROJECT_DIR$/rdn_permutation.py" beforeDir="false" />
+>>>>>>> parent of 1ecc13d... Radii + experiments excel added:.idea/workspace.xml
+=======
+      <change afterPath="$PROJECT_DIR$/relative_layer/training_vsc.py" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/full_network/ae_training.py" afterDir="false" />
+>>>>>>> parent of 7b76629... Pre cleaning:.idea/workspace.xml
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/neighborhood_decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/neighborhood_decoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/neighborhood_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/neighborhood_encoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/single_layer_network.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/single_layer_network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/visualisation.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/visualisation.py" afterDir="false" />
+>>>>>>> parent of 6a18283... Clean 1:.idea/workspace.xml
+=======
+      <change afterPath="$PROJECT_DIR$/relative_layer/neighborhood_decoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/neighborhood_encoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/single_layer_network.py" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/full_network/training2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/full_network/visualisation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/decoder2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/decoder3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/encoder2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/encoder3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/grid_deformation_vis.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/rotation_invariant_layer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/simple_layer2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/relative_layer/simple_layer3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/visualisation/normals.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/visualisation/one_layer_features.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/visualisation/radius.py" afterDir="false" />
+>>>>>>> parent of 0fe5a94... Single Layer Network:.idea/workspace.xml
+=======
+      <change afterPath="$PROJECT_DIR$/full_network/full_decoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/full_network/full_encoder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/full_network/full_nework.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/full_network/training.py" afterDir="false" />
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composed_layer/composed_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/composed_layer/composed_encoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composed_layer/decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/composed_layer/decoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composed_layer/encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/composed_layer/encoder.py" afterDir="false" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <change beforePath="$PROJECT_DIR$/dataset/primitives.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/primitives.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/full_network/full_decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/full_decoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/full_network/full_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/full_encoder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/full_network/full_nework.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/full_nework.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/full_network/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/decoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/decoder.py" afterDir="false" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <change beforePath="$PROJECT_DIR$/relative_layer/encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/encoder.py" afterDir="false" />
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+=======
+      <change beforePath="$PROJECT_DIR$/relative_layer/relative_ae.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/relative_ae.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/simple_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/simple_layer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/training.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/training.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/relative_layer/visualisation.py" beforeDir="false" afterPath="$PROJECT_DIR$/relative_layer/visualisation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/visualisation/fps.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualisation/fps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/visualisation/knn.py" beforeDir="false" afterPath="$PROJECT_DIR$/full_network/full_network2.py" afterDir="false" />
+>>>>>>> parent of 0fe5a94... Single Layer Network:.idea/workspace.xml
+=======
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1UFVFdOgv1Gg4gQtSvfGiZg9Mm5" />
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\visualisation" />
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\dataset" />
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\Datasets" />
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloudNetwork" />
+      <recent name="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train" />
+    </key>
+  </component>
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+  <component name="RunManager" selected="Python.training_pc">
+=======
+=======
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+>>>>>>> parent of 4a0c8b0... PC result path added:.idea/workspace.xml
+  <component name="RunManager" selected="Python.test">
+>>>>>>> parent of 47fc858... parameter reduction 3:.idea/workspace.xml
+=======
+  <component name="RunManager" selected="Python.training">
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+>>>>>>> parent of 1ecc13d... Radii + experiments excel added:.idea/workspace.xml
+    <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+=======
+=======
+  <component name="RunManager" selected="Python.ae_training">
+>>>>>>> parent of 7b76629... Pre cleaning:.idea/workspace.xml
+=======
+  <component name="RunManager" selected="Python.Test">
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+=======
+  <component name="RunManager" selected="Python.visualisation (1)">
+>>>>>>> parent of 0fe5a94... Single Layer Network:.idea/workspace.xml
+=======
+  <component name="RunManager" selected="Python.Test">
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+    <configuration name="MnistVAE" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+>>>>>>> parent of 6a18283... Clean 1:.idea/workspace.xml
+      <module name="Generative-Mesh-Models" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\vervl\Anaconda3\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MnistVAE.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="PointCloudVAE_Eval" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Generative-Mesh-Models" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train\PointCloudVAE_Eval.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+    <configuration name="ae_training" type="PythonConfigurationType" factoryName="Python" temporary="true">
+=======
+    <configuration name="fps" type="PythonConfigurationType" factoryName="Python" temporary="true">
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+=======
+    <configuration name="one_layer_features" type="PythonConfigurationType" factoryName="Python" temporary="true">
+>>>>>>> parent of 0fe5a94... Single Layer Network:.idea/workspace.xml
+=======
+    <configuration name="PointCloudVAE_Train" type="PythonConfigurationType" factoryName="Python" temporary="true">
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+      <module name="Generative-Mesh-Models" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/full_network" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/full_network/ae_training.py" />
+=======
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/visualisation" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/visualisation/fps.py" />
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/visualisation/one_layer_features.py" />
+>>>>>>> parent of 0fe5a94... Single Layer Network:.idea/workspace.xml
+=======
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\PointCloud(V)AE\Train\PointCloudVAE_Train.py" />
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+    <configuration name="training" type="PythonConfigurationType" factoryName="Python" temporary="true">
+=======
+    <configuration name="training (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+=======
+    <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+      <module name="Generative-Mesh-Models" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/relative_layer/training.py" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/full_network/training.py" />
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test.py" />
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+    <configuration name="training2" type="PythonConfigurationType" factoryName="Python" temporary="true">
+=======
+    <configuration name="training" type="PythonConfigurationType" factoryName="Python" temporary="true">
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+      <module name="Generative-Mesh-Models" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/relative_layer" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\relative_layer\training_laptop.py" />
+=======
+      <option name="SCRIPT_NAME" value="C:\Users\vervl\OneDrive\Documenten\GitHub\Generative-Mesh-Models\relative_layer\training.py" />
+>>>>>>> parent of 1ecc13d... Radii + experiments excel added:.idea/workspace.xml
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/relative_layer/training.py" />
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+    <configuration name="training_pc" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+=======
+    <configuration name="visualisation (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+=======
+    <configuration name="visualisation" type="PythonConfigurationType" factoryName="Python" temporary="true">
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+      <module name="Generative-Mesh-Models" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/relative_layer" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/relative_layer/training_pc.py" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/relative_layer/visualisation.py" />
+>>>>>>> parent of 6a18283... Clean 1:.idea/workspace.xml
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/full_network/visualisation.py" />
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/relative_layer/visualisation.py" />
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.MnistVAE" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <item itemvalue="Python.training" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <item itemvalue="Python.training_pc" />
+=======
+      <item itemvalue="Python.Test" />
+      <item itemvalue="Python.training2" />
+      <item itemvalue="Python.visualisation" />
+      <item itemvalue="Python.ae_training" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+      <item itemvalue="Python.test" />
+>>>>>>> parent of 4a0c8b0... PC result path added:.idea/workspace.xml
+    </list>
+    <recent_temporary>
+      <list>
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+        <item itemvalue="Python.training_pc" />
+        <item itemvalue="Python.training" />
+=======
+>>>>>>> parent of 47fc858... parameter reduction 3:.idea/workspace.xml
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.training" />
+        <item itemvalue="Python.Test" />
+        <item itemvalue="Python.ae_training" />
+=======
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.ae_training" />
+        <item itemvalue="Python.Test" />
+        <item itemvalue="Python.training" />
+        <item itemvalue="Python.visualisation" />
+        <item itemvalue="Python.training2" />
+>>>>>>> parent of 1ecc13d... Radii + experiments excel added:.idea/workspace.xml
+=======
+      <item itemvalue="Python.training (1)" />
+      <item itemvalue="Python.visualisation (1)" />
+      <item itemvalue="Python.one_layer_features" />
+=======
+      <item itemvalue="Python.PointCloudVAE_Train" />
+      <item itemvalue="Python.PointCloudVAE_Eval" />
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+      <item itemvalue="Python.training" />
+      <item itemvalue="Python.visualisation" />
+      <item itemvalue="Python.Test" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.Test" />
+        <item itemvalue="Python.training" />
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+>>>>>>> parent of f8bf2d5... Update training file SingleLayerNetwork:.idea/workspace.xml
+=======
+        <item itemvalue="Python.one_layer_features" />
+>>>>>>> parent of 0fe5a94... Single Layer Network:.idea/workspace.xml
+=======
+        <item itemvalue="Python.visualisation" />
+        <item itemvalue="Python.PointCloudVAE_Eval" />
+        <item itemvalue="Python.PointCloudVAE_Train" />
+>>>>>>> parent of 377b2d6... UPDATE:.idea/workspace.xml
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bc74b985-2cca-41e6-a635-71a901943920" name="Default Changelist" comment="" />
+      <created>1574952227966</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1574952227966</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+<<<<<<< HEAD:.idea/workspace.xml~parent of 7ed7c5a... update
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="619" y="259" key="FileChooserDialogImpl" timestamp="1588060150597">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="619" y="259" key="FileChooserDialogImpl/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588060150597" />
+    <state width="1659" height="272" key="GridCell.Tab.0.bottom" timestamp="1588113287556">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.bottom/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588113287556" />
+    <state width="1659" height="272" key="GridCell.Tab.0.center" timestamp="1588113287556">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.center/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588113287556" />
+    <state width="1659" height="272" key="GridCell.Tab.0.left" timestamp="1588113287556">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.left/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588113287556" />
+    <state width="1659" height="272" key="GridCell.Tab.0.right" timestamp="1588113287556">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state width="1659" height="272" key="GridCell.Tab.0.right/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588113287556" />
+    <state x="341" y="149" key="SettingsEditor" timestamp="1588060175252">
+      <screen x="0" y="0" width="1680" height="1010" />
+    </state>
+    <state x="341" y="149" key="SettingsEditor/0.0.1680.1010/-1280.25.1280.984@0.0.1680.1010" timestamp="1588060175252" />
+=======
+>>>>>>> parent of 4a0c8b0... PC result path added:.idea/workspace.xml
+  </component>
+</project>

@@ -3,6 +3,5 @@
 *.pts
 *.pt
 result/
-.idea/
-__pycache__/
-trainin.py
+.idea/workspace.xml
+.idea/workspace.xml

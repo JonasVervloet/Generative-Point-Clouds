@@ -1,9 +1,12 @@
 import numpy as np
 import math
 import random
+import matplotlib.pyplot as plt
 
 import torch
+import torch_geometric.nn as gnn
 from torch_geometric.data import Data
+import point_cloud_utils as pcu
 
 
 class PrimitiveShapes:
@@ -20,7 +23,7 @@ class PrimitiveShapes:
         return np.random.uniform(nb_low, nb_high)
 
     @staticmethod
-    def datalist_generation(fn, nb_samples, sqrt_nb, max_nb):
+    def datalist_generation(fn, nb_samples, sqrt_nb, max_nb, normals):
 
         datalist = []
 
@@ -28,47 +31,105 @@ class PrimitiveShapes:
             points = fn(sqrt_nb)
             perm = torch.randperm(len(points))
             points = torch.tensor(points)[perm]
-            datalist.append(Data(pos=points[:max_nb]))
+            if normals:
+                normal = torch.tensor(
+                    pcu.estimate_normals(np.array(points), k=16)
+                )
+                datalist.append(Data(pos=points[:max_nb], norm=normal[:max_nb]))
+            else:
+                datalist.append(Data(pos=points[:max_nb]))
 
         return datalist
 
     @staticmethod
-    def generate_dataset(nb_objects, nb_points):
+    def generate_dataset(nb_objects, nb_points, shapes=[True, True, True, True, True], normals=False):
+        """
+
+        :param nb_objects: The number of objects of each shape that the method should generate.
+        :param nb_points: The number of points that each object should have.
+        :param shapes: Selecting which shape should be in the dataset. The list should contain True for the shape types
+        that are required and False for shape types that are not resuired. The order is as follows:
+        [spheres, cubes, cylinders, pyramids, torus]. As default, all are set to True.
+        :param normals: Boolean representing whether or not the final data elements will contain normal information. The
+        default is set to False.
+
+        :return: A dataset containing the required shapes, random shuffled. Each data item in the dataset is a
+        Data object from torch_geometric.
+        """
+
+        datalist = []
 
         # spheres
-        data1 = PrimitiveShapes.datalist_generation(
-            PrimitiveShapes.generate_spheres,
-            nb_objects, math.ceil(math.sqrt(nb_points)), nb_points
-        )
+        if shapes[0]:
+            datalist.append(PrimitiveShapes.datalist_generation(
+                PrimitiveShapes.generate_spheres,
+                nb_objects, math.ceil(math.sqrt(nb_points)), nb_points, normals
+            ))
 
         # cubes
-        data2 = PrimitiveShapes.datalist_generation(
-            PrimitiveShapes.generate_cube,
-            nb_objects, math.ceil(math.sqrt(nb_points/6)), nb_points
-        )
+        if shapes[1]:
+            datalist.append(PrimitiveShapes.datalist_generation(
+                PrimitiveShapes.generate_cube,
+                nb_objects, math.ceil(math.sqrt(nb_points/6)), nb_points, normals
+            ))
 
         # cylinders
-        data3 = PrimitiveShapes.datalist_generation(
-            PrimitiveShapes.generate_cylinder,
-            nb_objects, math.ceil(math.sqrt(nb_points/6)), nb_points
-        )
+        if shapes[2]:
+            datalist.append(PrimitiveShapes.datalist_generation(
+                PrimitiveShapes.generate_cylinder,
+                nb_objects, math.ceil(math.sqrt(nb_points/6)), nb_points, normals
+            ))
 
         # pyramids
-        data4 = PrimitiveShapes.datalist_generation(
-            PrimitiveShapes.generate_pyramid,
-            nb_objects, math.ceil(math.sqrt(nb_points/5)), nb_points
-        )
+        if shapes[3]:
+            datalist.append(PrimitiveShapes.datalist_generation(
+                PrimitiveShapes.generate_pyramid,
+                nb_objects, math.ceil(math.sqrt(nb_points/5)), nb_points, normals
+            ))
 
         # torus
-        data5 = PrimitiveShapes.datalist_generation(
-            PrimitiveShapes.generate_torus,
-            nb_objects, math.ceil(math.sqrt(nb_points)), nb_points
+        if shapes[4]:
+            datalist.append(PrimitiveShapes.datalist_generation(
+                PrimitiveShapes.generate_torus,
+                nb_objects, math.ceil(math.sqrt(nb_points)), nb_points, normals
+            ))
+
+        dataset = []
+        for set in datalist:
+            dataset += set
+        random.shuffle(dataset)
+
+        return dataset
+
+    @staticmethod
+    def generate_spheres(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [True, False, False, False, False], normals
         )
 
-        data_set = data1 + data2 + data3 + data4 + data5
-        random.shuffle(data_set)
+    @staticmethod
+    def generate_cubes(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [False, True, False, False, False], normals
+        )
 
-        return data_set
+    @staticmethod
+    def generate_cylinders(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [False, False, True, False, False], normals
+        )
+
+    @staticmethod
+    def generate_pyramids(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [False, False, False, True, False], normals
+        )
+
+    @staticmethod
+    def generate_tori(nb_objects, nb_points, normals=False):
+        return PrimitiveShapes.generate_dataset(
+            nb_objects, nb_points, [False, False, False, False, True], normals
+        )
 
     """
     SPHERES

@@ -9,9 +9,8 @@ from dataset.primitives import PrimitiveShapes
 from LossFunctions import ChamferDistLoss
 from full_network.full_nework import FullNetwork
 
-FROM_EPOCH = 40
-NB_EPOCHS = 100
-BATCH_SIZE = 5
+FROM_EPOCH = 90
+NB_EPOCHS = 110
 RESULT_PATH = "D:/Documenten/Results/"
 NAME = "FullNetwork/"
 START_LR = 0.001
@@ -32,8 +31,8 @@ val_dataset = PrimitiveShapes.generate_dataset(
     VAL_SIZE, NB_POINTS,
     shapes=[True, True, True, True, True], normals=False
 )
-train_loader = DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE)
-val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE)
+train_loader = DataLoader(dataset=train_dataset, batch_size=5)
+val_loader = DataLoader(dataset=val_dataset, batch_size=5)
 print(len(train_loader))
 print(len(val_loader))
 
@@ -69,7 +68,7 @@ for lr in range(LR_NB):
             pos = batch.pos
             batch_inds = batch.batch
 
-            points_out, batch_out = net(pos, batch_inds)
+            samples2_out, batch_samples2_out, samples_out, batch_samples_out, points_out, batch_out = net(pos, batch_inds)
             loss = loss_fn(
                 pos,
                 points_out,

@@ -102,14 +102,19 @@ class ChamferDistLoss(Module):
 
 
 class ChamferVAELoss(Module):
-    def __init__(self, alfa=0.5):
+    def __init__(self, alfa=1.0):
         super(ChamferVAELoss, self).__init__()
         self.alfa = alfa
         self.chamfer = ChamferDistLoss()
 
-    def forward(self, inp, outp, z_mu, z_var):
-        chamf_loss = self.chamfer(inp, outp)
-        kl_loss = 0.5 * torch.sum(torch.exp(z_var) + z_mu**2 - 1.0 - z_var)
+    def forward(self, input, output, batch_in, batch_out, mean, log_variance):
+        chamf_loss = self.chamfer(
+            input,
+            output,
+            batch_in,
+            batch_out
+        )
+        kl_loss = 0.5 * torch.sum(torch.exp(log_variance) + mean ** 2 - 1.0 - log_variance)
 
         return chamf_loss + self.alfa * kl_loss
 

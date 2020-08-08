@@ -6,15 +6,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from dataset.primitives import PrimitiveShapes
-from LossFunctions import ChamferDistLoss
-from full_network.full_nework import FullNetwork
+from LossFunctions import ChamferDistLoss, ChamferVAELoss
+from full_network.full_network_vae import FullNetworkVAE
 
-FROM_EPOCH = 40
-NB_EPOCHS = 100
+FROM_EPOCH = 450
+NB_EPOCHS = 550
 BATCH_SIZE = 5
-RESULT_PATH = "D:/Documenten/Results/"
+RESULT_PATH = "D:/Resultaten/Reverse/VAE/"
 NAME = "FullNetwork/"
-START_LR = 0.001
+START_LR = 0.00001
+original_lr = 0.001
 LR_NB = 1
 NB_POINTS = 3600
 TRAIN_SIZE = 50
@@ -37,15 +38,15 @@ val_loader = DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE)
 print(len(train_loader))
 print(len(val_loader))
 
-loss_fn = ChamferDistLoss()
+loss_fn = ChamferVAELoss()
 
 for lr in range(LR_NB):
     learning_rate = START_LR / max(1, (lr * 10))
-    path = RESULT_PATH + NAME + "LearningRate{}/".format(round(learning_rate * 100000))
+    path = RESULT_PATH + NAME + "LearningRate{}/".format(round(original_lr * 100000))
     print(learning_rate)
     print(round(learning_rate*100000))
 
-    net = FullNetwork()
+    net = FullNetworkVAE()
     train_losses = np.empty(0)
     val_losses = np.empty(0)
     if not FROM_EPOCH == 0:
@@ -63,18 +64,24 @@ for lr in range(LR_NB):
         print(epoch)
         temp_loss = []
 
+        if FROM_EPOCH != 0 and epoch == FROM_EPOCH:
+            print('continue')
+            continue
+
         for batch in train_loader:
             optimizer.zero_grad()
 
             pos = batch.pos
             batch_inds = batch.batch
 
-            points_out, batch_out = net(pos, batch_inds)
+            points_out, batch_out, mean, log_variance = net(pos, batch_inds)
             loss = loss_fn(
-                pos,
-                points_out,
+                input=pos,
+                output=points_out,
                 batch_in=batch_inds,
-                batch_out=batch_out
+                batch_out=batch_out,
+                mean=mean,
+                log_variance=log_variance
             )
             loss.backward()
             optimizer.step()
@@ -90,12 +97,14 @@ for lr in range(LR_NB):
             pos = val_batch.pos
             batch_inds = val_batch.batch
 
-            points_out, batch_out = net(pos, batch_inds)
+            points_out, batch_out, mean, log_variance = net(pos, batch_inds)
             loss = loss_fn(
-                pos,
-                points_out,
+                input=pos,
+                output=points_out,
                 batch_in=batch_inds,
-                batch_out=batch_out
+                batch_out=batch_out,
+                mean=mean,
+                log_variance=log_variance
             )
             temp_loss.append(loss.item())
 

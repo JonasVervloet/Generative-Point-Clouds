@@ -206,7 +206,7 @@ pytz==2019.1
 pywavelets==1.0.3
 pywin32==223
 pywinpty==0.5.5
-pyyaml==5.1.1
+pyyaml==5.4
 pyzmq==18.0.0
 qtawesome==0.5.7
 qtconsole==4.5.1

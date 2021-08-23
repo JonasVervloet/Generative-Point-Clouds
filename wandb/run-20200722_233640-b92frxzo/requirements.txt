@@ -105,7 +105,7 @@ jupyter-client==5.3.1
 jupyter-console==6.0.0
 jupyter-core==4.5.0
 jupyterlab-server==1.0.0
-jupyterlab==1.0.2
+jupyterlab==1.2.21
 kaolin==0.2.0+6185b20
 keepalive==0.5
 keyring==18.0.0

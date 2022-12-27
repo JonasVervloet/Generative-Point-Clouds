@@ -227,7 +227,7 @@ selenium==3.141.0
 send2trash==1.5.0
 sentry-sdk==0.16.2
 service-identity==18.1.0
-setuptools==41.0.1
+setuptools==65.5.1
 shortuuid==1.0.1
 simplegeneric==0.8.1
 singledispatch==3.4.0.3

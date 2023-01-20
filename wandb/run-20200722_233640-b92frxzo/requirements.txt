@@ -119,7 +119,7 @@ markdown==3.1.1
 markupsafe==1.1.1
 matplotlib==3.1.0
 mccabe==0.6.1
-mechanize==0.4.5
+mechanize==0.4.6
 menuinst==1.4.16
 meshplot==0.3.2
 mistune==0.8.4
